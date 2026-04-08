@@ -1,5 +1,8 @@
 import { MetadataRoute } from 'next'
 import { FERRAMENTAS, CATEGORIAS } from '@/lib/ferramentas'
+import { PROFISSOES } from '@/lib/salarios/profissoes'
+import { ELEMENTOS } from '@/lib/periodica/elementos'
+import { MEDICAMENTOS } from '@/lib/medicamentos/remedios'
 
 const BASE_URL = 'https://calculadoravirtual.com'
 
@@ -19,6 +22,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: hoje,
       changeFrequency: 'weekly',
       priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/salarios`,
+      lastModified: hoje,
+      changeFrequency: 'weekly',
+      priority: 0.95,
+    },
+    {
+      url: `${BASE_URL}/salarios/maiores-salarios`,
+      lastModified: hoje,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/salarios/profissoes-do-futuro`,
+      lastModified: hoje,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/tabela-periodica`,
+      lastModified: hoje,
+      changeFrequency: 'monthly',
+      priority: 0.95,
+    },
+    {
+      url: `${BASE_URL}/medicamentos`,
+      lastModified: hoje,
+      changeFrequency: 'weekly',
+      priority: 0.95,
     },
   ]
 
@@ -70,5 +103,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ]
 
-  return [...paginas, ...categorias, ...calculadoras, ...blog, ...duvidas]
+  // Salários — 502 páginas
+  const salarios: MetadataRoute.Sitemap = PROFISSOES.map(p => ({
+    url: `${BASE_URL}/salarios/${p.slug}`,
+    lastModified: hoje,
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
+  // Tabela periódica — 118 páginas
+  const periodica: MetadataRoute.Sitemap = ELEMENTOS.map(e => ({
+    url: `${BASE_URL}/tabela-periodica/${e.simbolo.toLowerCase()}`,
+    lastModified: hoje,
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
+  // Medicamentos — ~50 páginas
+  const medicamentos: MetadataRoute.Sitemap = MEDICAMENTOS.map(m => ({
+    url: `${BASE_URL}/medicamentos/${m.slug}`,
+    lastModified: hoje,
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
+  return [...paginas, ...categorias, ...calculadoras, ...blog, ...duvidas, ...salarios, ...periodica, ...medicamentos]
 }
