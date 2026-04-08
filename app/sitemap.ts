@@ -3,6 +3,8 @@ import { FERRAMENTAS, CATEGORIAS } from '@/lib/ferramentas'
 import { PROFISSOES } from '@/lib/salarios/profissoes'
 import { ELEMENTOS } from '@/lib/periodica/elementos'
 import { MEDICAMENTOS } from '@/lib/medicamentos/remedios'
+import { SLUGS_TRABALHISTA } from '@/lib/trabalhista/slugs'
+import { SLUGS_EMPRESTIMOS } from '@/lib/emprestimos/slugs'
 
 const BASE_URL = 'https://calculadoravirtual.com'
 
@@ -127,5 +129,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  return [...paginas, ...categorias, ...calculadoras, ...blog, ...duvidas, ...salarios, ...periodica, ...medicamentos]
+  // Trabalhista — hub + ~850 páginas de guias
+  const trabalhista: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/trabalhista`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_TRABALHISTA.map(slug => ({
+      url: `${BASE_URL}/trabalhista/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+  ]
+
+  // Empréstimos — hub + ~1000 páginas
+  const emprestimos: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/emprestimos`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_EMPRESTIMOS.map(slug => ({
+      url: `${BASE_URL}/emprestimos/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+  ]
+
+  return [...paginas, ...categorias, ...calculadoras, ...blog, ...duvidas, ...salarios, ...periodica, ...medicamentos, ...trabalhista, ...emprestimos]
 }
