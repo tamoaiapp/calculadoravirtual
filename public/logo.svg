@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 44" fill="none">
+  <!-- Icon: calculator -->
+  <rect x="2" y="2" width="40" height="40" rx="10" fill="#2563eb"/>
+  <rect x="10" y="10" width="24" height="7" rx="3" fill="white" opacity="0.9"/>
+  <rect x="10" y="22" width="6" height="6" rx="2" fill="white" opacity="0.9"/>
+  <rect x="19" y="22" width="6" height="6" rx="2" fill="white" opacity="0.9"/>
+  <rect x="28" y="22" width="6" height="6" rx="2" fill="white" opacity="0.9"/>
+  <rect x="10" y="31" width="6" height="6" rx="2" fill="white" opacity="0.9"/>
+  <rect x="19" y="31" width="6" height="6" rx="2" fill="white" opacity="0.9"/>
+  <rect x="28" y="31" width="6" height="6" rx="2" fill="#93c5fd" opacity="0.9"/>
+  <!-- Text: Calculadora -->
+  <text x="52" y="19" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" font-weight="700" fill="#0f172a">Calculadora</text>
+  <!-- Text: Virtual -->
+  <text x="52" y="36" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" font-weight="400" fill="#2563eb">Virtual</text>
+</svg>
