@@ -28,7 +28,7 @@ export function AutorBox({ compact = false }: AutorBoxProps) {
           Escritor especializado em finanças pessoais, legislação trabalhista e saúde. Acompanha as atualizações da Receita Federal, ANS e Ministério do Trabalho desde 2015.
         </p>
         <a
-          href="https://linkedin.com/in/tiago-oliveira"
+          href="https://www.linkedin.com/in/tiago-oliveira-8312ab402/"
           target="_blank"
           rel="noopener noreferrer"
           style={{ fontSize: '0.75rem', color: 'var(--brand)', textDecoration: 'none', fontWeight: 600 }}
@@ -65,7 +65,7 @@ export function AutorBox({ compact = false }: AutorBoxProps) {
             Escritor independente
           </span>
           <a
-            href="https://linkedin.com/in/tiago-oliveira"
+            href="https://www.linkedin.com/in/tiago-oliveira-8312ab402/"
             target="_blank"
             rel="noopener noreferrer"
             style={{ fontSize: '0.75rem', color: 'var(--brand)', textDecoration: 'none', fontWeight: 600 }}
@@ -87,8 +87,8 @@ export const schemaAutor = {
   '@type': 'Person',
   name: 'Tiago Oliveira',
   jobTitle: 'Escritor independente',
-  url: 'https://linkedin.com/in/tiago-oliveira',
-  sameAs: ['https://linkedin.com/in/tiago-oliveira'],
+  url: 'https://www.linkedin.com/in/tiago-oliveira-8312ab402/',
+  sameAs: ['https://www.linkedin.com/in/tiago-oliveira-8312ab402/'],
   worksFor: {
     '@type': 'Organization',
     name: 'Calculadora Virtual',
