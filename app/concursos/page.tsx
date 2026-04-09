@@ -4,8 +4,8 @@ import { CARGOS, ORGAOS, AREAS_CONCURSO, CONCURSOS_PREVISTOS } from '@/lib/concu
 import { fmt, fmtNum, dificuldadeLabel, escolaridadeLabel, calcularSalarioLiquido } from '@/lib/concursos/generator'
 
 export const metadata: Metadata = {
-  title: 'Concursos Públicos 2025 — Salários, Vagas e Como Passar | Calculadora Virtual',
-  description: 'Guia completo de concursos públicos 2025: salários detalhados (bruto e líquido), vagas previstas, dificuldade e matérias de cada cargo. Mais de 200 cargos federais, estaduais e municipais.',
+  title: 'Concursos Públicos 2026 — Salários, Vagas e Como Passar | Calculadora Virtual',
+  description: 'Guia completo de concursos públicos 2026: salários detalhados (bruto e líquido), vagas previstas, dificuldade e matérias de cada cargo. Mais de 200 cargos federais, estaduais e municipais.',
   alternates: { canonical: '/concursos' },
 }
 
@@ -22,7 +22,7 @@ export default function ConcursosPage() {
       {/* Hero */}
       <div style={{ textAlign: 'center', marginBottom: 40, paddingTop: 16 }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text)', marginBottom: 12, lineHeight: 1.3 }}>
-          🏛️ Concursos Públicos 2025
+          🏛️ Concursos Públicos 2026
         </h1>
         <p style={{ color: 'var(--muted)', fontSize: '1rem', lineHeight: 1.7, maxWidth: 620, margin: '0 auto 24px' }}>
           Salários completos (bruto e líquido), vagas previstas, dificuldade e matérias de cada cargo público. Mais de 200 cargos federais, estaduais e municipais.
@@ -32,7 +32,7 @@ export default function ConcursosPage() {
           {[
             { label: 'Cargos mapeados', valor: `${CARGOS.length}+` },
             { label: 'Órgãos', valor: `${ORGAOS.length}+` },
-            { label: 'Vagas previstas 2025', valor: `${fmtNum(CONCURSOS_PREVISTOS.reduce((a, c) => a + c.vagas, 0))}+` },
+            { label: 'Vagas previstas 2026', valor: `${fmtNum(CONCURSOS_PREVISTOS.reduce((a, c) => a + c.vagas, 0))}+` },
             { label: 'Maior salário', valor: fmt2(Math.max(...CARGOS.map(c => c.salarioInicial))) },
           ].map((s, i) => (
             <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--line)', borderRadius: 12, padding: '12px 20px', textAlign: 'center', minWidth: 130 }}>
@@ -171,7 +171,7 @@ export default function ConcursosPage() {
             { href: '/concursos/concursos-salario-acima-10000', label: '💵 Salário acima de R$10.000' },
             { href: '/concursos/concursos-mais-faceis', label: '🟢 Concursos mais fáceis' },
             { href: '/concursos/concursos-mais-dificeis', label: '🔴 Concursos mais difíceis' },
-            { href: '/concursos/concursos-mais-vagas', label: '📋 Mais vagas em 2025' },
+            { href: '/concursos/concursos-mais-vagas', label: '📋 Mais vagas em 2026' },
             { href: '/concursos/concursos-previstos-2026', label: '📅 Previstos para 2026' },
             { href: '/concursos/como-calcular-salario-servidor-publico', label: '🔢 Calcular salário líquido' },
             { href: '/concursos/beneficios-servidor-federal', label: '🎁 Benefícios do servidor federal' },
@@ -196,16 +196,16 @@ export default function ConcursosPage() {
       {/* SEO texto */}
       <div style={{ background: 'var(--bg2)', borderRadius: 14, padding: '24px', fontSize: '0.88rem', color: 'var(--muted)', lineHeight: 1.8 }}>
         <h2 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text)', marginBottom: 12 }}>
-          Sobre os Concursos Públicos no Brasil — 2025
+          Sobre os Concursos Públicos no Brasil — 2026
         </h2>
         <p>
-          O Brasil tem mais de 1 milhão de servidores públicos federais e cerca de 10 milhões em todas as esferas (federal, estadual e municipal). Em 2025, estão previstos concursos em praticamente todos os grandes órgãos: Receita Federal (699 vagas, salário R$21.029), Polícia Federal (1.500 vagas, R$12.957), INSS (3.000 vagas, R$8.547) e muitos outros.
+          O Brasil tem mais de 1 milhão de servidores públicos federais e cerca de 10 milhões em todas as esferas (federal, estadual e municipal). Em 2026, estão previstos concursos em praticamente todos os grandes órgãos: Receita Federal (699 vagas, salário R$21.029), Polícia Federal (1.500 vagas, R$12.957), INSS (3.000 vagas, R$8.547) e muitos outros.
         </p>
         <p style={{ marginTop: 12 }}>
           Os salários do funcionalismo público variam de R$1.550 (Agente Comunitário de Saúde) a R$29.295 (Delegado da Polícia Federal). O salário líquido é sempre menor que o bruto por conta dos descontos de INSS (7,5% a 14%) e Imposto de Renda (até 27,5%). Use nossa calculadora para simular o salário líquido exato de qualquer cargo.
         </p>
         <p style={{ marginTop: 12 }}>
-          Todos os dados de salários, vagas e benefícios são baseados em editais e tabelas oficiais dos órgãos públicos, atualizados para 2025.
+          Todos os dados de salários, vagas e benefícios são baseados em editais e tabelas oficiais dos órgãos públicos, atualizados para 2026.
         </p>
       </div>
     </div>

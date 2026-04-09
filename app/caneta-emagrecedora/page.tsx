@@ -4,8 +4,8 @@ import { MEDICAMENTOS_CANETA } from '@/lib/caneta/medicamentos'
 import { SLUGS_GUIAS, SLUGS_COMPARATIVOS, SLUGS_EFEITOS } from '@/lib/caneta/slugs'
 
 export const metadata: Metadata = {
-  title: 'Caneta Emagrecedora — Ozempic, Wegovy, Mounjaro: Guia Completo 2025 | Calculadora Virtual',
-  description: 'Guia completo sobre canetas emagrecedoras: Ozempic, Wegovy, Mounjaro, Saxenda, Rybelsus. Semana a semana, efeitos colaterais, doses, preço e comparativos atualizados 2025.',
+  title: 'Caneta Emagrecedora — Ozempic, Wegovy, Mounjaro: Guia Completo 2026 | Calculadora Virtual',
+  description: 'Guia completo sobre canetas emagrecedoras: Ozempic, Wegovy, Mounjaro, Saxenda, Rybelsus. Semana a semana, efeitos colaterais, doses, preço e comparativos atualizados 2026.',
   alternates: { canonical: '/caneta-emagrecedora' },
 }
 
@@ -54,7 +54,7 @@ export default function CanetaPage() {
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
         <div style={{ display: 'inline-block', background: '#fef3c7', color: '#92400e', borderRadius: 8, padding: '4px 12px', fontSize: '0.78rem', fontWeight: 700, marginBottom: 10 }}>
-          🔥 Em alta 2025
+          🔥 Em alta 2026
         </div>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text)', marginBottom: 12 }}>
           Caneta Emagrecedora — Guia Completo

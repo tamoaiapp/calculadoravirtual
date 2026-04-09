@@ -4,8 +4,8 @@ import { calcularLucroShopee, calcularLucroML, calcularLucroTikTok, calcularPrec
 export const CALCS_ECOMMERCE: CalcConfig[] = [
   {
     slug: 'calculadora-shopee',
-    titulo: 'Calculadora Shopee 2026',
-    desc: 'Calcule seu lucro líquido na Shopee descontando comissões e taxas 2026.',
+    titulo: 'Calculadora de Lucro Shopee',
+    desc: 'Calcule seu lucro líquido na Shopee descontando comissões, taxas fixas e custos. Atualizado 2026.',
     cat: 'ecommerce', icon: '🛍️',
     campos: [
       { k: 'precoVenda', l: 'Preço de Venda', p: '100', u: 'R$' },
@@ -30,7 +30,7 @@ export const CALCS_ECOMMERCE: CalcConfig[] = [
   },
   {
     slug: 'calculadora-mercado-livre',
-    titulo: 'Calculadora Mercado Livre 2026',
+    titulo: 'Calculadora de Lucro Mercado Livre',
     desc: 'Calcule suas taxas e lucro no Mercado Livre (Clássico e Premium).',
     cat: 'ecommerce', icon: '🛒',
     campos: [
@@ -56,7 +56,7 @@ export const CALCS_ECOMMERCE: CalcConfig[] = [
   },
   {
     slug: 'calculadora-tiktok-shop',
-    titulo: 'Calculadora TikTok Shop 2026',
+    titulo: 'Calculadora de Lucro TikTok Shop',
     desc: 'Calcule seu lucro no TikTok Shop com comissões e taxa de afiliado.',
     cat: 'ecommerce', icon: '🎵',
     campos: [

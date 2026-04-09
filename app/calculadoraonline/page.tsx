@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Calculadora Online Grátis 2025 — Rescisão, INSS, Férias e Mais | Calculadora Virtual',
+  title: 'Calculadora Online Grátis 2026 — Rescisão, INSS, Férias e Mais | Calculadora Virtual',
   description: 'Calculadoras online gratuitas: rescisão trabalhista, férias CLT, 13º salário, INSS, FGTS, calculadora padrão, científica, frações, binária e estatística. Sem instalar.',
   alternates: { canonical: '/calculadoraonline' },
 }
@@ -35,8 +35,8 @@ const CALCS = [
   },
   {
     slug: 'calculadora-online-de-inss',
-    titulo: 'Calculadora de INSS 2025',
-    desc: 'Tabela progressiva INSS 2025 para CLT, autônomo, MEI e doméstico. Detalhamento por faixa e código de recolhimento GPS.',
+    titulo: 'Calculadora de INSS 2026',
+    desc: 'Tabela progressiva INSS 2026 para CLT, autônomo, MEI e doméstico. Detalhamento por faixa e código de recolhimento GPS.',
     icone: '🏛️',
     cor: '#7c3aed',
     tags: ['INSS', 'previdência', 'CLT', 'MEI', 'autônomo'],
@@ -177,10 +177,10 @@ export default function CalculadoraOnlinePage() {
           Calculadoras online gratuitas — trabalhistas e matemáticas
         </h2>
         <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: 1.8, marginBottom: 10 }}>
-          A <strong>calculadora de rescisão trabalhista</strong> calcula automaticamente as verbas rescisórias conforme o tipo de demissão (sem justa causa, pedido, acordo mútuo ou justa causa), aplicando o aviso prévio proporcional (30 + 3 dias por ano de serviço) e as tabelas de INSS e IR 2025.
+          A <strong>calculadora de rescisão trabalhista</strong> calcula automaticamente as verbas rescisórias conforme o tipo de demissão (sem justa causa, pedido, acordo mútuo ou justa causa), aplicando o aviso prévio proporcional (30 + 3 dias por ano de serviço) e as tabelas de INSS e IR 2026.
         </p>
         <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: 1.8, marginBottom: 10 }}>
-          A <strong>calculadora de INSS 2025</strong> usa a tabela progressiva oficial e calcula a contribuição para CLT, autônomo (20%), contribuinte individual (11%) e MEI (5% fixo), com detalhamento por faixa. A <strong>calculadora de férias</strong> inclui 1/3 constitucional, opção de abono pecuniário e descontos de INSS e IR.
+          A <strong>calculadora de INSS 2026</strong> usa a tabela progressiva oficial e calcula a contribuição para CLT, autônomo (20%), contribuinte individual (11%) e MEI (5% fixo), com detalhamento por faixa. A <strong>calculadora de férias</strong> inclui 1/3 constitucional, opção de abono pecuniário e descontos de INSS e IR.
         </p>
         <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: 1.8 }}>
           Todas as calculadoras funcionam inteiramente no navegador — sem cadastro, sem instalar nada. A <strong>calculadora científica</strong> suporta seno, cosseno, tangente, logaritmos, fatoriais e expressões com parênteses em graus ou radianos.
