@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: page.metaTitle,
       description: page.metaDesc,
-      url: `https://calculadoravirtual.com.br/duvidas/${slug}`,
+      url: `https://calculadoravirtual.com/duvidas/${slug}`,
       siteName: 'Calculadora Virtual',
       locale: 'pt_BR',
       type: 'article',
@@ -64,8 +64,8 @@ export default async function DuvidasPage({ params }: { params: Promise<{ slug: 
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://calculadoravirtual.com.br' },
-      { '@type': 'ListItem', position: 2, name: 'Dúvidas', item: 'https://calculadoravirtual.com.br/duvidas' },
+      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://calculadoravirtual.com' },
+      { '@type': 'ListItem', position: 2, name: 'Dúvidas', item: 'https://calculadoravirtual.com/duvidas' },
       { '@type': 'ListItem', position: 3, name: ferramenta.titulo },
     ],
   }

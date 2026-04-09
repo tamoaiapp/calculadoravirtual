@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: artigo.metaTitle,
       description: artigo.metaDesc,
-      url: `https://calculadoravirtual.com.br/ferramentas/${slug}`,
+      url: `https://calculadoravirtual.com/ferramentas/${slug}`,
       siteName: 'Calculadora Virtual',
       locale: 'pt_BR',
       type: 'website',
@@ -91,7 +91,7 @@ export default async function PageFerramenta({ params }: { params: Promise<{ slu
     '@type': 'WebApplication',
     name: ferramenta.titulo,
     description: ferramenta.descricao,
-    url: `https://calculadoravirtual.com.br/ferramentas/${slug}`,
+    url: `https://calculadoravirtual.com/ferramentas/${slug}`,
     applicationCategory: 'UtilitiesApplication',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
     inLanguage: 'pt-BR',
@@ -103,8 +103,8 @@ export default async function PageFerramenta({ params }: { params: Promise<{ slu
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://calculadoravirtual.com.br' },
-      { '@type': 'ListItem', position: 2, name: categoriaNome, item: `https://calculadoravirtual.com.br/categoria/${ferramenta.categoria}` },
+      { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://calculadoravirtual.com' },
+      { '@type': 'ListItem', position: 2, name: categoriaNome, item: `https://calculadoravirtual.com/categoria/${ferramenta.categoria}` },
       { '@type': 'ListItem', position: 3, name: ferramenta.titulo },
     ],
   }

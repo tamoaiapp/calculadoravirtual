@@ -14,7 +14,7 @@ import { SLUGS_MEI } from '@/lib/mei/slugs'
 import { SLUGS_NUTRICAO } from '@/lib/nutricao/slugs'
 import { SLUGS_SAUDE } from '@/lib/saude/slugs'
 
-const BASE_URL = 'https://calculadoravirtual.com.br'
+const BASE_URL = 'https://calculadoravirtual.com'
 
 // Sitemap index: Next.js gera /sitemap.xml apontando para cada /sitemap/[id].xml
 // Google recomenda máx. 50.000 URLs por arquivo e 50MB por sitemap.

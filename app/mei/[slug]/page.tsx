@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: pagina.metaTitle,
       description: pagina.metaDesc,
-      url: `https://calculadoravirtual.com.br/mei/${slug}`,
+      url: `https://calculadoravirtual.com/mei/${slug}`,
       siteName: 'Calculadora Virtual',
       locale: 'pt_BR',
       type: 'article',
@@ -93,9 +93,9 @@ export default async function PaginaMEISlug({ params }: { params: Promise<{ slug
     publisher: {
       '@type': 'Organization',
       name: 'Calculadora Virtual',
-      url: 'https://calculadoravirtual.com.br',
+      url: 'https://calculadoravirtual.com',
     },
-    url: `https://calculadoravirtual.com.br/mei/${slug}`,
+    url: `https://calculadoravirtual.com/mei/${slug}`,
     inLanguage: 'pt-BR',
     keywords: pagina.tags.join(', '),
   }
