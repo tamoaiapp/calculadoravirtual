@@ -57,10 +57,10 @@ function base(f: Ferramenta, extra: Partial<BlogArtigo>): BlogArtigo {
     categoria: f.categoria,
     tags: [slugToTema(f.slug), f.categoria, 'calculadora online', '2026'],
     tempoLeitura: 12,
-    intro: `<strong>${f.titulo}</strong> é uma das ferramentas mais buscadas por brasileiros que precisam de respostas rápidas e confiáveis. ${f.descricao} Neste guia completo, vamos explicar tudo o que você precisa saber: como funciona o cálculo, quais são as regras em 2026, erros comuns que as pessoas cometem e como interpretar o resultado.\n\nUse a calculadora acima para obter o resultado da sua situação específica — é gratuita, sem cadastro e atualizada com os valores vigentes de 2026. Depois, leia o artigo para entender cada detalhe e tomar decisões mais informadas.\n\nEste conteúdo foi elaborado com base na legislação e tabelas oficiais vigentes em 2026. Os valores são atualizados periodicamente para refletir mudanças em leis, tabelas fiscais e índices econômicos.`,
+    intro: `Você sabe exatamente o quanto ${slugToTema(f.slug).replace('calculadora ', '')} vai custar ou resultar na sua situação? A maioria das pessoas descobre tarde demais — depois de assinar, pagar ou tomar a decisão errada. ${f.descricao}\n\nEste guia explica como o cálculo funciona, quais erros são mais comuns e como interpretar o resultado corretamente. Os dados são baseados em legislação e tabelas oficiais vigentes em 2026.\n\n<strong>📅 Atualizado em abril/2026</strong> · Revisado com base nas regras vigentes de 2026.`,
     secoes: [],
     faq: [],
-    conclusao: `Use nossa ${f.titulo} gratuitamente para calcular a sua situação específica. Os valores são baseados nas regras e tabelas oficiais de 2026. Para decisões financeiras ou jurídicas importantes, consulte sempre um profissional qualificado.`,
+    conclusao: `Os valores apresentados são baseados nas regras e tabelas oficiais de 2026. Para decisões financeiras ou jurídicas importantes, consulte sempre um profissional qualificado. <strong>📅 Conteúdo revisado em abril/2026.</strong>`,
     ...extra,
   }
 }

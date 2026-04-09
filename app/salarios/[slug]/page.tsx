@@ -153,7 +153,15 @@ export default function SalarioSlugPage({ params }: { params: { slug: string } }
             <span style={{ background: 'var(--bg2)', borderRadius: 6, padding: '3px 10px', fontSize: '0.78rem', color: 'var(--muted)' }}>{pg.mercadoLabel}</span>
           </div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text)', marginBottom: 10 }}>{pg.h1}</h1>
-          <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: 1.7 }}>{pg.intro}</p>
+          <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: 12 }}>{pg.intro}</p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <span style={{ background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.2)', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: 'var(--brand)', fontWeight: 600 }}>
+              📅 Dados de 2026
+            </span>
+            <span style={{ background: 'var(--bg2)', border: '1px solid var(--line)', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: 'var(--muted)', fontWeight: 500 }}>
+              📊 Fonte: CAGED, RAIS e pesquisas salariais
+            </span>
+          </div>
         </div>
 
         {/* Card salário destaque */}

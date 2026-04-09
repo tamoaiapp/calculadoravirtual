@@ -161,6 +161,15 @@ export default async function PaginaTrabalhista({ params }: { params: Promise<{ 
                 {pagina.titulo}
               </h1>
 
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16, marginTop: 8 }}>
+                <span style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: 'var(--brand)', fontWeight: 600 }}>
+                  📅 Tabelas atualizadas para 2026
+                </span>
+                <span style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: '#166534', fontWeight: 600 }}>
+                  ⚖️ Conforme CLT e Portaria MPS 2025
+                </span>
+              </div>
+
               {/* Tags */}
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
                 {pagina.tags.map(tag => (

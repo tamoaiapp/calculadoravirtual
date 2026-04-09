@@ -75,9 +75,17 @@ export default async function EmprestimoSlugPage({ params }: { params: Promise<{
         <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text)', marginBottom: 12, lineHeight: 1.3 }}>
           {pg.h1}
         </h1>
-        <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: 1.8, marginBottom: 28, maxWidth: 720 }}>
+        <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: 1.8, marginBottom: 14, maxWidth: 720 }}>
           {pg.intro}
         </p>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 28 }}>
+          <span style={{ background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.2)', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: 'var(--brand)', fontWeight: 600 }}>
+            📅 Taxas atualizadas 2026
+          </span>
+          <span style={{ background: 'var(--bg2)', border: '1px solid var(--line)', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: 'var(--muted)', fontWeight: 500 }}>
+            🏦 Fonte: Banco Central do Brasil
+          </span>
+        </div>
 
         {/* Cards de destaque */}
         {parcelaRef !== undefined && (

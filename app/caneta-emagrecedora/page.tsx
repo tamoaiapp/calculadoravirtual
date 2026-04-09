@@ -191,6 +191,87 @@ export default function CanetaPage() {
           Os estudos clínicos mais recentes — como o SURMOUNT-1 (tirzepatida) e o STEP-1 (semaglutida 2,4mg) — demonstraram perdas de peso médias de <strong>15% a 22% do peso corporal</strong> em 68 semanas, resultados sem precedentes para medicamentos não cirúrgicos. Todos exigem prescrição médica e acompanhamento especializado.
         </p>
       </div>
+
+      {/* Tabela de perda de peso por semana — baseada em estudos clínicos */}
+      <div style={{ marginTop: 40 }}>
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text)', marginBottom: 6 }}>
+          📊 Perda de peso semana a semana — dados dos estudos clínicos
+        </h2>
+        <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginBottom: 16 }}>
+          Fontes: Wilding et al. <em>NEJM</em> 2021 (STEP-1, semaglutida 2,4mg) · Jastreboff et al. <em>NEJM</em> 2022 (SURMOUNT-1, tirzepatida 15mg)
+        </p>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
+            <caption style={{ captionSide: 'bottom', fontSize: '0.75rem', color: 'var(--dim)', padding: '8px 0', textAlign: 'left' }}>
+              * Perda média do peso corporal inicial. Resultados individuais variam.
+            </caption>
+            <thead>
+              <tr style={{ background: 'var(--bg2)' }}>
+                <th style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 700, color: 'var(--text)', borderBottom: '2px solid var(--line)' }}>Semana</th>
+                <th style={{ padding: '10px 14px', textAlign: 'center', fontWeight: 700, color: 'var(--text)', borderBottom: '2px solid var(--line)' }}>Semaglutida 2,4mg<br /><span style={{ fontWeight: 400, fontSize: '0.75rem' }}>(Wegovy / Ozempic off-label)</span></th>
+                <th style={{ padding: '10px 14px', textAlign: 'center', fontWeight: 700, color: 'var(--text)', borderBottom: '2px solid var(--line)' }}>Tirzepatida 15mg<br /><span style={{ fontWeight: 400, fontSize: '0.75rem' }}>(Mounjaro)</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['4 semanas', '~1,5% do peso', '~1,8% do peso'],
+                ['12 semanas', '~4,5% do peso', '~5,5% do peso'],
+                ['24 semanas', '~8,5% do peso', '~11,0% do peso'],
+                ['52 semanas', '~12,0% do peso', '~16,0% do peso'],
+                ['68 semanas', '~14,9% do peso', '~20,9% do peso'],
+              ].map(([semana, sema, tirze], i) => (
+                <tr key={i} style={{ background: i % 2 === 0 ? 'var(--card)' : 'var(--bg)', borderBottom: '1px solid var(--line)' }}>
+                  <td style={{ padding: '9px 14px', fontWeight: 600, color: 'var(--text)' }}>{semana}</td>
+                  <td style={{ padding: '9px 14px', textAlign: 'center', color: 'var(--brand)', fontWeight: 600 }}>{sema}</td>
+                  <td style={{ padding: '9px 14px', textAlign: 'center', color: 'var(--green)', fontWeight: 600 }}>{tirze}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ fontSize: '0.78rem', color: 'var(--dim)', marginTop: 8 }}>
+          Exemplo: pessoa de 90kg usando semaglutida por 68 semanas perde em média 13,4kg (14,9%). Com tirzepatida, ~18,8kg (20,9%).
+        </p>
+      </div>
+
+      {/* Tabela comparativa de preços */}
+      <div style={{ marginTop: 40 }}>
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text)', marginBottom: 6 }}>
+          💰 Comparativo de preços e doses — Brasil 2026
+        </h2>
+        <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginBottom: 16 }}>
+          Preços de referência em farmácias particulares. Valores podem variar por região e farmácia.
+        </p>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
+            <thead>
+              <tr style={{ background: 'var(--bg2)' }}>
+                {['Medicamento', 'Princípio Ativo', 'Dose inicial', 'Dose máxima', 'Frequência', 'Preço médio/mês'].map(h => (
+                  <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 700, color: 'var(--text)', borderBottom: '2px solid var(--line)' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['Ozempic 0,5mg', 'Semaglutida', '0,25mg/sem', '1mg/sem', 'Semanal', 'R$ 800–1.200'],
+                ['Wegovy', 'Semaglutida 2,4mg', '0,25mg/sem', '2,4mg/sem', 'Semanal', 'R$ 1.200–1.800'],
+                ['Mounjaro', 'Tirzepatida', '2,5mg/sem', '15mg/sem', 'Semanal', 'R$ 1.500–2.500'],
+                ['Saxenda', 'Liraglutida', '0,6mg/dia', '3mg/dia', 'Diário', 'R$ 900–1.400'],
+                ['Rybelsus', 'Semaglutida oral', '3mg/dia', '14mg/dia', 'Diário', 'R$ 500–800'],
+              ].map(([med, pa, di, dm, freq, preco], i) => (
+                <tr key={i} style={{ background: i % 2 === 0 ? 'var(--card)' : 'var(--bg)', borderBottom: '1px solid var(--line)' }}>
+                  <td style={{ padding: '9px 14px', fontWeight: 700, color: 'var(--text)' }}>{med}</td>
+                  <td style={{ padding: '9px 14px', color: 'var(--muted)' }}>{pa}</td>
+                  <td style={{ padding: '9px 14px', color: 'var(--muted)' }}>{di}</td>
+                  <td style={{ padding: '9px 14px', color: 'var(--muted)' }}>{dm}</td>
+                  <td style={{ padding: '9px 14px', color: 'var(--muted)' }}>{freq}</td>
+                  <td style={{ padding: '9px 14px', fontWeight: 700, color: 'var(--green)' }}>{preco}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   )
 }

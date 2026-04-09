@@ -121,6 +121,18 @@ export default async function PageFerramenta({ params }: { params: Promise<{ slu
     })),
   }
 
+  // Schema.org HowTo
+  const schemaHowTo = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: `Como usar a ${ferramenta.titulo}`,
+    step: [
+      { '@type': 'HowToStep', position: 1, text: `Informe os dados nos campos da calculadora (ex: ${ferramenta.descricao.slice(0, 80)})` },
+      { '@type': 'HowToStep', position: 2, text: 'Clique em "Calcular" para obter o resultado instantaneamente.' },
+      { '@type': 'HowToStep', position: 3, text: 'Analise o resultado e os detalhes do cálculo exibidos abaixo.' },
+    ],
+  }
+
   return (
     <>
       {/* Schema.org JSON-LD */}
@@ -140,6 +152,7 @@ export default async function PageFerramenta({ params }: { params: Promise<{ slu
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaFAQ) }}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaHowTo) }} />
 
       <div className="container" style={{ paddingTop: 28, paddingBottom: 48 }}>
         {/* Breadcrumb */}
@@ -163,6 +176,15 @@ export default async function PageFerramenta({ params }: { params: Promise<{ slu
         <p style={{ color: 'var(--muted)', fontSize: '0.95rem', marginBottom: 24 }}>
           {ferramenta.descricao}
         </p>
+
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
+          <span style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: 'var(--brand)', fontWeight: 600 }}>
+            📅 Atualizado 2026
+          </span>
+          <span style={{ background: 'var(--bg2)', border: '1px solid var(--line)', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: 'var(--muted)', fontWeight: 500 }}>
+            ✓ Gratuito e sem cadastro
+          </span>
+        </div>
 
         <div className="layout-two-col">
 

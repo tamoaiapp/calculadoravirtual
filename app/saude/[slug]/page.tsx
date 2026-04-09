@@ -159,6 +159,15 @@ export default async function SaudeSlugPage({ params }: { params: Promise<{ slug
                 {pagina.titulo}
               </h1>
 
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 16, marginTop: 8 }}>
+                <span style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 8, padding: '4px 12px', fontSize: '0.78rem', color: '#166534', fontWeight: 600 }}>
+                  ✅ Informações baseadas em fontes oficiais (ANS, MS, ANVISA)
+                </span>
+                <span style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 8, padding: '4px 12px', fontSize: '0.78rem', color: '#1e40af', fontWeight: 600 }}>
+                  📅 Atualizado em abril/2026
+                </span>
+              </div>
+
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
                 {pagina.tags.map(tag => (
                   <span key={tag} style={{

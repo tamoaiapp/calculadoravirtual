@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
   } catch {
     return {
-      title: `Concurso Público 2025 | Calculadora Virtual`,
+      title: `Concurso Público 2026 | Calculadora Virtual`,
       description: 'Informações sobre concursos públicos, salários e como passar.',
     }
   }
@@ -59,9 +59,17 @@ export default async function ConcursoSlugPage({ params }: { params: Promise<{ s
         <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text)', marginBottom: 12, lineHeight: 1.3 }}>
           {pg.h1}
         </h1>
-        <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: 1.8, marginBottom: 28, maxWidth: 680 }}>
+        <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: 1.8, marginBottom: 14, maxWidth: 680 }}>
           {pg.intro}
         </p>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 28 }}>
+          <span style={{ background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.2)', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: 'var(--brand)', fontWeight: 600 }}>
+            📅 Atualizado 2026
+          </span>
+          <span style={{ background: 'var(--bg2)', border: '1px solid var(--line)', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: 'var(--muted)', fontWeight: 500 }}>
+            🏛️ Fonte: IBGE, INSS e tabelas oficiais
+          </span>
+        </div>
 
         {/* Cards de destaque para cargo específico */}
         {cargo && (

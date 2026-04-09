@@ -77,10 +77,18 @@ export default async function NutricaoSlugPage({ params }: { params: Promise<{ s
               {pagina.titulo}
             </h1>
             {pagina.subtitulo && (
-              <p style={{ fontSize: '1rem', color: 'var(--muted)', margin: 0, lineHeight: 1.5 }}>
+              <p style={{ fontSize: '1rem', color: 'var(--muted)', margin: '0 0 12px', lineHeight: 1.5 }}>
                 {pagina.subtitulo}
               </p>
             )}
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 12 }}>
+              <span style={{ background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.25)', borderRadius: 8, padding: '3px 10px', fontSize: '0.75rem', color: 'var(--green)', fontWeight: 600 }}>
+                📅 Atualizado 2026
+              </span>
+              <span style={{ background: 'var(--bg2)', border: '1px solid var(--line)', borderRadius: 8, padding: '3px 10px', fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 500 }}>
+                🥗 Fonte: TACO/IBGE e ANVISA
+              </span>
+            </div>
           </div>
 
           {/* Calculadora em destaque */}

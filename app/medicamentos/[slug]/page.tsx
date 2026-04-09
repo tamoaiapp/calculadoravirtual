@@ -72,8 +72,21 @@ export default async function MedicamentoPage({ params }: { params: Promise<{ sl
     },
   ]
 
+  const schemaMedical = {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalWebPage',
+    name: m.nome,
+    description: `Bula simplificada e informações sobre ${m.nome} (${m.principioAtivo}). Indicações, dosagens e precauções.`,
+    medicalAudience: { '@type': 'MedicalAudience', audienceType: 'Patient' },
+    lastReviewed: '2026-04-01',
+    reviewedBy: { '@type': 'Organization', name: 'Calculadora Virtual', url: 'https://calculadoravirtual.com' },
+    url: `https://calculadoravirtual.com/medicamentos/${m.slug}`,
+    inLanguage: 'pt-BR',
+  }
+
   return (
     <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMedical) }} />
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaAutor) }} />
     <div className="container" style={{ paddingTop: 32, paddingBottom: 60 }}>
       {/* Breadcrumb */}
@@ -98,6 +111,14 @@ export default async function MedicamentoPage({ params }: { params: Promise<{ sl
         <h1 style={{ fontSize: '1.9rem', fontWeight: 800, color: 'var(--text)', marginBottom: 8, lineHeight: 1.2 }}>
           {m.nome}
         </h1>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 20, marginTop: 8 }}>
+          <span style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 8, padding: '4px 12px', fontSize: '0.78rem', color: '#166534', fontWeight: 600 }}>
+            ✅ Baseado em bulas registradas na Anvisa
+          </span>
+          <span style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 8, padding: '4px 12px', fontSize: '0.78rem', color: '#1e40af', fontWeight: 600 }}>
+            📅 Revisado em abril/2026
+          </span>
+        </div>
         <div style={{ fontSize: '1rem', color: 'var(--muted)', marginBottom: 6 }}>
           <strong>Princípio ativo:</strong> {m.principioAtivo}
         </div>
