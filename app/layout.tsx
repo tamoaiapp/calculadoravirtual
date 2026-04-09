@@ -15,9 +15,42 @@ export const metadata: Metadata = {
   },
   openGraph: {
     images: [{ url: '/mascote.png', width: 1024, height: 1024 }],
+    siteName: 'Calculadora Virtual',
+    locale: 'pt_BR',
+    type: 'website',
   },
   other: {
     'google-adsense-account': 'ca-pub-6916421107498737',
+  },
+}
+
+const schemaOrg = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Calculadora Virtual',
+  url: 'https://calculadoravirtual.com',
+  logo: 'https://calculadoravirtual.com/mascote.png',
+  description: 'Site brasileiro de calculadoras online gratuitas com mais de 10.000 páginas sobre trabalhista, impostos, saúde, imóveis, veículos e finanças.',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'contato@calculadoravirtual.com',
+    contactType: 'customer support',
+    availableLanguage: 'Portuguese',
+  },
+  areaServed: 'BR',
+  inLanguage: 'pt-BR',
+}
+
+const schemaWebsite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Calculadora Virtual',
+  url: 'https://calculadoravirtual.com',
+  description: 'Calculadoras online gratuitas atualizadas para 2026.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://calculadoravirtual.com/ferramentas?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
   },
 }
 
@@ -25,6 +58,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR">
       <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaWebsite) }} />
         {/* ── Header ── */}
         <header style={{
           background: '#fff',
@@ -75,9 +110,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/emprestimos" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Empréstimos</Link>
                 <Link href="/concursos" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Concursos</Link>
                 <Link href="/saude" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Saúde</Link>
+                <Link href="/veiculos" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Veículos</Link>
+                <Link href="/imoveis" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Imóveis</Link>
+                <Link href="/mei" style={{ color: 'var(--muted)', textDecoration: 'none' }}>MEI/PJ</Link>
                 <Link href="/caneta-emagrecedora" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Ozempic/GLP-1</Link>
                 <Link href="/blog" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Blog</Link>
-                <Link href="/duvidas" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Dúvidas</Link>
+                <Link href="/sobre" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Sobre</Link>
+                <Link href="/contato" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Contato</Link>
+                <Link href="/politica-de-privacidade" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Privacidade</Link>
               </div>
             </div>
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--line)', fontSize: '0.78rem', color: 'var(--dim)' }}>

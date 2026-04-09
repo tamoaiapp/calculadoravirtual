@@ -39,6 +39,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/mei`, lastModified: hoje, changeFrequency: 'weekly', priority: 0.95 },
     { url: `${BASE_URL}/nutricao`, lastModified: hoje, changeFrequency: 'weekly', priority: 0.95 },
     { url: `${BASE_URL}/saude`, lastModified: hoje, changeFrequency: 'weekly', priority: 0.95 },
+    { url: `${BASE_URL}/sobre`, lastModified: hoje, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/contato`, lastModified: hoje, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/politica-de-privacidade`, lastModified: hoje, changeFrequency: 'yearly', priority: 0.3 },
   ]
 
   const categorias = CATEGORIAS.map(cat => ({
