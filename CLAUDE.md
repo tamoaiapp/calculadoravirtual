@@ -1,6 +1,6 @@
 # Calculadora Virtual — CLAUDE.md
 # Site com 1.000+ calculadoras online gratuitas
-# Atualizado: 2026-04-07
+# Atualizado: 2026-04-09
 
 ---
 
@@ -12,9 +12,9 @@ Site brasileiro de calculadoras online com:
 - **1.000 páginas de blog** (`/blog/[slug]`) com calculadora + artigo longo (guia completo)
 - **15 páginas de categoria** (`/categoria/[slug]`)
 - **Monetização:** Google AdSense Auto Ads (pub-id: `ca-pub-6916421107498737`)
-- **Total de páginas estáticas geradas:** ~2.025
+- **Total de páginas estáticas geradas:** ~4.565
 
-**URL:** calculadoravirtual.com.br  
+**URL:** calculadoravirtual.com  
 **Deploy:** Vercel (auto-deploy do GitHub)  
 **Diretório local:** `c:\Users\Notebook\Downloads\projeto clodcode\calculaai`
 
@@ -44,60 +44,46 @@ calculaai/
 │   ├── globals.css                 ← design system completo (CSS vars + classes utilitárias)
 │   ├── sitemap.ts                  ← sitemap automático (ferramentas + categorias + blog)
 │   ├── favicon.ico                 ← gerado do mascote.png
-│   ├── ferramentas/
-│   │   ├── page.tsx                ← lista todas as ferramentas com filtro por busca (?q=)
-│   │   └── [slug]/
-│   │       └── page.tsx            ← ferramenta + artigo SEO curto + sidebar + relacionadas
-│   ├── blog/
-│   │   ├── page.tsx                ← índice de 1.000 posts com filtro por categoria
-│   │   └── [slug]/
-│   │       └── page.tsx            ← CALCULADORA NO TOPO + artigo longo + FAQ + sidebar
-│   ├── categoria/
-│   │   └── [slug]/
-│   │       └── page.tsx            ← grid de ferramentas da categoria
-│   └── sitemap.ts
+│   ├── ferramentas/[slug]/page.tsx ← ferramenta + artigo SEO curto + HowTo schema + AutorBox
+│   ├── blog/[slug]/page.tsx        ← CALCULADORA NO TOPO + artigo longo + FAQ + AutorBox
+│   ├── categoria/[slug]/page.tsx   ← grid de ferramentas da categoria
+│   ├── trabalhista/[slug]/page.tsx ← páginas de direitos trabalhistas (CLT 2026)
+│   ├── ir/[slug]/page.tsx          ← páginas Imposto de Renda (IRPF 2026)
+│   ├── salarios/[slug]/page.tsx    ← páginas de salários por profissão
+│   ├── medicamentos/[slug]/page.tsx← MedicalWebPage schema + AutorBox + badge ANVISA
+│   ├── saude/[slug]/page.tsx       ← artigos saúde + badge ANS/MS + AutorBox
+│   ├── emprestimos/[slug]/page.tsx ← simulações de empréstimos e financiamentos
+│   ├── concursos/[slug]/page.tsx   ← páginas de concursos públicos
+│   ├── veiculos/[slug]/page.tsx    ← IPVA, CNH, custos veiculares
+│   ├── imoveis/[slug]/page.tsx     ← ITBI, financiamento, custos imobiliários
+│   ├── mei/[slug]/page.tsx         ← MEI, DAS, limites e obrigações
+│   ├── nutricao/[slug]/page.tsx    ← calorias, dietas, tabela nutricional
+│   ├── caneta-emagrecedora/page.tsx← Ozempic/Wegovy/Mounjaro — tabelas clínicas únicas
+│   └── tabela-periodica/[simbolo]/ ← elementos químicos
 │
-├── components/
-│   ├── calculadoras/
-│   │   ├── CalculadoraGenerica.tsx ← renderiza 99% das calculadoras via CalcConfig
-│   │   ├── saude/
-│   │   │   └── CalculadoraIMC.tsx  ← componente especial (UI própria)
-│   │   └── trabalhista/
-│   │       └── CalculadoraSalarioLiquido.tsx  ← componente especial
-│   └── ui/
-│       ├── HeaderSearch.tsx        ← barra de busca do header (client component)
-│       └── InterstitialAd.tsx      ← arquivo existe mas NÃO É MAIS USADO (Auto Ads)
-│
-├── hooks/
-│   └── useCalculadora.ts           ← hook de estado da calculadora (sem interstitial)
+├── components/ui/
+│   └── AutorBox.tsx                ← badge E-E-A-T autor (Tiago Oliveira) — usado em todas as slug pages
 │
 ├── lib/
 │   ├── ferramentas.ts              ← converte TODAS_CALCULADORAS → FERRAMENTAS[] + CATEGORIAS[]
-│   ├── seo-articles.ts             ← gera artigos curtos para /ferramentas/[slug]
+│   ├── seo-articles.ts             ← artigos curtos /ferramentas/[slug] — 15 templates por categoria
 │   ├── blog-articles.ts            ← interface BlogArtigo + 3 posts manuais ricos
-│   ├── blog-generator.ts           ← gera BlogArtigo automaticamente para todas as 1.000 ferramentas
+│   ├── blog-generator.ts           ← gera BlogArtigo automático — intro problem-first
+│   ├── emprestimos/                ← generator + dados + slugs
+│   ├── concursos/                  ← generator + dados + slugs
+│   ├── veiculos/                   ← generator + dados + slugs
+│   ├── imoveis/                    ← generator + dados + slugs
+│   ├── mei/                        ← generator + dados + slugs
+│   ├── nutricao/                   ← generator + dados + slugs
+│   ├── salarios/                   ← generator + dados + slugs
 │   └── calculadoras/
 │       ├── types.ts                ← CalcConfig, CampoCalc, ResultadoCalc
 │       ├── index.ts                ← TODAS_CALCULADORAS (spread de todos os grupos)
-│       ├── calcs-trabalhista.ts
-│       ├── calcs-impostos.ts
-│       ├── calcs-ecommerce.ts
-│       ├── calcs-investimentos.ts
-│       ├── calcs-programas-sociais.ts
-│       ├── calcs-medicamentos.ts
-│       ├── calcs-saude.ts
-│       ├── calcs-veiculos.ts
-│       ├── calcs-energia.ts
-│       ├── calcs-criar-empreender.ts
-│       ├── calcs-empresas-rh.ts
-│       ├── calcs-tech-ia.ts
-│       ├── calcs-agronegocio.ts
-│       ├── calcs-imoveis.ts
-│       └── calcs-dia-a-dia.ts
+│       └── calcs-[categoria].ts    ← 15 arquivos de calculadoras
 │
 └── public/
-    ├── mascote.png                 ← logo do site (usada no header e favicon)
-    ├── apple-touch-icon.png        ← 180×180 gerado do mascote
+    ├── mascote.png                 ← logo do site
+    ├── autor.jpg                   ← foto do autor (AutorBox E-E-A-T)
     └── ads.txt                     ← google.com, pub-6916421107498737, DIRECT, f08c47fec0942fa0
 ```
 
@@ -305,14 +291,26 @@ O `export const CALCS_DIA_A_DIA` deve estar **no final do arquivo**, depois de t
 | Rota | Arquivo | Tipo | Slugs |
 |---|---|---|---|
 | `/` | `app/page.tsx` | Static | — |
-| `/ferramentas` | `app/ferramentas/page.tsx` | Dynamic (searchParams) | — |
-| `/ferramentas/[slug]` | `app/ferramentas/[slug]/page.tsx` | SSG | 1.000 slugs |
-| `/blog` | `app/blog/page.tsx` | Dynamic (searchParams) | — |
-| `/blog/[slug]` | `app/blog/[slug]/page.tsx` | SSG | 1.000 slugs |
-| `/categoria/[slug]` | `app/categoria/[slug]/page.tsx` | SSG | 15 slugs |
+| `/ferramentas/[slug]` | `app/ferramentas/[slug]/page.tsx` | SSG | ~1.000 |
+| `/blog/[slug]` | `app/blog/[slug]/page.tsx` | SSG | ~1.000 |
+| `/categoria/[slug]` | `app/categoria/[slug]/page.tsx` | SSG | 15 |
+| `/trabalhista/[slug]` | `app/trabalhista/[slug]/page.tsx` | SSG | 80 |
+| `/ir/[slug]` | `app/ir/[slug]/page.tsx` | SSG | 80 |
+| `/salarios/[slug]` | `app/salarios/[slug]/page.tsx` | SSG | ~470 |
+| `/medicamentos/[slug]` | `app/medicamentos/[slug]/page.tsx` | SSG | 80 |
+| `/saude/[slug]` | `app/saude/[slug]/page.tsx` | SSG | 80 |
+| `/emprestimos/[slug]` | `app/emprestimos/[slug]/page.tsx` | SSG | 80 |
+| `/concursos/[slug]` | `app/concursos/[slug]/page.tsx` | SSG | 80 |
+| `/veiculos/[slug]` | `app/veiculos/[slug]/page.tsx` | SSG | 80 |
+| `/imoveis/[slug]` | `app/imoveis/[slug]/page.tsx` | SSG | 80 |
+| `/mei/[slug]` | `app/mei/[slug]/page.tsx` | SSG | 80 |
+| `/nutricao/[slug]` | `app/nutricao/[slug]/page.tsx` | SSG | 80 |
+| `/tabela-periodica/[simbolo]` | SSG | 118 |
 | `/sitemap.xml` | `app/sitemap.ts` | Static | — |
 
-**Build output:** ~2.025 páginas estáticas geradas em ~10 segundos.
+**Limite SSG por rota:** `slice(0, 80)` nos `generateStaticParams` para respeitar o limite de 80MB do Vercel free. `dynamicParams = true` serve o restante on-demand.
+
+**Build output:** ~4.565 páginas estáticas geradas em ~60 segundos.
 
 ---
 
@@ -404,6 +402,40 @@ O Vercel detecta o repositório GitHub e deploya automaticamente a cada push.
 
 ---
 
+## Padrões SEO obrigatórios (implementados em abr/2026)
+
+### AutorBox (E-E-A-T)
+Presente em todas as slug pages. Importar de `@/components/ui/AutorBox`:
+```tsx
+import { AutorBox, schemaAutor } from '@/components/ui/AutorBox'
+// No return: <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaAutor) }} />
+// No final do artigo: <AutorBox />
+// No sidebar: <AutorBox compact />
+```
+
+### Badges de atualização
+Todas as slug pages têm badges logo após o H1:
+```tsx
+<span>📅 Atualizado 2026</span>
+<span>📊 Fonte: [órgão oficial]</span>
+```
+Fontes por categoria: BACEN (emprestimos), IBGE/INSS (concursos), CAGED/RAIS (salarios), TACO/ANVISA (nutricao), CLT (trabalhista), Receita Federal (ir).
+
+### Schemas obrigatórios por tipo de página
+- **ferramentas/[slug]**: WebApplication + HowTo + FAQPage + BreadcrumbList + schemaAutor
+- **medicamentos/[slug]**: MedicalWebPage + schemaAutor + FAQPage
+- **saude/[slug]**: Article + schemaAutor + FAQPage
+- **blog/[slug]**: Article + schemaAutor + FAQPage
+- **demais slug pages**: Article + FAQPage
+
+### Intro — padrão obrigatório (problem-first)
+- **NÃO usar:** `"X é uma das ferramentas mais buscadas/práticas..."`
+- **NÃO usar:** conclusão começando com `"Use nossa X gratuitamente..."`
+- **USAR:** Abre com o problema do usuário (`"Você sabe exatamente...?"`, `"Pequenos erros de cálculo custam..."`)
+- **USAR:** Conclusão com dado concreto + badge `📅 Revisado em abril/2026`
+
+---
+
 ## O que NÃO fazer
 
 - **Não usar Supabase nem banco de dados** — tudo é estático em TypeScript
@@ -414,3 +446,5 @@ O Vercel detecta o repositório GitHub e deploya automaticamente a cada push.
 - **Não criar componentes especiais** sem necessidade — CalculadoraGenerica cobre 99% dos casos
 - **Não adicionar fontes externas** — usa system-ui
 - **Não usar dark theme** — o design é claro (bg: #f8fafc)
+- **Não criar slug duplicado** — cada slug deve aparecer exatamente uma vez no total de TODAS_CALCULADORAS
+- **Não usar `.com.br`** — o domínio é `calculadoravirtual.com`
