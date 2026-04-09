@@ -161,15 +161,15 @@ function gerarCreditoPessoalBanco(slug: string): PaginaEmprestimo {
         ],
       },
       {
-        h2: 'Documentos Necessários e Como Aumentar as Chances de Aprovação',
+        h2: 'Como Aumentar as Chances de Aprovação (e Pagar Menos)',
+        conteudo: `A lógica dos bancos: quanto menor o risco que você representa, menor a taxa. Score acima de 750 pode significar 1,5-2% a.m. a menos do que o cliente com score 600 — em 24 meses e ${fmt(valorEx)}, essa diferença chega a ${fmt(calcPrice(valorEx, taxa * 1.35, 24).totalPago - calcPrice(valorEx, taxa, 24).totalPago)}. Dois comportamentos que mais impactam o score em curto prazo: pagar todas as faturas antes do vencimento (não no dia, antes) e manter o uso do cartão abaixo de 30% do limite.`,
         lista: [
-          'RG ou CNH — qualquer documento oficial com foto',
-          'CPF em situação regular na Receita Federal (consulte em receita.fazenda.gov.br)',
-          'Comprovante de renda dos últimos 3 meses: contracheque, extrato bancário ou declaração de autônomo',
-          'Comprovante de residência em nome próprio, emitido há menos de 90 dias',
-          'Score acima de 600 para aprovação básica; acima de 700 para as melhores taxas',
-          'Dica: pague todas as contas em dia nos 3 meses antes de pedir o empréstimo — o score melhora e a taxa cai',
-          'Nunca aceite a primeira oferta: peça a simulação por escrito com o CET e compare com pelo menos mais 2 bancos',
+          `RG ou CNH + CPF regular na Receita (consulte em receita.fazenda.gov.br)`,
+          `3 meses de comprovante de renda: contracheque, extrato com crédito de salário ou pró-labore para sócios`,
+          `Comprovante de residência emitido há menos de 90 dias — em nome próprio ou com declaração de terceiro`,
+          `Score: acima de 700 para taxas do anúncio; acima de 750 para as propostas mais agressivas`,
+          `Relacionamento: cliente que recebe salário ou tem investimento no banco consegue taxa 20-30% menor`,
+          `Peça simulação em pelo menos 3 bancos antes de assinar — leve a proposta mais barata para negociar com os outros`,
         ],
       },
     ],
@@ -184,7 +184,7 @@ function gerarCreditoPessoalBanco(slug: string): PaginaEmprestimo {
       },
       {
         pergunta: 'O dinheiro cai na conta em quanto tempo?',
-        resposta: 'Bancos digitais liberam em minutos após aprovação. Bancos tradicionais levam de 1 a 3 dias úteis. Mas atenção: a pressa é inimiga da boa decisão financeira — compare taxas antes de aceitar qualquer proposta.',
+        resposta: 'Bancos digitais liberam em minutos após aprovação. Bancos tradicionais levam de 1 a 3 dias úteis. Mas aprovação rápida é argumento de venda — não de qualidade da taxa. Simule em pelo menos 3 bancos antes de aceitar qualquer proposta; a diferença de custo pode ser maior que a conveniência da velocidade.',
       },
       {
         pergunta: 'Posso quitar antes do prazo e economizar?',
@@ -312,14 +312,15 @@ function gerarConsignado(slug: string): PaginaEmprestimo {
         ],
       },
       {
-        h2: 'Documentos Necessários para Contratação',
+        h2: 'Documentação e o Que Mudou em 2023',
+        conteudo: `Desde 2023, o INSS exige autorização digital no app Meu INSS para novos contratos de consignado — isso foi introduzido para reduzir fraudes. É o passo mais importante e que mais gente esquece: sem a autorização digital, o banco não pode processar o contrato, mesmo com toda a documentação em ordem.`,
         lista: [
-          'RG ou CNH — qualquer documento oficial com foto',
-          'CPF regularizado (consulte em receita.fazenda.gov.br)',
-          'Extrato do benefício INSS (pelo app Meu INSS ou agência)',
+          'RG ou CNH — documento oficial com foto',
+          'CPF regularizado — consulte em receita.fazenda.gov.br',
+          'Extrato do benefício: acesse pelo app Meu INSS (gratuito) — mostra benefício líquido e margem disponível',
           'Comprovante de residência emitido há menos de 90 dias',
-          'Cartão do benefício — número e banco do benefício',
-          'Autorização digital via app Meu INSS (obrigatória desde 2023 para novos contratos)',
+          'Cartão do benefício: número e banco recebedor',
+          'Autorização digital via app Meu INSS (obrigatória desde 2023) — sem isso, o banco não processa',
         ],
       },
       {
@@ -965,7 +966,7 @@ function gerarSimulacaoParcelaMeses(slug: string): PaginaEmprestimo {
 function gerarGuia(slug: string): PaginaEmprestimo {
   let titulo = 'Guia de Empréstimos e Financiamentos 2026'
   let h1 = titulo
-  let intro = 'Guia completo sobre empréstimos, financiamentos e crédito no Brasil em 2026.'
+  let intro = 'No Brasil em 2026, a taxa de crédito pessoal médio é de 5,1% ao mês — mais de 60% ao ano. Escolher a modalidade errada de empréstimo pode custar o dobro do que a mais barata. Este guia mostra as taxas reais, como funcionam os sistemas de amortização e como não cair nas armadilhas mais comuns dos contratos bancários.'
   const secoes: SecaoEmprestimo[] = []
   const faq: { pergunta: string; resposta: string }[] = []
   let conclusao = ''
@@ -1061,18 +1062,15 @@ function gerarGuia(slug: string): PaginaEmprestimo {
     })
     if (slug.includes('melhorar')) {
       secoes.push({
-        h2: '10 Formas de Melhorar o Score Rápido',
+        h2: 'O Que Realmente Move o Score — Velocidade de Cada Ação',
+        conteudo: `O Serasa usa um modelo preditivo: ele não olha só o que você deve, mas a probabilidade de você pagar daqui para frente. Quitar uma dívida atrasada move o score em 30-60 dias. Pagar contas em dia por 3 meses consecutivos costuma adicionar 50-80 pontos. Consultas frequentes de crédito (mais de 3 em 30 dias) derrubam o score porque sinalizam desespero por crédito. Cadastro Positivo ativo sozinho pode acrescentar 30-50 pontos sem fazer nada além de se cadastrar.`,
         lista: [
-          'Quite todas as dívidas atrasadas (prioridade absoluta)',
-          'Cadastre-se no Cadastro Positivo (Serasa/SPC)',
-          'Pague todas as contas no vencimento ou antes',
-          'Mantenha o uso do cartão abaixo de 30% do limite',
-          'Não faça muitas consultas de crédito em curto período',
-          'Mantenha suas informações atualizadas no Serasa',
-          'Use Pix e TED para movimentar a conta — histórico bancário conta',
-          'Evite negativar contas (luz, água, aluguel)',
-          'Tenha uma conta corrente ativa com movimentação',
-          'Aguarde — o score melhora naturalmente com o tempo e histórico positivo',
+          'Impacto imediato (30-60 dias): quite dívidas em atraso — especialmente as mais recentes, que pesam mais',
+          'Impacto médio (60-90 dias): ative o Cadastro Positivo no app do Serasa — histórico de pagamentos em dia entra na conta',
+          'Impacto gradual (3-6 meses): pague cartão ANTES do vencimento, não no dia — o sistema registra data de pagamento',
+          'Evite: mais de 3 consultas de crédito em 30 dias — cada consulta pesa contra por 6 meses no modelo',
+          'Use o cartão com até 30% do limite — R$ 300 usados num limite de R$ 1.000 é sinal positivo; R$ 900 de R$ 1.000 é sinal de risco',
+          'Atualize renda e dados no Serasa pelo app — modelo usa renda declarada para calcular capacidade de pagamento',
         ],
       })
     }
@@ -1080,7 +1078,7 @@ function gerarGuia(slug: string): PaginaEmprestimo {
       { pergunta: 'O score melhora em quanto tempo?', resposta: 'Com as ações corretas (quitar dívidas, pagar em dia), o score começa a melhorar em 1-3 meses. Melhorias significativas levam de 6 meses a 1 ano.' },
       { pergunta: 'Score de quanto é bom para empréstimo?', resposta: 'Acima de 700 pontos você consegue taxas melhores. Acima de 800, as melhores propostas. Abaixo de 500, o acesso ao crédito é limitado e as taxas são mais altas.' },
     )
-    conclusao = 'O score de crédito é a chave para acessar crédito com taxas menores. Priorize quitar dívidas, pague tudo no vencimento e mantenha o Cadastro Positivo ativo. A melhora é gradual mas consistente.'
+    conclusao = 'Um score de 600 para 750 pode representar 1,5% a.m. a menos na taxa de crédito pessoal — em R$ 20.000 em 24 meses, isso é quase R$ 2.000 de diferença. As três ações de maior impacto: quitar atrasos (30-60 dias para refletir), ativar Cadastro Positivo (30-50 pontos de graça) e não consultar crédito em múltiplos bancos no mesmo mês.'
   } else {
     // Guia genérico
     secoes.push({
@@ -1102,7 +1100,7 @@ function gerarGuia(slug: string): PaginaEmprestimo {
       { pergunta: 'Qual é o menor empréstimo disponível?', resposta: 'Fintechs como PicPay e Nubank liberam a partir de R$ 100-200. Bancos tradicionais geralmente têm mínimo de R$ 300-500.' },
       { pergunta: 'Como calcular a parcela de um empréstimo?', resposta: 'Use a fórmula PRICE: PMT = PV × [i × (1+i)^n] / [(1+i)^n − 1]. Onde PV = valor, i = taxa mensal (decimal), n = número de meses.' },
     )
-    conclusao = 'Antes de contratar qualquer empréstimo, compare o CET (Custo Efetivo Total) entre pelo menos 3 instituições. Escolha sempre a modalidade mais barata disponível para o seu perfil (consignado > garantia > pessoal).'
+    conclusao = 'A hierarquia do crédito no Brasil em 2026: consignado INSS (1,97% a.m.) → antecipação FGTS (1,29% a.m.) → consignado servidor (2,05% a.m.) → crédito pessoal com garantia → crédito pessoal sem garantia. Quanto mais para o fim dessa fila você for, mais caro fica. Exija o CET por escrito em qualquer modalidade — é direito seu por lei.'
   }
 
   return {
@@ -1135,44 +1133,46 @@ function gerarGenerico(slug: string): PaginaEmprestimo {
     slug,
     tipo: 'generico',
     titulo,
-    metaTitle: `${titulo} — Empréstimos e Financiamentos 2026 | Calculadora Virtual`,
-    metaDesc: `Guia completo sobre ${titulo.toLowerCase()} em 2026. Taxas, simulações e como contratar.`,
-    h1: `${titulo}: Guia Completo 2026`,
-    intro: `Tudo sobre ${titulo.toLowerCase()} em 2026. Taxas, documentos, simulações e dicas para conseguir o melhor crédito.`,
+    metaTitle: `${titulo} — Taxas Reais, Simulação e CET 2026 | Calculadora Virtual`,
+    metaDesc: `${titulo} em 2026: taxa mínima ${fmtPct(taxa)} a.m. Simule ${fmt(valorEx)} em 24 meses = ${fmt(price24.parcela)}/mês, total ${fmt(price24.totalPago)}. Compare antes de assinar.`,
+    h1: `${titulo}: Taxas Reais, Simulação e O Que os Bancos Não Mostram (2026)`,
+    intro: `A taxa anunciada raramente é a taxa que você vai pagar. No crédito pessoal, a média nacional em março/2026 foi de 5,1% a.m. — mas o cliente sem score alto ou sem relacionamento paga mais. Para ${fmt(valorEx)} em 24 meses a ${fmtPct(taxa)} a.m., a parcela é ${fmt(price24.parcela)}/mês e o total pago é ${fmt(price24.totalPago)} (${fmt(price24.totalJuros)} de juros). Sempre exija o CET antes de assinar — é obrigação legal do banco fornecer.`,
     taxaRef: taxa,
     valorRef: valorEx,
     prazoRef: 24,
     parcelaRef: price24.parcela,
     secoes: [
       {
-        h2: 'Taxas de Referência 2026',
+        h2: 'Taxas Comparadas 2026 — Da Mais Barata à Mais Cara',
         tabela: {
-          cabecalho: ['Modalidade', 'Taxa Mensal', 'Taxa Anual'],
+          cabecalho: ['Modalidade', 'Taxa Mensal', 'Taxa Anual', `${fmt(valorEx)} em 24 meses`],
           linhas: [
-            ['Consignado INSS', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.inss_teto)) + ' a.a.'],
-            ['Crédito Pessoal', fmtPct(taxa) + ' a.m.', fmtPct(mensal2Anual(taxa)) + ' a.a.'],
-            ['Financiamento Imóvel', fmtPct(TAXAS_2026.imovel.cef_min_mensal) + ' a.m.', fmtPct(TAXAS_2026.imovel.cef_anual) + ' a.a.'],
-            ['Rotativo Cartão (teto)', fmtPct(TAXAS_2026.teto_rotativo_cartao) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.teto_rotativo_cartao)) + ' a.a.'],
+            ['Antecipação FGTS', '1,29% a.m.', fmtPct(mensal2Anual(1.29)) + ' a.a.', fmt(calcPrice(valorEx, 1.29, 24).parcela) + '/mês'],
+            ['Consignado INSS (teto)', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.inss_teto)) + ' a.a.', fmt(calcPrice(valorEx, TAXAS_2026.consignado.inss_teto, 24).parcela) + '/mês'],
+            ['Crédito Pessoal (mín.)', fmtPct(taxa) + ' a.m.', fmtPct(mensal2Anual(taxa)) + ' a.a.', fmt(price24.parcela) + '/mês'],
+            ['Financiamento Imóvel (CEF)', fmtPct(TAXAS_2026.imovel.cef_min_mensal) + ' a.m.', fmtPct(TAXAS_2026.imovel.cef_anual) + ' a.a.', 'Produto específico'],
+            ['Rotativo Cartão (teto legal)', fmtPct(TAXAS_2026.teto_rotativo_cartao) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.teto_rotativo_cartao)) + ' a.a.', fmt(calcPrice(valorEx, TAXAS_2026.teto_rotativo_cartao, 24).parcela) + '/mês'],
           ],
         },
+        conteudo: `A diferença entre o consignado INSS (${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m.) e o crédito pessoal médio (5,1% a.m.) representa ${fmt(calcPrice(valorEx, 5.1, 24).totalPago - calcPrice(valorEx, TAXAS_2026.consignado.inss_teto, 24).totalPago)} a mais pagos em 24 meses para ${fmt(valorEx)}. Se você for aposentado, pensionista ou servidor público, sempre verifique primeiro o consignado.`,
       },
       {
-        h2: `Simulação: R$ ${fmtNum(valorEx)} em 24 Meses`,
-        destaque: `Parcela: ${fmt(price24.parcela)}/mês · Total: ${fmt(price24.totalPago)} · Juros: ${fmt(price24.totalJuros)}`,
-        conteudo: `Simulação com taxa de ${fmtPct(taxa)} ao mês (crédito pessoal — taxa mínima em banco grande). O consignado (${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m.) seria ${fmt(calcPrice(valorEx, TAXAS_2026.consignado.inss_teto, 24).parcela)}/mês.`,
+        h2: `Simulação Detalhada: ${fmt(valorEx)} em 24 Meses`,
+        destaque: `Crédito pessoal: ${fmt(price24.parcela)}/mês · Total: ${fmt(price24.totalPago)} · Juros: ${fmt(price24.totalJuros)} · Consignado INSS: ${fmt(calcPrice(valorEx, TAXAS_2026.consignado.inss_teto, 24).parcela)}/mês`,
+        conteudo: `Na Tabela PRICE (parcelas fixas), os juros são maiores no início. No 1º mês, dos ${fmt(price24.parcela)} da parcela, apenas ${fmt(calcPrice(valorEx, taxa, 24).tabela[0]?.amortizacao ?? 0)} reduzem o saldo devedor — o resto vai para juros. Por isso, quem quita antecipado economiza muito: os juros futuros são cancelados. Para ${fmt(valorEx)} em 24 meses, quitar na metade do prazo pode economizar cerca de ${fmt(price24.totalJuros * 0.4)} de juros.`,
       },
     ],
     faq: [
       {
-        pergunta: `O que é ${titulo}?`,
-        resposta: `${titulo} é uma modalidade de crédito disponível no Brasil em 2026. As condições variam por banco e perfil do tomador.`,
+        pergunta: `Como conseguir ${titulo.toLowerCase()} com a menor taxa possível?`,
+        resposta: `Três fatores que mais reduzem a taxa: (1) Score acima de 700 — cada 50 pontos a mais pode representar 0,3-0,5% a.m. a menos; (2) Relacionamento bancário — cliente que recebe salário ou tem investimento no banco consegue 20-30% de desconto; (3) Comparar 3 propostas — use a menor como argumento de negociação com os outros bancos.`,
       },
       {
-        pergunta: 'Qual banco tem a menor taxa?',
-        resposta: `Para crédito pessoal, os bancos digitais (Nubank, Inter, C6) costumam ter as menores taxas. Para consignado, compare o teto legal de ${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m. entre os bancos credenciados.`,
+        pergunta: 'O que é CET e por que importa mais que a taxa de juros?',
+        resposta: `CET (Custo Efetivo Total) inclui a taxa de juros, IOF, tarifas e seguros — é o custo real do crédito. Um banco pode anunciar taxa de 3% a.m. e ter CET de 4,2% a.a. por conta do IOF (0,0082%/dia + 0,38% flat) e seguros embutidos. O Banco Central obriga todos os bancos a informar o CET antes da contratação — exija-o por escrito.`,
       },
     ],
-    conclusao: `Sempre compare pelo menos 3 propostas antes de contratar qualquer tipo de crédito. Verifique o CET, o prazo e se as parcelas cabem no seu orçamento.`,
+    conclusao: `Antes de assinar qualquer contrato de crédito, faça duas perguntas ao banco: qual é o CET (não só a taxa) e qual é o valor total a ser pago no final do contrato. Para ${fmt(valorEx)} em 24 meses a ${fmtPct(taxa)} a.m., o total é ${fmt(price24.totalPago)} — se o banco mostrar um número muito diferente, alguma tarifa está escondida.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -1366,18 +1366,18 @@ function gerarComparativo(slug: string): PaginaEmprestimo {
         )} a mais para o mesmo empréstimo de R$ 10.000 em 24 meses. Comparar antes de contratar é literalmente dinheiro no bolso.`,
       },
       {
-        h2: 'Antes de Pegar Crédito Pessoal: Verifique Estas Alternativas Mais Baratas',
+        h2: 'Qual Crédito Usar Dependendo do Seu Perfil — Mapa de Decisão 2026',
         tabela: {
-          cabecalho: ['Modalidade', 'Taxa Mensal', 'Taxa Anual', 'Quem Pode', 'R$ 10.000 em 24 meses'],
+          cabecalho: ['Perfil', 'Melhor Opção', 'Taxa Mensal', 'R$ 10.000 em 24 meses', 'Por que é a melhor'],
           linhas: [
-            ['Consignado INSS (teto legal)', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', '26,4% a.a.', 'Aposentados/pensionistas INSS', fmt(calcPrice(10000, TAXAS_2026.consignado.inss_teto, 24).parcela) + '/mês'],
-            ['Consignado Servidor', fmtPct(TAXAS_2026.consignado.servidor_federal_max) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.servidor_federal_max)) + ' a.a.', 'Servidores públicos', fmt(calcPrice(10000, TAXAS_2026.consignado.servidor_federal_max, 24).parcela) + '/mês'],
-            ['Antecipação FGTS', '1,29% a.m.', fmtPct(mensal2Anual(1.29)) + ' a.a.', 'CLTs com saldo no FGTS', 'Desconto no saldo — sem parcela'],
-            [`Menor taxa crédito pessoal`, fmtPct(bancoOrdenado[0]?.taxaMinMensal ?? 2.35) + ' a.m.', fmtPct(bancoOrdenado[0]?.taxaMinAnual ?? 32) + ' a.a.', 'Qualquer pessoa (aprovação)', fmt(calcPrice(10000, bancoOrdenado[0]?.taxaMinMensal ?? 2.35, 24).parcela) + '/mês'],
-            [`Maior taxa crédito pessoal`, fmtPct(bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5) + ' a.m.', fmtPct(mensal2Anual(bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5)) + ' a.a.', 'Qualquer pessoa (aprovação)', fmt(calcPrice(10000, bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5, 24).parcela) + '/mês'],
+            ['Aposentado/pensionista INSS', 'Consignado INSS', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', fmt(calcPrice(10000, TAXAS_2026.consignado.inss_teto, 24).parcela) + '/mês', 'Não consulta Serasa; desconto automático no benefício'],
+            ['Servidor público federal', 'Consignado Servidor', fmtPct(TAXAS_2026.consignado.servidor_federal_max) + ' a.m.', fmt(calcPrice(10000, TAXAS_2026.consignado.servidor_federal_max, 24).parcela) + '/mês', 'Menor taxa do mercado para servidores; prazo de 96 meses'],
+            ['CLT com saldo no FGTS', 'Antecipação FGTS', '1,29% a.m.', 'Desconto direto no saldo futuro', 'Taxa mais baixa do mercado — sem parcela mensal'],
+            ['Score 700+, renda comprovada', bancoOrdenado[0]?.nome ?? 'Banco com menor taxa', fmtPct(bancoOrdenado[0]?.taxaMinMensal ?? 2.35) + ' a.m.', fmt(calcPrice(10000, bancoOrdenado[0]?.taxaMinMensal ?? 2.35, 24).parcela) + '/mês', 'Aproveitar score alto para conseguir taxa mínima do ranking'],
+            ['Score baixo ou negativado', 'Home Equity (imóvel)', '1,5–2% a.m.', 'Varia por valor do imóvel', 'Taxa baixa mesmo sem score — imóvel é a garantia'],
           ],
         },
-        conteudo: `A média nacional de crédito pessoal (5,1% a.m.) é mais de 2,5 vezes o teto do consignado INSS (${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m.). Se você é aposentado ou pensionista, nunca tome crédito pessoal antes de tentar o consignado.`,
+        conteudo: `A diferença entre usar o crédito errado e o certo para o seu perfil pode ser ${fmt(calcPrice(10000, 5.1, 24).totalPago - calcPrice(10000, TAXAS_2026.consignado.inss_teto, 24).totalPago)} em 24 meses para R$ 10.000. O banco não vai te oferecer a opção mais barata espontaneamente — você precisa saber qual é a sua e pedir.`,
       },
       {
         h2: '5 Estratégias Para Conseguir a Menor Taxa Possível',
@@ -1550,14 +1550,15 @@ function gerarFGTS(slug: string): PaginaEmprestimo {
         conteudo: 'O desconto do FGTS é feito diretamente na parcela anual do saque-aniversário. Você não paga parcelas mensais com dinheiro do salário.',
       },
       {
-        h2: 'Saque-Aniversário: Cuidados Importantes',
-        alerta: 'Atenção! Ao aderir ao saque-aniversário, você perde o direito de sacar o FGTS em caso de demissão sem justa causa. A adesão é irreversível por 2 anos.',
+        h2: 'Saque-Aniversário: O Risco que a Propaganda Não Mostra',
+        alerta: 'Ao aderir ao saque-aniversário, você perde o saque do FGTS em caso de demissão sem justa causa — recebe apenas a multa de 40%, não o saldo total. Se for demitido com R$ 30.000 no FGTS, recebe R$ 12.000 de multa e fica sem acesso ao restante enquanto houver saldo comprometido.',
+        conteudo: `A conta que muita gente não faz: quem antecipa 3 parcelas de R$ 5.000 cada (R$ 15.000 total) e é demitido 6 meses depois perde acesso a esses R$ 15.000 do saldo principal no momento da rescisão. O dinheiro fica bloqueado até a quitação da antecipação. Para quem está em empresa com risco de demissão, o custo "invisível" pode ser muito maior que os juros economizados.`,
         lista: [
-          'Você só pode sacar uma parcela por ano (no mês do seu aniversário)',
-          'Em caso de demissão sem justa causa, recebe apenas a multa de 40% (não o saldo total)',
-          'A antecipação pode comprometer parcelas futuras do saque',
-          'Para quem tem estabilidade no emprego, o saque-aniversário pode valer a pena',
-          'Para CLTs com risco de demissão, prefira o saque-rescisão (modalidade padrão)',
+          'Uma parcela por ano, no mês do aniversário — não é flexível',
+          'Demissão sem justa causa: recebe só a multa de 40%, não o saldo total',
+          'Parcelas antecipadas comprometem o saldo futuro do saque-aniversário',
+          'Ótimo para quem tem estabilidade real: funcionário público, servidor com cargo efetivo, dono de empresa',
+          'Evitar se você tem menos de 2 anos no emprego atual ou está em empresa enxugando equipe',
         ],
       },
     ],
@@ -1566,7 +1567,7 @@ function gerarFGTS(slug: string): PaginaEmprestimo {
       { pergunta: 'Quantas parcelas posso antecipar?', resposta: 'A maioria dos bancos permite antecipar de 1 a 12 parcelas anuais futuras do saque-aniversário, dependendo do saldo disponível.' },
       { pergunta: 'A taxa é garantida?', resposta: 'A taxa é fixada no contrato. Não varia durante o prazo. O desconto é automático nas parcelas anuais do saque-aniversário.' },
     ],
-    conclusao: `A antecipação do FGTS é uma das modalidades de crédito mais baratas do Brasil (taxa mínima de 1,29% a.m.), mas tem um risco importante: você perde o saque do FGTS em demissão sem justa causa enquanto houver saldo comprometido.`,
+    conclusao: `A antecipação do FGTS a 1,29% a.m. custa quatro vezes menos que o crédito pessoal médio — é um dos créditos mais baratos do Brasil para quem tem saldo disponível. Mas o saque-aniversário transforma o FGTS em garantia: se você for demitido sem justa causa com R$ 20.000 antecipados, esse valor fica bloqueado e só vai para o banco. Para quem tem estabilidade no emprego, faz sentido. Para quem está em risco de demissão, o consignado (se aposentado) ou o crédito pessoal podem ser mais seguros.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -1587,7 +1588,7 @@ function gerarGoverno(slug: string): PaginaEmprestimo {
     metaTitle: `${titulo} | Calculadora Virtual`,
     metaDesc: `${titulo}: taxas a partir de ${fmtPct(taxa)} a.m. Veja condições, documentos e como simular.`,
     h1: `${titulo}: Taxas, Condições e Como Contratar`,
-    intro: `O governo federal oferece linhas de crédito diferenciadas para microempreendedores e pequenas empresas em 2026. Taxas menores, prazos maiores e carência para incentivar os negócios.`,
+    intro: `O Pronampe (Programa Nacional de Apoio às Microempresas) e as linhas do BNDES cobram Selic + 6% ao ano — com a Selic a 12,75% em 2026, isso dá cerca de 1,5% ao mês, menos da metade do crédito pessoal convencional (5,1% a.m.). A pegada: você precisa do CNPJ regularizado e do faturamento declarado. MEI com DASN-SIMEI em dia acessa o Pronampe em até 5 dias úteis pelo banco conveniado.`,
     taxaRef: taxa,
     secoes: [
       {
@@ -1620,7 +1621,7 @@ function gerarGoverno(slug: string): PaginaEmprestimo {
       { pergunta: 'Qual banco libera crédito para MEI mais fácil?', resposta: 'Banco do Brasil, Caixa, Santander e fintechs como Creditas e Bom pra Crédito têm linhas específicas para MEI. O BB e Caixa costumam ter as melhores taxas por conta do Pronampe.' },
       { pergunta: 'Precisa de garantia para crédito MEI?', resposta: 'No Pronampe, o FGI (Fundo Garantidor) pode ser usado como garantia. Para valores menores, geralmente não é exigida garantia real.' },
     ],
-    conclusao: `O Pronampe e as linhas BNDES são as melhores opções de crédito para MEI e pequenas empresas em 2026. Taxas menores que o mercado e prazos longos. Mantenha o CNPJ regularizado e o faturamento declarado para ter acesso.`,
+    conclusao: `Para um MEI com faturamento de R$ 81.000/ano (teto 2026), o Pronampe libera até R$ 24.300 a Selic + 6% a.a. — enquanto o crédito pessoal cobraria 5,1% a.m. sobre o mesmo valor. A diferença em 24 meses: mais de R$ 5.000 de juros a menos. Pré-requisito inegociável: CNPJ ativo, DASN-SIMEI do último ano declarado e sem débitos na Receita Federal.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }

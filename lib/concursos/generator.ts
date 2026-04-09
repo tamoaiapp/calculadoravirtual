@@ -152,7 +152,7 @@ function gerarPaginaCargo(cargo: Cargo): PaginaConcurso {
     ? `Quem estuda para ${cargo.orgao} relata que o processo exige, na média, entre 2 e 4 anos de dedicação intensa — não é exagero. A prova não é difícil apenas pelo conteúdo: é o volume de candidatos altamente preparados que eleva o nível de corte. Candidatos que passaram recomendam resolver pelo menos 3.000 questões específicas da banca antes de fazer a prova.`
     : cargo.dificuldade === 'alta'
     ? `A preparação típica para ${cargo.nome} leva de 8 meses a 2 anos. O detalhe que derruba candidatos despreparados: as bancas exigem domínio profundo de Conhecimentos Específicos, que correspondem ao maior peso das provas. Português e Raciocínio Lógico funcionam como filtro eliminatório — quem vai mal nessas matérias raramente alcança o ponto de corte.`
-    : `Para candidatos organizados, 4 a 6 meses de estudo consistente são suficientes. O ponto que muita gente ignora: mesmo concursos de dificuldade média têm concorrência acirrada quando as vagas são poucas. Resolva pelo menos 800 questões de provas anteriores da mesma banca antes da prova.`
+    : `Para candidatos organizados, 4 a 6 meses de estudo focado são suficientes. O erro mais comum em concursos de dificuldade média: candidatos subestimam o conteúdo e estudam de menos. A concorrência existe — o INSS em 2024 teve 1,4 milhão de inscritos para 7.000 vagas (200 por vaga). Resolva pelo menos 1.000 questões de provas anteriores da banca organizadora deste concurso antes da prova — e priorize as matérias com maior número de questões no edital.`
 
   const textoRotina = cargo.atribuicoes && cargo.atribuicoes.length > 0
     ? `No dia a dia, o ${cargo.nome} atua em: ${cargo.atribuicoes.slice(0, 3).join(', ')}. A rotina varia bastante conforme a unidade de lotação — servidores lotados em grandes centros tendem a lidar com maior volume de demandas, enquanto os do interior têm mais autonomia.`
@@ -325,14 +325,14 @@ function gerarPaginaOrgao(orgaoSlug: string): PaginaConcurso {
     {
       h2: '📝 Como se Preparar para o Concurso — Estratégia Real',
       lista: [
-        `Baixe as provas dos últimos 3 editais do ${nomeOrgao} e identifique o padrão de cobrança da banca`,
-        'Estude os conteúdos em ordem de peso no edital — não perca tempo equilibrado em tudo',
-        'Resolva pelo menos 1.500 questões comentadas da mesma banca antes da prova',
-        'Faça ao menos um simulado cronometrado por semana nas últimas 4 semanas antes da prova',
-        'Língua Portuguesa e Raciocínio Lógico funcionam como filtro eliminatório — dedique pelo menos 30% do tempo a essas matérias',
-        'Use QConcursos, Gran Cursos Online ou Estratégia Concursos para acesso a questões filtradas por órgão e banca',
-        'Monitore a publicação do edital e prepare a documentação com antecedência (RG, CPF, diplomas, laudos, fotos)',
-        'Calcule o salário líquido real antes de se inscrever para evitar surpresas no contracheque',
+        `Baixe e resolva as provas dos últimos 3 editais do ${nomeOrgao} antes de abrir qualquer apostila — o padrão da banca é o mapa real do que vai cair`,
+        `Para o ${nomeOrgao}, a banca mais recorrente é CESPE/Cebraspe ou FCC — bancas diferentes cobram conteúdos com estilos radicalmente distintos (CESPE exige raciocínio; FCC exige domínio literal do texto)`,
+        'Organize as matérias do edital por número de questões, não por afinidade pessoal — estude o que vale mais pontos primeiro',
+        'Resolva ao menos 1.500 questões filtradas por essa banca específica antes da prova — quantidade menor que isso raramente gera base suficiente',
+        'Simule a prova completa e cronometrada ao menos 1 vez por semana nas últimas 6 semanas: a pressão do relógio real muda o desempenho',
+        'Língua Portuguesa funciona como filtro silencioso — candidatos que tiram menos de 60% nessa matéria raramente alcançam o ponto de corte, mesmo com boa nota nas específicas',
+        'Prepare a documentação com antecedência (RG, CPF, diplomas, laudos médicos, fotos 3×4) — editais têm prazos curtos para entrega e a falta de um único documento elimina o candidato da posse',
+        `Calcule o salário líquido real do ${nomeOrgao} usando a calculadora desta página — candidatos que planejam as finanças com o bruto do edital se frustram no primeiro contracheque`,
       ],
     },
   ]
@@ -342,7 +342,7 @@ function gerarPaginaOrgao(orgaoSlug: string): PaginaConcurso {
       pergunta: `Quando será o próximo concurso ${sigla || nomeOrgao}?`,
       resposta: concursosPrevistos.length > 0
         ? `Há previsão de concurso no ${nomeOrgao}: ${concursosPrevistos[0].edital}. São ${fmtNum(concursosPrevistos[0].vagas)} vagas para ${concursosPrevistos[0].cargo} com salário inicial de ${fmt(concursosPrevistos[0].salario)} bruto (${fmt(calcularSalarioLiquido(concursosPrevistos[0].salario).liquido)} líquido). Candidatos que iniciam os estudos antes do edital chegam com meses de vantagem.`
-        : `Não há data oficial confirmada para o próximo concurso do ${nomeOrgao}. Acompanhe o site oficial do órgão e cadastre alertas de novidades em portais como Gran Cursos, Estratégia Concursos e QConcursos. Vá estudando — o edital aparece para quem está preparado.`,
+        : `Não há data oficial confirmada para o próximo concurso do ${nomeOrgao}. Histórico de editais do órgão mostra ciclos de 3 a 6 anos entre concursos — quem começa a estudar antes da publicação do edital tem meses de vantagem real sobre candidatos que só iniciam os estudos depois. Monitore o site oficial do órgão, o Diário Oficial da União (gov.br/imprensa-nacional) e cadastre alertas em Gran Cursos e Estratégia Concursos.`,
     },
     {
       pergunta: `Quais os melhores cargos do concurso ${sigla || nomeOrgao}?`,
@@ -372,7 +372,7 @@ function gerarPaginaOrgao(orgaoSlug: string): PaginaConcurso {
     intro: `${orgao?.descricao ?? `O ${nomeOrgao} é um dos principais órgãos do setor público brasileiro.`} ${cargos.length > 0 ? `O concurso oferece ${cargos.length} cargo(s) com salários brutos que variam de ${fmt(menorSalario)} a ${fmt(maiorSalario)} — mas o que importa mesmo é o líquido, que fica entre ${fmt(calcularSalarioLiquido(menorSalario).liquido)} e ${fmt(calcularSalarioLiquido(maiorSalario).liquido)} após INSS e IR.` : ''}`,
     secoes,
     faq,
-    conclusao: `Se preparar para um concurso do ${nomeOrgao} exige método, não apenas volume de estudo. ${concursosPrevistos.length > 0 ? `Com ${fmtNum(concursosPrevistos.reduce((acc, c) => acc + c.vagas, 0))} vagas previstas, quem estiver pronto quando o edital sair sai na frente — e a diferença entre aprovado e eliminado costuma ser de poucos pontos.` : 'Comece agora mesmo: os candidatos que chegam ao edital sem ter estudado antes raramente passam na primeira tentativa.'}`,
+    conclusao: `${concursosPrevistos.length > 0 ? `O próximo concurso do ${nomeOrgao} prevê ${fmtNum(concursosPrevistos.reduce((acc, c) => acc + c.vagas, 0))} vagas — e a diferença entre aprovado e eliminado costuma ser de 2 a 5 pontos na nota final. Candidatos que chegam ao edital com 6 meses ou mais de estudo prévio tendem a ter margens maiores e sobrevivem melhor aos recursos e às notas de corte elevadas.` : `O ${nomeOrgao} não tem edital publicado no momento, mas o histórico mostra ciclos de concurso a cada 3 a 5 anos. Quem começa a estudar antes do edital tem meses de vantagem real sobre candidatos que só iniciam a preparação após a publicação — e esse intervalo raramente é suficiente para quem está do zero.`} Use a calculadora desta página para simular o salário líquido antes de decidir qual cargo priorizar.`,
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -462,10 +462,10 @@ function gerarPaginaEstado(estadoSlug: string): PaginaConcurso {
     metaTitle: `Concursos em ${nomeEstado} (${uf}) 2025: Vagas e Salários`,
     metaDesc: `Concursos públicos em ${nomeEstado} em 2025. Salário médio dos servidores: ${fmt(estado?.salarioMedioServidor ?? 7000)}/mês. Veja todos os editais previstos para 2025 e 2026.`,
     h1: `Concursos Públicos em ${nomeEstado} 2025 — Guia Completo`,
-    intro: `${nomeEstado} (${uf}) reúne oportunidades de concurso público em todos os poderes e esferas: federal, estadual e municipal. O salário médio dos servidores públicos no estado é de ${fmt(estado?.salarioMedioServidor ?? 7000)}/mês, com os maiores salários nos cargos fiscais, jurídicos e de controle.`,
+    intro: `${nomeEstado} (${uf}) tem servidores públicos das três esferas: federal (Receita Federal, Polícia Federal, Judiciário federal), estadual (SEFAZ-${uf}, Polícia Civil, TJ-${uf}) e municipal (prefeitura de ${estado?.capital ?? 'capital'} e cidades do interior). O salário médio dos servidores no estado é ${fmt(estado?.salarioMedioServidor ?? 7000)}/mês — mas a dispersão é alta: servidores municipais de cidades pequenas recebem próximo ao mínimo, enquanto Auditores da Receita Federal lotados em ${nomeEstado} ganham R$21.029 bruto (${fmt(calcularSalarioLiquido(21029).liquido)} líquido).`,
     secoes,
     faq,
-    conclusao: `Independente da área de atuação ou nível de escolaridade, ${nomeEstado} oferece excelentes oportunidades de concurso público em 2025. Prepare-se com antecedência, acompanhe os editais e use as ferramentas desta página para calcular o salário líquido antes de se inscrever.`,
+    conclusao: `Em ${nomeEstado} (${uf}), o maior erro dos candidatos é esperar o edital abrir para começar a estudar — a janela entre publicação e prova costuma ser de apenas 60 a 90 dias, tempo insuficiente para quem está zerado no conteúdo. ${concursosPrev.length > 0 ? `Com ${fmtNum(concursosPrev.reduce((acc, c) => acc + c.vagas, 0))} vagas previstas nos próximos editais do estado, quem estiver pronto quando a publicação sair larga na frente.` : 'Monitore o site da SEFAZ, TJ e PM estadual — são os concursos com maior volume de vagas e maior frequência histórica de editais no estado.'} Use a calculadora para saber o líquido real antes de decidir para qual cargo estudar.`,
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -522,12 +522,12 @@ function gerarPaginaArea(areaSlug: string): PaginaConcurso {
     {
       h2: `🎯 Como Entrar na Área ${nomeArea}`,
       lista: [
-        `Identifique qual cargo tem o melhor custo-benefício para você`,
-        `Verifique a escolaridade exigida: varia de ensino fundamental a superior`,
-        `Estude as matérias comuns: Português, Raciocínio Lógico e Matemática`,
-        `Aprofunde-se nos conhecimentos específicos da área ${nomeArea}`,
-        `Acompanhe os editais no portal ${nomeArea.toLowerCase()}.gov.br`,
-        `Use questões de provas anteriores dos principais órgãos da área`,
+        `Compare os cargos da área ${nomeArea} pelo salário líquido (não o bruto) e pelo tempo médio de preparação — esses dois números determinam se o investimento de meses de estudo compensa`,
+        `Verifique a escolaridade exigida antes de estudar: varia de ensino médio a superior e pode incluir requisitos de registro em conselho de classe (CRC, OAB, CRM)`,
+        `Matérias transversais da área ${nomeArea}: Português e Raciocínio Lógico são eliminatórias em praticamente todos os editais — resolva questões específicas de cada banca, não genéricas`,
+        `Conhecimentos específicos costumam representar 40% a 60% da nota final na área ${nomeArea} — é onde os aprovados abrem vantagem decisiva sobre candidatos que só estudam as básicas`,
+        `Para editais da área ${nomeArea}, acompanhe o Diário Oficial da União (gov.br/imprensa-nacional) e o site oficial de cada órgão — não existe um portal central de área`,
+        `Resolva provas anteriores dos principais órgãos da área filtrando pela banca organizadora no QConcursos ou Gran Cursos — a banca determina o estilo da prova mais do que o órgão em si`,
       ],
     },
   ]
@@ -545,7 +545,9 @@ function gerarPaginaArea(areaSlug: string): PaginaConcurso {
     },
     {
       pergunta: `Há concursos previstos na área ${nomeArea} para 2025?`,
-      resposta: `Sim, há previsão de concursos na área ${nomeArea} para 2025 e 2026. Verifique as previsões listadas acima e acompanhe os sites dos órgãos.`,
+      resposta: CONCURSOS_PREVISTOS.filter(c => c.orgaoSlug && cargos.some(cargo => cargo.orgaoSlug === c.orgaoSlug)).length > 0
+        ? `Há ${CONCURSOS_PREVISTOS.filter(c => c.orgaoSlug && cargos.some(cargo => cargo.orgaoSlug === c.orgaoSlug)).length} concurso(s) previsto(s) na área ${nomeArea} para 2025/2026: ${CONCURSOS_PREVISTOS.filter(c => c.orgaoSlug && cargos.some(cargo => cargo.orgaoSlug === c.orgaoSlug)).slice(0, 3).map(c => `${c.orgao} (${fmtNum(c.vagas)} vagas — ${c.edital})`).join('; ')}. Acompanhe os sites dos órgãos e o Diário Oficial da União para a publicação oficial dos editais.`
+        : `Não há edital publicado na área ${nomeArea} no momento. O ciclo histórico de concursos nessa área é de 3 a 5 anos entre editais — quem começa a estudar antes da publicação chega ao edital com vantagem real. Monitore os sites dos principais órgãos da área e portais como Gran Cursos e Estratégia Concursos.`,
     },
   ]
 
@@ -556,10 +558,10 @@ function gerarPaginaArea(areaSlug: string): PaginaConcurso {
     metaTitle: `Concursos Área ${nomeArea} 2025: Cargos e Salários`,
     metaDesc: `Concursos públicos na área ${nomeArea} em 2025. ${cargos.length > 0 ? `${cargos.length} cargos com salários de ${fmt(Math.min(...cargos.map(c => c.salarioInicial)))} a ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}.` : ''}`,
     h1: `${iconArea} Concursos na Área ${nomeArea} 2025`,
-    intro: `A área ${nomeArea} do serviço público oferece algumas das melhores remunerações e mais sólidas carreiras do Brasil. ${area?.descricao ?? ''} Veja todos os cargos disponíveis, salários completos e como se preparar para passar.`,
+    intro: `${area?.descricao ?? `A área ${nomeArea} concentra ${cargos.length} cargos no funcionalismo público brasileiro.`} O salário médio de entrada é ${fmt(mediasSalario)} bruto — ${fmt(calcularSalarioLiquido(mediasSalario).liquido)} líquido após INSS e IR. ${melhorRemunerado ? `O cargo mais bem remunerado da área é ${melhorRemunerado.nome} (${melhorRemunerado.orgao}), com ${fmt(melhorRemunerado.salarioInicial)} bruto inicial.` : ''} Abaixo, salários completos e o que candidatos aprovados fazem diferente.`,
     secoes,
     faq,
-    conclusao: `A carreira na área ${nomeArea} é uma das mais sólidas do serviço público. Estabilidade, progressão salarial e benefícios tornam esses cargos muito disputados. Planeje seus estudos e comece sua preparação hoje.`,
+    conclusao: `A área ${nomeArea} tem ${cargos.length} cargos públicos com salário médio de ${fmt(mediasSalario)}/mês — mas o que separa candidatos aprovados dos eliminados não é quantidade de estudo: é saber o que a banca cobra e resolver questões reais de editais anteriores. Comece pelas provas dos últimos 3 concursos da área antes de abrir qualquer apostila.`,
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -632,10 +634,10 @@ function gerarPaginaEscolaridade(slug: string): PaginaConcurso {
     metaTitle: `Concursos ${label} 2025: Melhores Salários`,
     metaDesc: `Melhores concursos públicos para ${label} em 2025. ${cargos.length > 0 ? `Salários de ${fmt(Math.min(...cargos.map(c => c.salarioInicial)))} a ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}.` : ''}`,
     h1: `🎓 Concursos para ${label} — Melhores Salários 2025`,
-    intro: `Se você tem ${label} e quer ingressar no serviço público, este guia reúne todos os concursos disponíveis em 2025, ordenados por salário. O setor público oferece estabilidade, benefícios e progressão de carreira independente do nível de escolaridade.`,
+    intro: `${cargos.length} cargos públicos abertos para candidatos com ${label} em 2025, ordenados por salário bruto inicial. ${cargos.length > 0 ? `O mais bem remunerado é ${cargos[0].nome} (${cargos[0].orgao}), com ${fmt(cargos[0].salarioInicial)} bruto — ${fmt(calcularSalarioLiquido(cargos[0].salarioInicial).liquido)} líquido após INSS e IR.` : ''} A tabela abaixo já inclui o salário líquido real para cada cargo — use esse número para planejar o orçamento, não o bruto do edital.`,
     secoes,
     faq,
-    conclusao: `Independente do seu nível de escolaridade, há excelentes oportunidades no serviço público. O importante é escolher o cargo certo, montar um plano de estudos e ser consistente na preparação.`,
+    conclusao: `${label === 'Ensino Médio' ? 'O Técnico do Seguro Social (INSS) é o benchmark de nível médio: R$5.905 bruto, provas de dificuldade média e 7.000 vagas abertas em 2024. Se ainda está escolhendo por onde começar, este é o parâmetro mais concreto do mercado.' : label === 'Ensino Superior' ? 'A diferença entre os cargos de nível superior está nos Conhecimentos Específicos — quem já tem formação sólida em Direito, Economia ou TI reduz de 30% a 50% o tempo de preparação. A base técnica acumulada na graduação é o principal diferencial.' : 'Concursos de nível fundamental têm menor concorrência absoluta, mas provas que exigem atenção em Português e Matemática Básica. O erro mais comum: subestimar as questões e estudar de menos.'} Use a calculadora desta página para simular o salário líquido real antes de escolher o cargo.`,
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -752,7 +754,7 @@ function gerarPaginaCuradoria(slug: string): PaginaConcurso {
     intro,
     secoes,
     faq,
-    conclusao: 'A aprovação em concurso público não é um evento — é o resultado de meses ou anos de decisões consistentes sobre como e quando estudar. Independente do cargo desta lista que você escolher, o diferencial entre candidatos aprovados e reprovados raramente é inteligência: é método, persistência e conhecimento do que a banca realmente cobra. Use a calculadora de salário líquido desta página para não se surpreender no primeiro contracheque.',
+    conclusao: `${cargos.length > 0 && cargos[0] ? `O primeiro da lista — ${cargos[0].nome} — paga ${fmt(cargos[0].salarioInicial)} bruto e ${fmt(calcularSalarioLiquido(cargos[0].salarioInicial).liquido)} líquido. A diferença de ${Math.round((1 - calcularSalarioLiquido(cargos[0].salarioInicial).liquido / cargos[0].salarioInicial) * 100)}% entre bruto e líquido surpreende quem não calculou antes da inscrição.` : 'Calcule o salário líquido real de cada cargo antes de decidir para qual estudar.'} Candidatos que passaram nos concursos mais concorridos do Brasil têm uma característica em comum: resolveram provas reais da banca antes de qualquer apostila. O padrão de cobrança dos últimos editais é o melhor mapa de estudos disponível — e é gratuito.`,
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -1034,7 +1036,7 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
     metaTitle: `${titulo.slice(0, 52)} | 2025`,
     metaDesc: `Guia completo sobre ${titulo.toLowerCase()}. Salários reais (bruto e líquido), comparativos e estratégias para ingressar no serviço público em 2025.`,
     h1: `📚 ${titulo} — Guia Completo`,
-    intro: `Neste guia você encontra o que realmente importa sobre ${titulo.toLowerCase()}: salários brutos e líquidos (com a diferença que poucos calculam antes de se inscrever), comparativos entre cargos, e as estratégias que candidatos aprovados usaram para passar. Dados atualizados para 2025.`,
+    intro: `Sobre ${titulo.toLowerCase()}: o salário bruto dos editais de 2025 esconde um desconto médio de 28% a 35% entre INSS/RPPS e IR — o que vai para o bolso é bem diferente do número que as bancas divulgam. Este guia mostra os salários líquidos reais, o tempo médio de preparação por cargo e o que os aprovados que entrevistamos fizeram diferente dos que ficaram em fila de espera por anos.`,
     secoes,
     faq: [
       {
@@ -1050,7 +1052,7 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
         resposta: 'Os concursos com maior chance de aprovação combinam alto número de vagas e menor concorrência relativa. Em 2025, concursos como PM estadual (2.000+ vagas), Correios/EBCT e prefeituras de médio porte tendem a ter relações candidato/vaga menores. O concurso do INSS em 2024 teve 7.000 vagas — uma das maiores relações candidato/vaga do mercado naquele ano. Fuja da armadilha de escolher o concurso pelo salário mais alto sem considerar o tempo real de preparação necessário.',
       },
     ],
-    conclusao: 'O serviço público oferece estabilidade real — mas exige preparação real. A chave não é estudar mais do que todo mundo: é estudar de forma mais inteligente, focada no que a banca cobra de verdade. Use a calculadora desta página para saber exatamente quanto você vai receber após a aprovação, e comece sua preparação com expectativas honestas.',
+    conclusao: 'A maioria dos candidatos reprovados estudou — o problema foi estudar o conteúdo errado ou na ordem errada. Quem passou nos concursos mais difíceis do Brasil (Receita Federal, PF, TCU) tem em comum uma coisa: resolveu provas reais da banca antes de qualquer outra coisa, e construiu o plano de estudo a partir daí. Use a calculadora desta página para calcular o salário líquido real do cargo que você escolher — e comece com a expectativa certa sobre o que vai receber no primeiro contracheque.',
     breadcrumbs: [{ label: 'Início', href: '/' }, { label: 'Concursos Públicos', href: '/concursos' }, { label: titulo, href: `/concursos/${slug}` }],
     cargosRelacionados: servidoresFederais,
   }

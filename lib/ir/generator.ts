@@ -135,16 +135,16 @@ function gerarPaginaDeducao(slug: string, d: typeof DEDUCOES[0], ano: 2025 | 202
     publishedAt: '2026-04-07',
     tags: ['dedução IR', d.nome.toLowerCase(), `IR ${anoStr}`, 'imposto de renda', 'IRPF'],
     tempoLeitura: 10,
-    intro: `Tem contribuinte que paga imposto a mais todo ano porque simplesmente não sabe que tem direito à dedução de <strong>${d.nome}</strong>. Não é falta de caráter — é falta de informação. A Receita Federal não vai te lembrar.\n\n${d.limiteDesc ? `<strong>Limite em ${anoStr}:</strong> ${d.limiteDesc}. Acima disso, o excedente não deduz — então o planejamento durante o ano importa.` : 'Sem limite fixo para essa dedução — tudo que for comprovado pode ser usado.'} \n\nEste guia explica como funciona essa dedução na prática, quais documentos guardar, como calcular o quanto você economiza e os erros que mandaram contribuintes para a malha fina nos últimos anos. Cada R$ 1.000 que você deduz numa alíquota de 27,5% significa R$ 275 a menos de imposto. Multiplica isso pelo que você paga ao longo do ano.`,
+    intro: `Tem contribuinte que paga imposto a mais todo ano porque não sabe que tem direito à dedução de <strong>${d.nome}</strong>. A Receita Federal não avisa — ela só cruza os dados na malha fina quando algo está errado.\n\n${d.limiteDesc ? `<strong>Limite em ${anoStr}:</strong> ${d.limiteDesc}. Acima do teto, o excedente não deduz — o que você não usar no ano se perde.` : 'Sem teto definido para essa dedução — declare o valor real, com comprovação.'} \n\nEste guia mostra o cálculo real da economia: quanto volta no bolso, quais documentos a Receita vai pedir se você cair na malha fina, e os erros que mandaram contribuintes para lá nos últimos anos.`,
     secoes: [
       {
         h2: `Como Funciona a Dedução de ${d.nome} na Prática`,
-        conteudo: `<p>${d.como_calcular}</p><p>Essa dedução entra na base de cálculo do IRPF — ou seja, ela reduz o valor sobre o qual a alíquota incide, não o imposto diretamente. O efeito prático: menos base, menos imposto. Para quem está na faixa de 27,5%, cada R$ 1.000 deduzido vale R$ 275 de imposto real a menos.</p>`,
+        conteudo: `<p>${d.como_calcular}</p><p>Essa dedução reduz a <em>base de cálculo</em> do IRPF — não o imposto diretamente. Para quem está na faixa de 27,5%, R$ 1.000 deduzidos economizam R$ 275 de imposto. Quem ganha R$ 8.000/mês e tem R$ 12.000/ano nessa dedução economiza R$ 3.300 — dinheiro que simplesmente fica retido para a Receita se você não declarar.</p>`,
         destaque: d.limiteDesc ? `Limite oficial em ${anoStr} (Instrução Normativa RFB): ${d.limiteDesc}` : 'Sem teto definido — comprove tudo e deduza o que foi efetivamente gasto.',
       },
       {
         h2: 'Exemplo Real com Números',
-        conteudo: `<p>${d.exemplo}</p><p>Em termos práticos: um contribuinte na faixa de 27,5% que usa essa dedução corretamente reduz sua base tributável — e paga menos imposto. Vale a pena simular antes de escolher entre o modelo completo e o simplificado.</p>`,
+        conteudo: `<p>${d.exemplo}</p><p>Simule os dois modelos no programa IRPF antes de enviar: se suas deduções reais (incluindo esta) somarem mais de 20% da renda tributável, o modelo completo resulta em restituição maior ou imposto menor. A comparação leva 30 segundos e pode valer centenas de reais.</p>`,
         tabela: {
           cabecalho: ['Informação', 'Detalhe'],
           linhas: [
@@ -173,10 +173,10 @@ function gerarPaginaDeducao(slug: string, d: typeof DEDUCOES[0], ano: 2025 | 202
         h2: 'Como Aproveitar ao Máximo Essa Dedução',
         lista: [
           d.dica,
-          'Organize os comprovantes por mês em uma pasta digital — foto no celular já resolve. Em março, você vai agradecer.',
-          'Simule os dois modelos no programa IRPF antes de enviar — o simplificado (20% automático, teto R$ 16.754,34) às vezes supera o completo para quem tem poucas deduções.',
-          'Se tiver dúvida sobre o que entra e o que não entra, consulte um contador. O custo da consulta geralmente é bem menor do que o imposto que você perderia por não usar a dedução.',
-          'Para despesas de dependentes (filhos, cônjuge), mantenha os documentos no nome do dependente — não basta ter o CPF, o nome no recibo importa.',
+          'Foto do recibo no celular direto numa pasta do Google Drive, mês a mês. Quem tenta reconstituir documentos em março geralmente perde alguma coisa.',
+          'O programa IRPF calcula completo e simplificado lado a lado — veja os dois números antes de escolher. O simplificado (20% automático, teto R$ 16.754,34/ano) às vezes ganha para quem tem poucas deduções.',
+          'Despesas de dependentes precisam estar no nome do dependente — não basta ter o CPF no recibo, o nome importa. Já derrubou muita dedução na malha fina.',
+          'Dúvida sobre o que entra? Um contador cobra menos pela consulta do que o imposto que você pagaria por ignorar a dedução.',
         ],
       },
       {
@@ -192,7 +192,7 @@ function gerarPaginaDeducao(slug: string, d: typeof DEDUCOES[0], ano: 2025 | 202
             ['Economia anual estimada', '—', 'Até R$ 3.300/ano (na faixa de 27,5%)'],
           ],
         },
-        destaque: 'Cada R$ 1.000 deduzido por quem está na alíquota de 27,5% representa R$ 275 a menos de imposto. Multiplique por 12 meses e pelo total de deduções que você tem direito.',
+        destaque: 'Para renda de R$ 8.000/mês na faixa de 27,5%: usar R$ 12.000/ano nessa dedução economiza R$ 3.300 de imposto — o equivalente a mais de um salário médio brasileiro.',
       },
     ],
     faq: [
@@ -217,7 +217,7 @@ function gerarPaginaDeducao(slug: string, d: typeof DEDUCOES[0], ano: 2025 | 202
         resposta: 'Depende do tipo de dedução. Despesas médicas e educação de dependentes (filhos, cônjuge, pais dependentes) entram normalmente no modelo completo. A dedução por dependente em si (R$ 2.275,08/ano) é um tipo específico — não se acumula com outros tipos. Em caso de dúvida sobre quem pode ser incluído como dependente, consulte o art. 35 do Decreto 9.580/2018 ou a orientação de um contador.',
       },
     ],
-    conclusao: `A dedução de ${d.nome} é um direito garantido pela legislação tributária brasileira — e não aproveitar é pagar imposto que não precisa ser pago. ${d.dica} A lógica é simples: organize os comprovantes ao longo do ano (não tente reconstituir tudo em março), compare completo e simplificado no programa IRPF antes de enviar, e guarde os documentos por 5 anos. Dinheiro de volta na restituição ou imposto menor na apuração — ambos valem o trabalho.`,
+    conclusao: `${d.dica} Dito isso: a dedução de ${d.nome} só funciona se você tiver o comprovante quando a Receita pedir — e ela pode pedir até 5 anos depois. Pasta digital com fotos dos recibos, mês a mês, é suficiente. Na hora de declarar, compare o modelo completo contra o simplificado: se suas deduções reais somarem mais de 20% da renda, o completo vale. Se somarem menos, o simplificado é mais simples e igualmente válido.`,
   }
 }
 
@@ -235,7 +235,7 @@ function gerarPaginaSituacao(slug: string, s: typeof SITUACOES[0], ano: 2025 | 2
     publishedAt: '2026-04-07',
     tags: [s.slug, `IR ${anoStr}`, 'declaração IR', s.nome.toLowerCase(), 'IRPF'],
     tempoLeitura: 12,
-    intro: `<strong>${s.nome}</strong>: ${s.descricao}\n\nQuem declara errado não é necessariamente desonesto — na maior parte dos casos é alguém que não sabia qual rendimento informar, esqueceu um informe de rendimentos ou não conhecia uma dedução a que tinha direito. O resultado é o mesmo: malha fina, restituição retida, ou imposto a mais pago sem necessidade.\n\nEste guia foi escrito para a sua situação específica. Você vai saber o que declarar, onde informar, o que deduzir e os erros que mais mandaram pessoas como você para a malha fina nos últimos anos.\n\n${s.obrigatorio_declarar ? `<strong>Obrigatoriedade em ${anoStr}:</strong> Sim — ${s.nome} geralmente se enquadra nas regras. Mas mesmo quem não é obrigado pode declarar para recuperar imposto retido na fonte.` : `<strong>Obrigatoriedade em ${anoStr}:</strong> Depende dos valores. Verifique se você se enquadra nos critérios da Receita Federal — renda acima de R$ 33.888/ano, bens acima de R$ 300.000, operações em bolsa, entre outros.`}`,
+    intro: `<strong>${s.nome}</strong>: ${s.descricao}\n\nA maioria dos erros na declaração não é desonestidade — é falta de informação. Quem esqueceu o informe de rendimentos de uma conta bancária que mal usa, quem não sabia que aluguel de pessoa física exige Carnê-Leão, quem declarou o mesmo filho como dependente ao mesmo tempo que o ex-cônjuge. O resultado em todos os casos: malha fina, restituição travada até que o contribuinte explique.\n\nEste guia foca na sua situação. O que declarar, onde cada valor vai no programa IRPF, e quais erros a Receita detecta com mais frequência para ${s.nome.toLowerCase()}.\n\n${s.obrigatorio_declarar ? `<strong>Obrigado a declarar em ${anoStr}?</strong> Em geral, sim. Mas mesmo quem não é obrigado pode declarar — se teve IR retido na fonte, é a única forma de recuperar o dinheiro.` : `<strong>Obrigado a declarar em ${anoStr}?</strong> Depende. Renda tributável acima de R$ 33.888/ano obriga. Mas há outros gatilhos: bens acima de R$ 300.000, operações em bolsa, atividade rural. Verifique todos antes de concluir que não precisa declarar.`}`,
     secoes: [
       {
         h2: `O que ${s.nome} Precisa Declarar`,
@@ -273,7 +273,7 @@ function gerarPaginaSituacao(slug: string, s: typeof SITUACOES[0], ano: 2025 | 2
         h2: 'Documentos para Reunir Antes de Começar',
         intro: 'Tente reunir tudo antes de abrir o programa — declarar com documentos faltando aumenta as chances de erro:',
         lista: s.documentos,
-        destaque: 'Use a declaração pré-preenchida disponível no e-CAC (conta Gov.br nível prata ou ouro). Ela já carrega rendimentos informados por empregadores, bancos e corretoras — economiza tempo e reduz erros.',
+        destaque: 'Acesse o e-CAC (conta Gov.br nível prata ou ouro) e ative a declaração pré-preenchida: ela importa automaticamente os informes de empregadores, bancos e corretoras. Você só precisa conferir e completar o que falta.',
       },
       {
         h2: 'Estratégias Específicas para Sua Situação',
@@ -304,7 +304,7 @@ function gerarPaginaSituacao(slug: string, s: typeof SITUACOES[0], ano: 2025 | 2
         resposta: 'Para situações simples (um emprego CLT, sem dependentes, sem investimentos), o app "Meu Imposto de Renda" (Android e iOS) funciona bem. Para casos mais complexos — autônomo com livro-caixa, investimentos em bolsa, vários dependentes, PGBL — use o programa IRPF no computador. A declaração pré-preenchida está disponível tanto no app quanto na versão web para quem tem conta Gov.br nível prata ou ouro.',
       },
     ],
-    conclusao: `Declarar o IR sendo ${s.nome} não precisa ser complicado. O que faz a diferença: saber o que declarar (todos os rendimentos, inclusive os isentos), usar as deduções certas (saúde, dependentes, ${s.deducao_principal.split('.')[0].toLowerCase()}) e não misturar o que é de uma fonte com o que é de outra. ${s.dicas[0]} Use o programa IRPF ${anoStr} disponível no site da Receita Federal, compare os modelos completo e simplificado antes de enviar, e guarde todos os comprovantes por 5 anos. Quem declara cedo recebe a restituição nos primeiros lotes.`,
+    conclusao: `${s.dicas[0]} Além disso: declare todos os rendimentos, inclusive os isentos — rendimento isento não declarado é a segunda causa mais comum de malha fina. Guarde comprovantes por 5 anos (a Receita pode auditar qualquer declaração dentro desse prazo). E entregue cedo: os dois primeiros lotes de restituição, em maio e junho, saem para quem enviou nos primeiros dias do prazo.`,
   }
 }
 
@@ -328,7 +328,7 @@ function gerarPaginaProfissao(slug: string, p: typeof PROFISSOES_IR[0], ano: 202
     publishedAt: '2026-04-07',
     tags: [p.nome.toLowerCase(), p.area.toLowerCase(), `IR ${anoStr}`, 'declaração IR', regimelabel.toLowerCase()],
     tempoLeitura: 11,
-    intro: `Existe um erro fiscal clássico que boa parte dos ${p.nome}s comete: não aproveitar todas as deduções a que tem direito — ou usar deduções de forma incorreta e acabar na malha fina. Regime típico: <strong>${regimelabel}</strong>. Área: ${p.area}.\n\n${p.dica_fiscal}\n\nEste guia foi escrito para quem trabalha na área de ${p.area}. Você vai ver como funciona o IR para a sua profissão, quais deduções são específicas para você, quanto paga em diferentes faixas de renda e os erros que a Receita Federal detecta com mais frequência nessa categoria.`,
+    intro: `Para ${p.nome} no regime <strong>${regimelabel}</strong>, o Imposto de Renda tem particularidades que fazem diferença real no quanto você paga — e a maioria das pessoas na área de ${p.area} deixa pelo menos uma delas passar.\n\n${p.dica_fiscal}\n\nEste guia vai direto ao ponto: quanto você paga em cada faixa de renda, quais deduções são específicas para quem atua em ${p.area}, e os erros que a Receita Federal detecta com mais frequência nessa categoria. Nada de teoria genérica.`,
     secoes: [
       {
         h2: `Como Funciona o IR para ${p.nome} — Regime ${regimelabel}`,
@@ -374,7 +374,7 @@ function gerarPaginaProfissao(slug: string, p: typeof PROFISSOES_IR[0], ano: 202
               'Informes de rendimentos de bancos e corretoras',
               'Comprovantes de despesas médicas e educação',
             ],
-        destaque: 'Use a declaração pré-preenchida no e-CAC — ela já carrega informes de empregadores e bancos, reduzindo trabalho e risco de erro de digitação.',
+        destaque: 'Peça informe de rendimentos de todos os pagadores, mesmo dos que parecem pequenos — um plantão avulso de R$ 2.000 que a empresa declarou e você esqueceu é suficiente para travar a restituição.',
       },
       {
         h2: `Quanto um ${p.nome} Paga de IR? Simulação por Faixa de Renda`,
@@ -436,7 +436,7 @@ function gerarPaginaProfissao(slug: string, p: typeof PROFISSOES_IR[0], ano: 202
         })(),
       },
     ],
-    conclusao: `Para ${p.nome}, declarar o IR de forma eficiente significa três coisas: registrar todos os rendimentos (sem exceção), usar todas as deduções da profissão (especialmente o livro-caixa, se for autônomo) e comparar os modelos completo e simplificado antes de enviar. ${p.dica_fiscal} Quem organiza os documentos ao longo do ano chega em março sem pressa e sem erros. Quem deixa para a última hora tende a esquecer rendimentos ou perder deduções.`,
+    conclusao: `${p.dica_fiscal} O resto é processo: informe de rendimentos de todos os pagadores, livro-caixa atualizado mês a mês se for autônomo, e a comparação entre completo e simplificado antes de enviar. ${p.nome} que fatura R$ 120.000/ano sem usar livro-caixa pode estar pagando R$ 10.000 a mais de IR do que deveria — e não sabe.`,
   }
 }
 
@@ -454,7 +454,7 @@ function gerarPaginaEstado(slug: string, e: typeof ESTADOS_IR[0], ano: 2025 | 20
     publishedAt: '2026-04-07',
     tags: [e.nome.toLowerCase(), e.sigla, `IR ${anoStr}`, 'ITCMD', 'imposto de renda', e.capital.toLowerCase()],
     tempoLeitura: 9,
-    intro: `Morador de <strong>${e.nome} (${e.sigla})</strong>? Veja o que é importante saber sobre a declaração do Imposto de Renda ${anoStr} e os impostos estaduais que impactam sua vida financeira.\n\n<strong>Capital:</strong> ${e.capital} | <strong>ITCMD:</strong> ${e.itcmd}%\n\nO IR federal é o mesmo para todos os estados — as alíquotas da tabela IRPF se aplicam igualmente em ${e.nome} e em São Paulo. Mas há particularidades econômicas e impostos estaduais que fazem diferença no planejamento fiscal.`,
+    intro: `Morar em <strong>${e.nome} (${e.sigla})</strong> não muda as alíquotas do IR federal — a tabela IRPF é a mesma do Oiapoque ao Chuí. O que muda: o ITCMD estadual (${e.itcmd}% em ${e.sigla}, comparado a 4%–8% em outros estados) e algumas características econômicas da região que afetam quais rendimentos e deduções são mais relevantes.\n\n<strong>Capital:</strong> ${e.capital} | <strong>ITCMD:</strong> ${e.itcmd}%\n\nSe você recebeu herança ou doação em ${e.nome}, esse imposto estadual pode ser mais relevante para o seu patrimônio do que o próprio IR federal.`,
     secoes: [
       {
         h2: `Tabela IRPF ${anoStr} — Válida para ${e.nome}`,
@@ -464,14 +464,14 @@ function gerarPaginaEstado(slug: string, e: typeof ESTADOS_IR[0], ano: 2025 | 20
           linhas: ano === 2025 ? linhasTabela2025 : linhasTabela2026,
         },
         destaque: ano === 2026
-          ? `🎉 Em ${anoStr}: isenção de IR para quem ganha até R$ 5.000/mês — impacto significativo para trabalhadores de ${e.nome}.`
-          : `📌 Tabela vigente para ${anoStr}. Em ${e.nome}, as mesmas alíquotas federais se aplicam.`,
+          ? `Em ${anoStr}: isenção de IR para quem ganha até R$ 5.000/mês. Para trabalhadores de ${e.nome} nessa faixa, é o fim de uma despesa mensal que muitos não percebem que poderiam evitar.`
+          : `Tabela vigente para ${anoStr}. A faixa de isenção (R$ 2.259,20/mês) sobe para R$ 5.000 em 2026 — a maior mudança na tabela do IR em décadas.`,
       },
       {
         h2: `ITCMD em ${e.nome}`,
         conteudo: `<p>O <strong>ITCMD (Imposto sobre Transmissão Causa Mortis e Doação)</strong> é estadual — cada estado define sua alíquota. Em ${e.nome}, a alíquota é de <strong>${e.itcmd}%</strong>.</p><p>O ITCMD incide sobre heranças e doações recebidas. Não é o IR — são tributos diferentes. A herança é isenta de IR federal, mas paga ITCMD estadual.</p>`,
         tabela: {
-          cabecalho: ['Imposto', 'Tipo', 'Alíquota em ${e.sigla}', 'Quem paga'],
+          cabecalho: ['Imposto', 'Tipo', `Alíquota em ${e.sigla}`, 'Quem paga'],
           linhas: [
             ['IR (IRPF)', 'Federal', 'Até 27,5%', 'Quem tem renda tributável'],
             ['ITCMD', 'Estadual', `${e.itcmd}%`, 'Herdeiro ou donatário'],
@@ -517,7 +517,7 @@ function gerarPaginaEstado(slug: string, e: typeof ESTADOS_IR[0], ano: 2025 | 20
         resposta: `A declaração do IR é feita pelo seu CPF e domicílio fiscal. O imóvel em ${e.nome} entra em "Bens e Direitos" da sua declaração normalmente. Se receber aluguel desse imóvel de pessoa física, recolha Carnê-Leão mensalmente.`,
       },
     ],
-    conclusao: `Morar em ${e.nome} não muda as regras do IR federal — a tabela IRPF e as deduções são as mesmas. O que muda é o ITCMD estadual (${e.itcmd}% em ${e.sigla}) e as particularidades econômicas que podem afetar seus rendimentos. Use o programa IRPF ${anoStr} da Receita Federal e aproveite todas as deduções disponíveis para pagar menos imposto legalmente.`,
+    conclusao: `Em ${e.nome}, o IR federal segue a mesma tabela de qualquer estado. O que vale monitorar: o ITCMD de ${e.itcmd}% — que incide sobre heranças e doações recebidas no estado — e as particularidades econômicas locais que definem quais rendimentos são mais comuns para quem mora em ${e.capital} e região. Declare usando o programa IRPF da Receita, aproveite as deduções que se aplicam à sua situação, e se recebeu herança recentemente, confira se o ITCMD estadual já foi quitado no inventário.`,
   }
 }
 
@@ -569,8 +569,8 @@ function gerarPaginaFaixaRenda(slug: string, f: typeof FAIXAS_RENDA[0], ano: 202
           'A mudança vale a partir de janeiro de 2026',
         ],
         destaque: f.de <= 5000
-          ? '🎉 Para sua faixa de renda, a isenção de 2026 representa economia real e significativa.'
-          : '📊 Para sua faixa de renda, há benefício em 2026, mas a mudança mais expressiva é para quem ganha até R$ 5.000.',
+          ? `Quem ganha R$ ${f.de.toLocaleString('pt-BR')} hoje paga cerca de ${fmtR$(calcularIR(f.de, 2025).imposto)}/mês de IR. Em 2026, paga zero — economia anual de ${fmtR$(calcularIR(f.de, 2025).imposto * 12)}.`
+          : `Para quem ganha ${f.label}, a mudança em 2026 reduz o IR mensal — mas o benefício mais expressivo é para quem está abaixo de R$ 5.000. Acima disso, a tabela mais abrangente ainda traz algum alívio.`,
       },
       {
         h2: 'Como Reduzir o IR Legalmente',
@@ -600,7 +600,7 @@ function gerarPaginaFaixaRenda(slug: string, f: typeof FAIXAS_RENDA[0], ano: 202
         resposta: `1. Calcule sua renda tributável mensal (salário menos INSS). 2. Aplique a tabela IRPF (alíquota progressiva). 3. Subtraia a parcela a deduzir da faixa. 4. Multiplique por 12 para o anual. Use nossa calculadora de IR no topo da página para o cálculo automático.`,
       },
     ],
-    conclusao: `Para quem ganha ${f.label}, o IR ${anoStr} representa ${calc2025.aliquotaEfetiva.toFixed(1)}% de alíquota efetiva sem deduções. Com as deduções corretas (dependentes, saúde, INSS), esse percentual cai significativamente. Em 2026, a isenção até R$ 5.000 traz mudança importante para toda a classe média brasileira.`,
+    conclusao: `Quem ganha ${f.label} paga ${calc2025.aliquotaEfetiva.toFixed(1)}% de alíquota efetiva sem deduções — mas na prática, com INSS, dependentes e saúde, esse número cai. Em 2026, a isenção até R$ 5.000 muda o jogo: quem está nessa faixa para de pagar IR completamente. Quem está acima ainda se beneficia da recalibração das faixas. Use a calculadora desta página para simular o seu caso com as deduções que você realmente tem.`,
   }
 }
 
@@ -694,7 +694,7 @@ function gerarPaginaTabela(slug: string, ano: 2025 | 2026): PaginaIR {
         resposta: 'A parcela a deduzir é calculada pela Receita Federal para garantir a progressividade. Ela representa o "desconto" que você tem ao usar a alíquota da faixa sobre toda a renda, em vez de calcular cada faixa separadamente.',
       },
     ],
-    conclusao: `A Tabela IRPF ${anoStr} define quanto você paga de Imposto de Renda. Use as deduções legais — dependentes, saúde, INSS, educação — para reduzir a base de cálculo e pagar menos. Em 2026, a isenção até R$ 5.000 representa a maior mudança na tabela do IR em décadas para a classe média brasileira.`,
+    conclusao: `A tabela progressiva do IRPF cobra menos de quem ganha menos e mais de quem ganha mais — mas a alíquota marginal (a mais alta da sua faixa) nunca incide sobre toda a renda. Quem ganha R$ 10.000/mês e está na faixa de 27,5% paga cerca de 18% de alíquota efetiva, não 27,5%. Use a calculadora desta página para ver o número exato da sua situação — e lembre que cada dedução que você usa reduz a base, não apenas o imposto da última faixa.`,
   }
 }
 
@@ -720,7 +720,7 @@ function gerarPaginaIsencao5000(slug: string): PaginaIR {
           'Aposentados com benefício até R$ 5.000',
           'MEIs com pró-labore e lucros até R$ 5.000/mês',
         ],
-        destaque: '🎉 Segundo o governo federal, cerca de 20 milhões de brasileiros serão totalmente isentos de IR em 2026.',
+        destaque: 'Segundo o Ministério da Fazenda, cerca de 13 milhões de contribuintes ficam totalmente isentos e outros 26 milhões terão redução — uma das maiores mudanças no IR desde o Plano Real.',
       },
       {
         h2: 'Comparativo: Quanto Se Economiza?',
@@ -785,7 +785,7 @@ function gerarPaginaIsencao5000(slug: string): PaginaIR {
         resposta: 'Mesmo isento de pagar IR, pode ainda ser obrigado a declarar se tiver: bens acima de R$ 300.000, realizou operações em bolsa, tem atividade rural, recebeu rendimentos isentos acima do limite, etc. Verifique todos os critérios da Receita Federal.',
       },
     ],
-    conclusao: 'A isenção do IR até R$ 5.000 em 2026 é a maior mudança na tributação da pessoa física brasileira em décadas. Quem se enquadra nessa faixa terá economia real e significativa a partir de janeiro de 2026. Para os demais, a tabela mais abrangente ainda traz redução no imposto mensal. Acompanhe as novidades no site da Receita Federal para garantir que sua declaração de 2026 seja feita corretamente.',
+    conclusao: 'A isenção até R$ 5.000 resolve o bolso de quem está nessa faixa a partir de janeiro de 2026 — sem precisar fazer nada diferente, o empregador já ajusta a retenção mensal. Para autônomos, o Carnê-Leão de janeiro/2026 já reflete a nova tabela. Um detalhe que pouca gente sabe: mesmo isento de pagar IR, você ainda pode ser obrigado a declarar — bens acima de R$ 300.000, operações em bolsa e outros critérios continuam valendo.',
   }
 }
 
@@ -879,7 +879,7 @@ function gerarPaginaMalhaFina(slug: string, ano: 2025 | 2026): PaginaIR {
         resposta: 'Acesse o e-CAC (eCAC.receita.fazenda.gov.br) com conta Gov.br e clique em "Meu Imposto de Renda". O status da declaração aparece como "Em processamento", "Declaração em fila de restituição" ou "Declaração em análise" (esse último indica malha fina). O motivo detalhado fica na aba "Pendências" ou "Extrato do Processamento". Também é possível verificar pelo app "Meu Imposto de Renda".',
       },
     ],
-    conclusao: `Malha fina não precisa ser um pesadelo. A Receita Federal retém para análise, você consulta o motivo no e-CAC, e na maioria dos casos ou retifica a declaração ou apresenta os documentos comprobatórios. O segredo para não cair: declare todos os rendimentos (inclusive isentos), use apenas deduções que tem comprovante, e use a declaração pré-preenchida para reduzir erros de digitação. Em ${anoStr}, os sistemas de cruzamento são mais eficientes do que nunca — apostar na invisibilidade não funciona mais.`,
+    conclusao: `Em 2024, a Receita Federal reteve mais de 1,5 milhão de declarações para análise. A maioria foi liberada após o contribuinte apresentar documentos ou retificar — sem multa de autuação. Os casos que viraram auto de infração geralmente envolviam omissão consciente de renda ou deduções claramente fraudadas. A linha divisória é simples: declare tudo que entrou, deduza só o que tem comprovante, e use a pré-preenchida para não esquecer o informe de uma conta que você mal usa. Isso resolve mais de 80% dos motivos de malha fina.`,
   }
 }
 
@@ -964,7 +964,7 @@ function gerarPaginaRestituicao(slug: string, ano: 2025 | 2026): PaginaIR {
         resposta: 'Três caminhos principais: (1) use o modelo completo e declare todas as deduções reais — saúde sem limite, dependentes, PGBL até 12% da renda; (2) peça os informes de rendimentos de todos os bancos e corretoras — o IRRF retido neles aparece como crédito na declaração; (3) entregue cedo para receber nos primeiros lotes e já usar o dinheiro. Para quem tem PGBL: contribuir até 31/dezembro antes de fechar o ano é a forma mais eficiente de ampliar a restituição do ano seguinte.',
       },
     ],
-    conclusao: `A restituição do IR ${anoStr} é dinheiro seu — não é benefício, é correção de imposto pago a mais. Para garantir o maior valor possível: use o modelo completo com todas as deduções cabíveis, entregue a declaração no início do prazo, informe uma conta corrente no seu CPF e acompanhe o processamento pelo app "Meu Imposto de Renda". Se a restituição não cair no prazo do lote previsto, o primeiro passo é verificar o status no e-CAC — na maioria dos casos, há um dado bancário errado ou uma inconsistência simples de corrigir.`,
+    conclusao: `Quem entregou a declaração na primeira semana do prazo, sem cair na malha fina, e informou conta corrente no próprio CPF geralmente recebe a restituição no 3º lote — julho. Quem entregou no último dia, caiu em malha fina ou informou conta poupança de banco diferente pode esperar até novembro. A diferença de 4 meses equivale a 4–5% de Selic a mais — mas ainda é melhor receber cedo, sem correção, do que ficar esperando o dinheiro travado. Se a restituição não aparecer no lote previsto, o e-CAC mostra o motivo exato na aba Pendências.`,
   }
 }
 
@@ -1043,7 +1043,7 @@ function gerarPaginaCompletoVsSimplificado(slug: string, ano: 2025 | 2026): Pagi
         resposta: 'Sim — no simplificado, você não precisa inserir comprovantes, médicos, escolas, planos de saúde. Mas "mais fácil" não significa "mais vantajoso". Se você tem dependentes, plano de saúde, PGBL ou filhos em escola, o modelo completo quase sempre resulta em mais restituição. Preencha o completo (com todas as deduções que você tem direito), clique em calcular, compare — e então escolha. Não escolha pelo trabalho, escolha pelo resultado.',
       },
     ],
-    conclusao: `A escolha entre completo e simplificado no IR ${anoStr} deve ser feita com números na tela — não por intuição. Regra prática: solteiros sem dependentes e com poucas despesas médicas geralmente vão bem no simplificado. Casados com filhos, plano de saúde e PGBL quase sempre ganham mais no completo. O programa IRPF calcula os dois automaticamente — use esse recurso antes de enviar. A diferença pode ser facilmente R$ 2.000 a R$ 5.000 a favor de quem escolhe certo.`,
+    conclusao: `Um caso real: contribuinte com renda de R$ 60.000/ano, 2 filhos em escola particular (R$ 1.500/mês cada), plano de saúde de R$ 900/mês e PGBL de R$ 600/mês. Deduções reais: R$ 48.000/ano — muito acima dos R$ 12.000 do simplificado (20% de R$ 60.000). Usar o simplificado por preguiça nesse caso representa pagar IR sobre R$ 36.000 a mais de base tributável. A diferença de imposto: mais de R$ 5.000. Isso é o que o botão "Calcular" no programa IRPF mostra em 30 segundos.`,
   }
 }
 
@@ -1092,7 +1092,7 @@ function gerarPaginaComoEconomizar(slug: string, ano: 2025 | 2026): PaginaIR {
         resposta: 'Depende da situação. Uma família com 2 filhos, plano de saúde e PGBL pode economizar R$ 8.000 a R$ 15.000/ano comparado a quem não usa nenhuma dedução. Autônomos que abrem PJ podem economizar ainda mais.',
       },
     ],
-    conclusao: `Pagar menos IR em ${anoStr} legalmente não é privilégio de rico — é direito de qualquer contribuinte que conhece as regras. Use deduções de saúde, dependentes, educação e PGBL; organize seus comprovantes; compare os modelos completo e simplificado; e se for autônomo, avalie a abertura de PJ com um contador.`,
+    conclusao: `Um autônomo que fatura R$ 150.000/ano sem abrir PJ e sem usar livro-caixa pode estar pagando até R$ 40.000 a mais de tributos do que precisaria. Uma família com 2 filhos, plano de saúde de R$ 1.500/mês e PGBL que ignora o modelo completo pode perder R$ 8.000 a R$ 15.000/ano de restituição. Não são casos extremos — são situações comuns. As estratégias deste guia não exigem advogado tributarista nem estrutura complexa: exigem organização e o hábito de simular antes de enviar.`,
   }
 }
 
@@ -1181,7 +1181,7 @@ function gerarPaginaCarneLeao(slug: string, ano: 2025 | 2026): PaginaIR {
         resposta: 'Sim. O Carnê-Leão é um pagamento mensal de IR que funciona como antecipação do imposto anual. Na declaração, ele aparece como "imposto pago" — creditado no ajuste. Se ao longo do ano você pagou Carnê-Leão a mais do que o IR calculado na declaração, a diferença vem como restituição. O Carnê-Leão Web tem exportação direta para o programa IRPF, tornando esse processo automático.',
       },
     ],
-    conclusao: `O Carnê-Leão é a obrigação mensal que mais pega desprevenido os profissionais autônomos brasileiros. Não é burocracia opcional — é imposto que você deve recolher todo mês que receber de pessoa física. A boa notícia: usando o livro-caixa corretamente, você reduz significativamente o imposto a pagar. Use o Carnê-Leão Web da Receita Federal, deduza todas as despesas profissionais legítimas, e exporte os dados direto para a declaração anual de ${anoStr} — sem retrabalho.`,
+    conclusao: `Psicólogo que atende 20 pacientes particulares por mês a R$ 250/sessão tem renda de R$ 5.000/mês de PF — Carnê-Leão obrigatório. Se usar o livro-caixa (aluguel da sala, materiais, anuidade do CRP), a base tributável cai para R$ 3.500, e o imposto mensal de R$ 400 vai para menos de R$ 200. Doze meses assim representam R$ 2.400 de diferença. O Carnê-Leão Web da Receita calcula isso automaticamente e exporta direto para o IRPF anual — sem redigitar nada.`,
   }
 }
 
@@ -1250,7 +1250,7 @@ function gerarPaginaGanhoCapital(slug: string, ano: 2025 | 2026): PaginaIR {
         resposta: 'Sim — e essa é uma das estratégias mais valiosas para investidores. Prejuízos em renda variável (ações, FIIs, ETFs, opções) compensam lucros futuros da mesma categoria — indefinidamente, enquanto você mantiver a declaração. Use o programa GCAP para registrar os prejuízos e compensar automaticamente nos meses com ganho. Essa compensação pode zerar o DARF de meses lucrativos.',
       },
     ],
-    conclusao: `O ganho de capital cobra dois impostos do contribuinte desavisado: o imposto em si e a multa por atraso. Em ${anoStr}, toda vez que você vender um bem com lucro, a primeira pergunta a fazer é: "Tem isenção?" (imóvel único até R$ 440k, ações abaixo de R$ 20k/mês, bens de pequeno valor até R$ 35k). Se não houver isenção, a segunda pergunta é: "Quando vence o DARF?" — último dia útil do mês seguinte. Use o programa GCAP, comprove todas as benfeitorias que aumentam o custo de aquisição, e pague em dia.`,
+    conclusao: `Quem vendeu um apartamento por R$ 400.000 (comprou por R$ 200.000, fez R$ 30.000 em reforma comprovada) deve R$ 18.000 de IR — e tinha até o último dia útil do mês seguinte para pagar o DARF. Quem não sabia disso e descobriu na declaração de março já acumulou 0,33%/dia de multa mais Selic desde a data de venda. O programa GCAP calcula o ganho, aplica as isenções e gera o DARF automaticamente. Guardar a escritura de compra, as notas de reforma e o contrato de venda reduz o ganho tributável — às vezes drasticamente.`,
   }
 }
 
@@ -1324,7 +1324,7 @@ function gerarPaginaPassoAPasso(slug: string, ano: 2025 | 2026): PaginaIR {
           'Clique em "Entregar declaração" — você precisará do certificado digital ou conta Gov.br',
           'Guarde o número do recibo de entrega',
         ],
-        destaque: `📅 Prazo de entrega em ${anoStr}: geralmente até 30 de abril. Verifique a data exata no site da Receita Federal.`,
+        destaque: `Prazo de entrega em ${anoStr}: geralmente até 30 de abril (às vezes prorrogado até 31 de maio). Quem entrega na primeira semana do prazo vai para os primeiros lotes de restituição — em média 3 meses antes de quem entrega no último dia.`,
       },
     ],
     faq: [
@@ -1341,7 +1341,7 @@ function gerarPaginaPassoAPasso(slug: string, ano: 2025 | 2026): PaginaIR {
         resposta: 'Para declarações simples (um emprego CLT, poucos dependentes, sem investimentos em bolsa), o app "Meu Imposto de Renda" (Android e iOS) funciona bem e suporta a declaração pré-preenchida. Para situações mais complexas — autônomo com livro-caixa, múltiplas fontes de renda, imóveis, investimentos, herança — use o programa IRPF no computador (Windows e Mac). A versão web (irpf.receita.fazenda.gov.br) também é uma alternativa sem precisar instalar nada.',
       },
     ],
-    conclusao: `Declarar o IR ${anoStr} em ordem é uma questão de preparação: reúna todos os documentos antes de abrir o programa, use a declaração pré-preenchida para economizar tempo e reduzir erros, e compare os modelos completo e simplificado antes de enviar. Quem entrega cedo dorme tranquilo — e recebe a restituição nos primeiros lotes. Quem deixa para o último dia corre risco de problemas técnicos, pressa e declaração incompleta.`,
+    conclusao: `Depois de enviar, guarde o número do recibo de entrega — ele é a prova de que você declarou no prazo, e sem ele não dá para retificar. Acompanhe o processamento pelo app "Meu Imposto de Renda" ou no e-CAC. Se o status mudar para "Em análise", consulte o motivo na aba Pendências antes de entrar em pânico — a maioria dos casos tem solução simples (dado bancário errado, informe de rendimentos divergente) que resolve com uma retificação.`,
   }
 }
 
@@ -1368,8 +1368,8 @@ function gerarPaginaGeral(slug: string, ano: 2025 | 2026): PaginaIR {
           linhas: ano === 2025 ? linhasTabela2025 : linhasTabela2026,
         },
         destaque: ano === 2026
-          ? '🎉 Em 2026: isenção ampliada até R$ 5.000/mês.'
-          : 'Em 2026, a faixa de isenção será ampliada para R$ 5.000/mês.',
+          ? 'Em 2026: isenção ampliada até R$ 5.000/mês. A maior mudança na tabela IRPF desde o Plano Real.'
+          : 'Em 2026, a isenção sobe de R$ 2.259,20 para R$ 5.000/mês — quem ganha R$ 4.000 deixa de pagar IR completamente.',
       },
       {
         h2: 'Principais Deduções Disponíveis',
@@ -1386,7 +1386,7 @@ function gerarPaginaGeral(slug: string, ano: 2025 | 2026): PaginaIR {
           'Rendimentos isentos: FGTS, LCI/LCA, herança, bolsas — precisam ser declarados mesmo sendo isentos',
           'Bens e direitos: imóveis, veículos, investimentos pelo valor em 31/dez',
         ],
-        destaque: 'Use a declaração pré-preenchida no e-CAC (conta Gov.br nível prata ou ouro) — ela já importa informes de empregadores e bancos automaticamente, reduzindo risco de erro e tempo de preenchimento.',
+        destaque: 'Declaração pré-preenchida (e-CAC, conta Gov.br nível prata ou ouro): ela já traz os dados que empregadores e bancos enviaram à Receita. Confira, complete o que falta, e evite divergências que travam a restituição.',
       },
     ],
     faq: [
@@ -1407,6 +1407,6 @@ function gerarPaginaGeral(slug: string, ano: 2025 | 2026): PaginaIR {
         resposta: 'É uma funcionalidade da Receita Federal que importa automaticamente os dados já informados por terceiros: salários do empregador (DIRF), rendimentos bancários (e-Financeira), despesas médicas (DMED). Para acessar, você precisa de conta Gov.br nível prata ou ouro. Disponível no e-CAC, no programa IRPF e no app "Meu Imposto de Renda". Reduz tempo de preenchimento e erros de digitação — mas confira os valores importados antes de enviar.',
       },
     ],
-    conclusao: `Entender ${tema} no contexto do IR ${anoStr} é meio caminho para declarar sem erros e pagar apenas o imposto que você deve. Use a calculadora desta página para simular seu imposto, compare os modelos completo e simplificado no programa IRPF, e entregue a declaração logo no início do prazo para garantir prioridade na restituição. A Receita Federal tem todos os seus dados — declarar corretamente é a melhor proteção contra malha fina.`,
+    conclusao: `A Receita Federal cruza o que você declara com dados de empregadores, bancos, corretoras e prestadores de saúde. Divergências travam a restituição até que você explique — e a explicação mais simples é ter os comprovantes certos na hora certa. Para ${tema} no IR ${anoStr}: declare todos os rendimentos, incluindo os isentos, use a calculadora desta página para estimar o imposto, e envie cedo para ficar nos primeiros lotes de restituição.`,
   }
 }
