@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ELEMENTOS, getElementoBySimboloOuSlug, getCatNomePeriodica, getCatCorPeriodica } from '@/lib/periodica/elementos'
+import { AutorBox, schemaAutor } from '@/components/ui/AutorBox'
 
 export async function generateStaticParams() {
   return ELEMENTOS.map(e => ({ simbolo: e.simbolo.toLowerCase() }))
@@ -77,6 +78,8 @@ export default async function ElementoPage({ params }: { params: Promise<{ simbo
   ]
 
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaAutor) }} />
     <div className="container" style={{ paddingTop: 32, paddingBottom: 60 }}>
       {/* Breadcrumb */}
       <nav style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: 20, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -288,6 +291,9 @@ export default async function ElementoPage({ params }: { params: Promise<{ simbo
           ← Voltar para a Tabela Periódica completa
         </Link>
       </div>
+
+      <AutorBox />
     </div>
+    </>
   )
 }

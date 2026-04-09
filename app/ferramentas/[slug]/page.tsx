@@ -6,6 +6,7 @@ import { CalculadoraGenerica } from '@/components/calculadoras/CalculadoraGeneri
 import { CalculadoraIMC } from '@/components/calculadoras/saude/CalculadoraIMC'
 import { CalculadoraSalarioLiquido } from '@/components/calculadoras/trabalhista/CalculadoraSalarioLiquido'
 import { gerarArtigoSEO } from '@/lib/seo-articles'
+import { AutorBox, schemaAutor } from '@/components/ui/AutorBox'
 import Link from 'next/link'
 
 export function generateStaticParams() {
@@ -126,6 +127,10 @@ export default async function PageFerramenta({ params }: { params: Promise<{ slu
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaWebApp) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaAutor) }}
       />
       <script
         type="application/ld+json"
@@ -316,10 +321,13 @@ export default async function PageFerramenta({ params }: { params: Promise<{ slu
                 </div>
               </section>
             )}
+
+            <AutorBox />
           </div>
 
           {/* Sidebar */}
           <div className="sidebar-col" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <AutorBox compact />
             {/* Calculadoras relacionadas na sidebar (versão compacta) */}
             {relacionadas.length > 0 && (
               <div className="card" style={{ padding: 16 }}>

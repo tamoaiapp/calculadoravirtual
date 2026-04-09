@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PROFISSOES, getProfissaoBySlug, getTopPagantes, getProfissoesFuturo } from '@/lib/salarios/profissoes'
 import { gerarPaginaSalario } from '@/lib/salarios/generator'
+import { AutorBox, schemaAutor } from '@/components/ui/AutorBox'
 
 export function generateStaticParams() {
   const slugsEspeciais = ['maiores-salarios', 'profissoes-do-futuro']
@@ -132,6 +133,8 @@ export default function SalarioSlugPage({ params }: { params: { slug: string } }
   const pg = gerarPaginaSalario(p)
 
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaAutor) }} />
     <div className="container" style={{ paddingTop: 32, paddingBottom: 60 }}>
       {/* Breadcrumb */}
       <nav style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: 20, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -283,7 +286,10 @@ export default function SalarioSlugPage({ params }: { params: { slug: string } }
             ← Ver todas as profissões
           </Link>
         </div>
+
+        <AutorBox />
       </div>
     </div>
+    </>
   )
 }

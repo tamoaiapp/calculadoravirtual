@@ -9,6 +9,7 @@ import { CalculadoraGenerica } from '@/components/calculadoras/CalculadoraGeneri
 import { CalculadoraIMC } from '@/components/calculadoras/saude/CalculadoraIMC'
 import { CalculadoraSalarioLiquido } from '@/components/calculadoras/trabalhista/CalculadoraSalarioLiquido'
 import type { BlogArtigo } from '@/lib/blog-articles'
+import { AutorBox, schemaAutor } from '@/components/ui/AutorBox'
 
 export function generateStaticParams() {
   return FERRAMENTAS.map(f => ({ slug: f.slug }))
@@ -58,7 +59,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     description: post.metaDesc,
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
-    author: { '@type': 'Organization', name: 'Calculadora Virtual' },
+    author: { '@type': 'Person', name: 'Tiago Oliveira', url: 'https://www.linkedin.com/in/tiago-oliveira-8312ab402/' },
     publisher: { '@type': 'Organization', name: 'Calculadora Virtual', url: 'https://calculadoravirtual.com' },
     url: `https://calculadoravirtual.com/blog/${slug}`,
     inLanguage: 'pt-BR',
@@ -86,6 +87,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       {schemaFAQ && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaFAQ) }} />
       )}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaAutor) }} />
 
       <div className="container" style={{ paddingTop: 28, paddingBottom: 60 }}>
 
@@ -494,11 +496,14 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 ))}
               </div>
 
+              <AutorBox />
             </article>
           </div>
 
           {/* ── Sidebar ── */}
           <div className="sidebar-col" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+            <AutorBox compact />
 
             <div className="card" style={{ padding: 16 }}>
               <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 12 }}>

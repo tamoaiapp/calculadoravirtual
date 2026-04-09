@@ -5,6 +5,7 @@ import {
   MEDICAMENTOS, getMedicamentoBySlug, getMedicamentoCatSlug,
   CATEGORIAS_MEDICAMENTOS, GRAVIDEZ_LABEL, getMedicamentosByCategoria
 } from '@/lib/medicamentos/remedios'
+import { AutorBox, schemaAutor } from '@/components/ui/AutorBox'
 
 export async function generateStaticParams() {
   return MEDICAMENTOS.map(m => ({ slug: m.slug }))
@@ -72,6 +73,8 @@ export default async function MedicamentoPage({ params }: { params: Promise<{ sl
   ]
 
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaAutor) }} />
     <div className="container" style={{ paddingTop: 32, paddingBottom: 60 }}>
       {/* Breadcrumb */}
       <nav style={{ fontSize: '0.82rem', color: 'var(--muted)', marginBottom: 20, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -248,6 +251,9 @@ export default async function MedicamentoPage({ params }: { params: Promise<{ sl
           ← Voltar para Bulas de Medicamentos
         </Link>
       </div>
+
+      <AutorBox />
     </div>
+    </>
   )
 }
