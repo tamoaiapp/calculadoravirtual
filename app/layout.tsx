@@ -49,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/ir">IR 2026</Link>
               <Link href="/emprestimos">Empréstimos</Link>
               <Link href="/concursos">Concursos</Link>
+              <Link href="/saude">Saúde</Link>
               <Link href="/caneta-emagrecedora">Ozempic</Link>
             </nav>
           </div>
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/ir" style={{ color: 'var(--muted)', textDecoration: 'none' }}>IR 2026</Link>
                 <Link href="/emprestimos" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Empréstimos</Link>
                 <Link href="/concursos" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Concursos</Link>
+                <Link href="/saude" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Saúde</Link>
                 <Link href="/caneta-emagrecedora" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Ozempic/GLP-1</Link>
                 <Link href="/blog" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Blog</Link>
                 <Link href="/duvidas" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Dúvidas</Link>

@@ -575,4 +575,196 @@ export const CALCS_IMOVEIS: CalcConfig[] = [
   { slug: 'calculadora-fgts-compra-imovel', titulo: 'FGTS para Compra de Imóvel', desc: 'Veja quanto do FGTS pode ser usado na compra de imóvel pelo SFH.', cat: 'Imóveis', icon: '🏦', campos: [{ k: 'saldoFgts', l: 'Saldo do FGTS (R$)', t: 'num', p: '40000', min: 0 }, { k: 'valorImovel', l: 'Valor do imóvel (R$)', t: 'num', p: '400000', min: 0 }], fn: (v) => { const limitesSFH = 1500000; const elegivel = v.valorImovel <= limitesSFH; const entrada = v.valorImovel * 0.2; return { principal: { valor: elegivel ? Math.min(v.saldoFgts, entrada) : 0, label: elegivel ? 'FGTS utilizável na entrada' : 'Imóvel acima do limite SFH', fmt: 'brl' }, detalhes: [{ l: 'Entrada recomendada (20%)', v: entrada, fmt: 'brl' }, { l: 'Limite SFH', v: limitesSFH, fmt: 'brl' }] } }, dis: DIS_IMO },
   { slug: 'calculadora-distrato-imovel', titulo: 'Distrato de Imóvel na Planta', desc: 'Calcule os valores devolvidos em caso de distrato imobiliário.', cat: 'Imóveis', icon: '📋', campos: [{ k: 'totalPago', l: 'Total pago (R$)', t: 'num', p: '80000', min: 0 }, { k: 'multa', l: 'Multa contratual (%)', t: 'num', p: '25', min: 0, max: 50 }], fn: (v) => { const multaValor = v.totalPago * v.multa / 100; const recebe = v.totalPago - multaValor; return { principal: { valor: recebe, label: 'Valor a receber no distrato', fmt: 'brl' }, detalhes: [{ l: 'Multa', v: multaValor, fmt: 'brl' }, { l: 'Total pago', v: v.totalPago, fmt: 'brl' }] } }, dis: 'Lei 13.786/2018. Verifique seu contrato. Consulte um advogado.' },
   { slug: 'calculadora-aluguel-projetado', titulo: 'Projeção de Aluguel com Reajuste', desc: 'Projete o aluguel futuro com reajuste anual pelo IGP-M ou IPCA.', cat: 'Imóveis', icon: '📈', campos: [{ k: 'aluguelAtual', l: 'Aluguel atual (R$)', t: 'num', p: '2000', min: 0 }, { k: 'reajusteAnual', l: 'Reajuste anual (%)', t: 'num', p: '8', min: 0 }, { k: 'anos', l: 'Projeção em anos', t: 'num', p: '5', min: 1, max: 30 }], fn: (v) => { const futuro = v.aluguelAtual * Math.pow(1 + v.reajusteAnual / 100, v.anos); return { principal: { valor: futuro, label: `Aluguel em ${v.anos} anos`, fmt: 'brl' }, detalhes: [{ l: 'Aumento total', v: futuro - v.aluguelAtual, fmt: 'brl' }, { l: 'Aluguel atual', v: v.aluguelAtual, fmt: 'brl' }] } }, dis: DIS_IMO },
+
+  // ── 8 novas calculadoras de imóveis 2026 ────────────────────────────────────
+  {
+    slug: 'calculadora-custo-compra-imovel',
+    titulo: 'Custo Total de Compra de Imóvel (ITBI + Cartório)',
+    desc: 'Calcule todos os custos extras na compra: ITBI, escritura, registro e certidões',
+    cat: 'Imóveis',
+    icon: '🏠',
+    campos: [
+      { k: 'valorImovel', l: 'Valor do imóvel (R$)', t: 'num', p: '350000', min: 0 },
+      { k: 'aliquotaITBI', l: 'Alíquota ITBI (%)', t: 'num', p: '3', min: 0, max: 10 },
+    ],
+    fn: (v) => {
+      const itbi = v.valorImovel * (v.aliquotaITBI / 100)
+      const escritura = v.valorImovel * 0.004
+      const registro = v.valorImovel * 0.004
+      const certidoes = Math.min(1200, v.valorImovel * 0.002)
+      const total = itbi + escritura + registro + certidoes
+      const pct = (total / v.valorImovel) * 100
+      return {
+        principal: { valor: total, label: 'Total de custos extras', fmt: 'brl' },
+        detalhes: [
+          { l: `ITBI (${v.aliquotaITBI}%)`, v: itbi, fmt: 'brl' },
+          { l: 'Escritura pública (~0,4%)', v: escritura, fmt: 'brl' },
+          { l: 'Registro de imóveis (~0,4%)', v: registro, fmt: 'brl' },
+          { l: 'Certidões e taxas', v: certidoes, fmt: 'brl' },
+          { l: '% sobre o valor do imóvel', v: pct, fmt: 'pct' },
+        ],
+        aviso: `Reserve ${pct.toFixed(1)}% acima do preço do imóvel para os custos de transferência.`,
+      }
+    },
+    dis: 'Taxas de cartório variam por estado. ITBI varia por município. Consulte valores locais.',
+  },
+  {
+    slug: 'calculadora-financiamento-imovel-detalhado',
+    titulo: 'Simulação de Financiamento Imobiliário — Price vs SAC',
+    desc: 'Compare Price e SAC detalhadamente: parcelas, juros totais e renda necessária',
+    cat: 'Imóveis',
+    icon: '🏦',
+    campos: [
+      { k: 'valorImovel', l: 'Valor do imóvel (R$)', t: 'num', p: '400000', min: 0 },
+      { k: 'entrada', l: 'Entrada (R$)', t: 'num', p: '80000', min: 0 },
+      { k: 'taxaAnual', l: 'Taxa de juros anual (%)', t: 'num', p: '10.5', min: 0, max: 30 },
+      { k: 'prazo', l: 'Prazo (meses)', t: 'num', p: '360', min: 12, max: 420 },
+    ],
+    fn: (v) => {
+      const valorFinanciado = Math.max(0, v.valorImovel - v.entrada)
+      const i = Math.pow(1 + v.taxaAnual / 100, 1 / 12) - 1
+      const n = Math.max(1, v.prazo)
+      // Price
+      const parcelaPrice = i > 0
+        ? valorFinanciado * (i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1)
+        : valorFinanciado / n
+      const totalPrice = parcelaPrice * n
+      const jurosPrice = totalPrice - valorFinanciado
+      // SAC
+      const amortSAC = valorFinanciado / n
+      const primParcelaSAC = amortSAC + valorFinanciado * i
+      const ultParcelaSAC = amortSAC + amortSAC * i
+      const totalSAC = n * amortSAC + valorFinanciado * i * (n + 1) / 2
+      const jurosSAC = totalSAC - valorFinanciado
+      // Renda
+      const rendaPrice = parcelaPrice / 0.30
+      const rendaSAC = primParcelaSAC / 0.30
+      return {
+        principal: { valor: parcelaPrice, label: 'Parcela Price (fixa)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Valor financiado', v: valorFinanciado, fmt: 'brl' },
+          { l: 'Price — total pago', v: totalPrice, fmt: 'brl' },
+          { l: 'Price — juros totais', v: jurosPrice, fmt: 'brl' },
+          { l: 'SAC — 1ª parcela', v: primParcelaSAC, fmt: 'brl' },
+          { l: 'SAC — última parcela', v: ultParcelaSAC, fmt: 'brl' },
+          { l: 'SAC — juros totais', v: jurosSAC, fmt: 'brl' },
+          { l: 'Renda mín. para Price', v: rendaPrice, fmt: 'brl' },
+          { l: 'Renda mín. para SAC', v: rendaSAC, fmt: 'brl' },
+        ],
+        aviso: `SAC economiza ${((1 - jurosSAC / jurosPrice) * 100).toFixed(1)}% nos juros vs Price, mas a 1ª parcela é maior.`,
+      }
+    },
+    dis: DIS_IMO,
+  },
+  {
+    slug: 'calculadora-comprar-vs-alugar',
+    titulo: 'Comprar vs Alugar — Qual Compensa Financeiramente?',
+    desc: 'Análise completa: ponto de equilíbrio e custo efetivo de cada opção',
+    cat: 'Imóveis',
+    icon: '⚖️',
+    campos: [
+      { k: 'valorImovel', l: 'Valor do imóvel (R$)', t: 'num', p: '500000', min: 0 },
+      { k: 'aluguelMensal', l: 'Aluguel equivalente (R$/mês)', t: 'num', p: '2500', min: 0 },
+      { k: 'taxaAnual', l: 'Taxa de juros financiamento (% a.a.)', t: 'num', p: '10.5', min: 0, max: 30 },
+      { k: 'entradaPercent', l: 'Entrada disponível (%)', t: 'num', p: '20', min: 5, max: 100 },
+    ],
+    fn: (v) => {
+      const entrada = v.valorImovel * (v.entradaPercent / 100)
+      const valorFinanciado = v.valorImovel - entrada
+      const i = Math.pow(1 + v.taxaAnual / 100, 1 / 12) - 1
+      const n = 360
+      const parcelaPrice = i > 0
+        ? valorFinanciado * (i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1)
+        : valorFinanciado / n
+      const iptuMensal = (v.valorImovel * 0.008) / 12
+      const custoMensalCompra = parcelaPrice + iptuMensal
+      const maisBaratoComprar = custoMensalCompra < v.aluguelMensal
+      const diferencaMensal = Math.abs(custoMensalCompra - v.aluguelMensal)
+      const custoInicio = entrada + v.valorImovel * 0.04
+      const mesesEquilibrio = diferencaMensal > 0 && !maisBaratoComprar
+        ? Math.round(custoInicio / diferencaMensal)
+        : 0
+      return {
+        principal: { valor: maisBaratoComprar ? 'Comprar é mais barato' : 'Alugar é mais barato agora', label: 'Resultado da comparação', fmt: 'txt' },
+        detalhes: [
+          { l: 'Custo mensal comprando (parcela + IPTU)', v: custoMensalCompra, fmt: 'brl' },
+          { l: 'Aluguel mensal', v: v.aluguelMensal, fmt: 'brl' },
+          { l: 'Diferença mensal', v: diferencaMensal, fmt: 'brl' },
+          { l: 'Entrada + custos de compra', v: custoInicio, fmt: 'brl' },
+          ...(mesesEquilibrio > 0 ? [{ l: 'Ponto de equilíbrio estimado', v: `${Math.round(mesesEquilibrio / 12)} anos`, fmt: 'txt' as const }] : []),
+        ],
+        aviso: 'Comprar gera patrimônio. Alugar preserva liquidez. Compare com seu objetivo de vida.',
+      }
+    },
+    dis: DIS_IMO,
+  },
+  {
+    slug: 'calculadora-renda-minima-financiamento',
+    titulo: 'Renda Mínima para Financiar um Imóvel',
+    desc: 'Descubra qual renda mensal é necessária para financiar o imóvel que você quer',
+    cat: 'Imóveis',
+    icon: '💵',
+    campos: [
+      { k: 'valorImovel', l: 'Valor do imóvel (R$)', t: 'num', p: '400000', min: 0 },
+      { k: 'entradaPercent', l: 'Entrada (%)', t: 'num', p: '20', min: 5, max: 80 },
+      { k: 'taxaAnual', l: 'Taxa de juros anual (%)', t: 'num', p: '10.5', min: 0, max: 25 },
+      { k: 'prazo', l: 'Prazo (meses)', t: 'num', p: '360', min: 60, max: 420 },
+    ],
+    fn: (v) => {
+      const entrada = v.valorImovel * (v.entradaPercent / 100)
+      const valorFinanciado = v.valorImovel - entrada
+      const i = Math.pow(1 + v.taxaAnual / 100, 1 / 12) - 1
+      const n = Math.max(1, v.prazo)
+      const parcela = i > 0
+        ? valorFinanciado * (i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1)
+        : valorFinanciado / n
+      const rendaMinima30 = parcela / 0.30
+      const rendaMinima35 = parcela / 0.35
+      return {
+        principal: { valor: rendaMinima30, label: 'Renda mínima (critério 30%)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Valor financiado', v: valorFinanciado, fmt: 'brl' },
+          { l: 'Entrada necessária', v: entrada, fmt: 'brl' },
+          { l: 'Parcela mensal (Price)', v: parcela, fmt: 'brl' },
+          { l: 'Renda mínima (30%)', v: rendaMinima30, fmt: 'brl' },
+          { l: 'Renda (35% — alguns bancos)', v: rendaMinima35, fmt: 'brl' },
+        ],
+        aviso: 'Bancos consideram renda comprovada. Autônomos/MEI precisam de extratos dos últimos 6 meses.',
+      }
+    },
+    dis: DIS_IMO,
+  },
+  {
+    slug: 'calculadora-fgts-imovel',
+    titulo: 'FGTS na Compra de Imóvel — Quanto Usar',
+    desc: 'Calcule quanto do saldo do FGTS pode ser usado na compra do imóvel',
+    cat: 'Imóveis',
+    icon: '💳',
+    campos: [
+      { k: 'saldoFGTS', l: 'Saldo do FGTS (R$)', t: 'num', p: '45000', min: 0 },
+      { k: 'valorImovel', l: 'Valor do imóvel (R$)', t: 'num', p: '400000', min: 0 },
+      { k: 'mesesContribuicao', l: 'Meses de contribuição ao FGTS', t: 'num', p: '48', min: 0 },
+    ],
+    fn: (v) => {
+      const elegivel = v.mesesContribuicao >= 36 && v.valorImovel <= 1500000
+      const entrada20 = v.valorImovel * 0.20
+      const maxUsavel = v.saldoFGTS * 0.80
+      const sugerido = Math.min(maxUsavel, entrada20)
+      const entradaRestante = Math.max(0, entrada20 - sugerido)
+      return {
+        principal: { valor: elegivel ? sugerido : 0, label: elegivel ? 'FGTS sugerido para entrada' : 'Sem elegibilidade ainda', fmt: 'brl' },
+        detalhes: [
+          { l: 'Saldo FGTS disponível', v: v.saldoFGTS, fmt: 'brl' },
+          { l: 'Máximo utilizável (80% do saldo)', v: maxUsavel, fmt: 'brl' },
+          { l: 'Entrada recomendada (20%)', v: entrada20, fmt: 'brl' },
+          { l: 'Complemento em dinheiro', v: entradaRestante, fmt: 'brl' },
+          { l: 'Meses faltando para elegibilidade', v: Math.max(0, 36 - v.mesesContribuicao), fmt: 'num' },
+        ],
+        aviso: elegivel
+          ? 'Você pode usar o FGTS na entrada ou para amortizar o saldo devedor.'
+          : `Você precisa de mais ${Math.max(0, 36 - v.mesesContribuicao)} meses de contribuição com carteira assinada para usar o FGTS.`,
+      }
+    },
+    dis: 'Regras do FGTS habitacional: mínimo 36 meses de contribuição, imóvel até R$ 1,5 milhão (SFH), sem outro imóvel no município de residência.',
+  },
 ]

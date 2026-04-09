@@ -511,4 +511,294 @@ export const CALCS_CRIAR_EMPREENDER: CalcConfig[] = [
   { slug: 'calculadora-valuation-simples', titulo: 'Valuation Simplificado', desc: 'Estime o valor de mercado do seu negócio.', cat: 'Criar e Empreender', icon: '🏢', campos: [{ k: 'lucroAnual', l: 'Lucro anual líquido (R$)', t: 'num', p: '120000', min: 0 }, { k: 'multiplo', l: 'Múltiplo de mercado (x)', t: 'num', p: '5', min: 1, max: 30 }], fn: (v) => ({ principal: { valor: v.lucroAnual * v.multiplo, label: 'Valuation estimado', fmt: 'brl' }, detalhes: [{ l: 'Lucro anual', v: v.lucroAnual, fmt: 'brl' }, { l: 'Múltiplo', v: v.multiplo, fmt: 'num' }] }), dis: DIS_EMP },
   { slug: 'calculadora-custo-hora-autonomo', titulo: 'Custo-Hora para Autônomo', desc: 'Defina seu preço por hora como profissional autônomo.', cat: 'Criar e Empreender', icon: '⏰', campos: [{ k: 'rendimentoDesejado', l: 'Rendimento mensal desejado (R$)', t: 'num', p: '8000', min: 0 }, { k: 'horasMes', l: 'Horas disponíveis por mês', t: 'num', p: '120', min: 1 }, { k: 'impostos', l: 'Impostos e encargos (%)', t: 'num', p: '15', min: 0, max: 50 }], fn: (v) => { const custoHora = (v.rendimentoDesejado / (1 - v.impostos / 100)) / v.horasMes; return { principal: { valor: custoHora, label: 'Valor mínimo por hora', fmt: 'brl' }, detalhes: [{ l: 'Rendimento bruto necessário', v: v.rendimentoDesejado / (1 - v.impostos / 100), fmt: 'brl' }] } }, dis: DIS_EMP },
   { slug: 'calculadora-payback-investimento', titulo: 'Payback de Investimento', desc: 'Calcule em quantos meses seu investimento se paga.', cat: 'Criar e Empreender', icon: '📈', campos: [{ k: 'investimento', l: 'Investimento inicial (R$)', t: 'num', p: '50000', min: 0 }, { k: 'retornoMensal', l: 'Retorno mensal líquido (R$)', t: 'num', p: '5000', min: 0.01 }], fn: (v) => { const meses = v.investimento / v.retornoMensal; return { principal: { valor: meses, label: 'Meses para payback', fmt: 'num' }, detalhes: [{ l: 'Em anos', v: meses / 12, fmt: 'num' }, { l: 'Retorno anualizado', v: (v.retornoMensal * 12 / v.investimento) * 100, fmt: 'pct' }] } }, dis: DIS_EMP },
+
+  // ── Calculadoras MEI / PJ / Autônomo ─────────────────────────────────────
+  {
+    slug: 'calculadora-das-mei',
+    titulo: 'Calculadora DAS MEI 2026',
+    desc: 'Calcule o DAS mensal e anual do MEI por tipo de atividade',
+    cat: 'Criar e Empreender',
+    icon: '📄',
+    campos: [
+      { k: 'tipo', l: 'Tipo de Atividade', t: 'sel', op: [['0','Comércio / Indústria (R$ 76,90)'], ['1','Serviços (R$ 80,90)'], ['2','Comércio + Serviços (R$ 81,90)'], ['3','Transporte (R$ 79,40)']] },
+    ],
+    fn: (v) => {
+      const tabela = [76.90, 80.90, 81.90, 79.40]
+      const inss = [75.90, 75.90, 75.90, 75.90]
+      const iss  = [0, 5.00, 5.00, 0]
+      const icms = [1.00, 0, 1.00, 3.50]
+      const idx = Math.min(Math.round(v.tipo), 3)
+      const mensal = tabela[idx]
+      return {
+        principal: { valor: mensal, label: 'DAS mensal', fmt: 'brl' },
+        detalhes: [
+          { l: 'INSS (5% do salário mínimo)', v: inss[idx], fmt: 'brl' },
+          { l: 'ISS', v: iss[idx], fmt: 'brl' },
+          { l: 'ICMS', v: icms[idx], fmt: 'brl' },
+          { l: 'DAS anual', v: mensal * 12, fmt: 'brl' },
+          { l: 'Limite de faturamento anual', v: 81000, fmt: 'brl' },
+        ],
+        aviso: 'DAS vence todo dia 20. INSS: 5% de R$1.518 = R$75,90. Limite MEI 2026: R$81.000/ano.',
+      }
+    },
+    dis: DIS_EMP,
+  },
+  {
+    slug: 'calculadora-faturamento-mei',
+    titulo: 'Calculadora de Faturamento MEI',
+    desc: 'Veja quanto % do limite MEI você já usou e se pode continuar como MEI',
+    cat: 'Criar e Empreender',
+    icon: '📊',
+    campos: [
+      { k: 'faturamentoMes', l: 'Faturamento do mês atual (R$)', t: 'num', p: '4500', min: 0 },
+      { k: 'mesesDecorridos', l: 'Meses decorridos no ano', t: 'num', p: '6', min: 1, max: 12 },
+    ],
+    fn: (v) => {
+      const limiteAnual = 81000
+      const limiteMensal = 6750
+      const faturadoEstimado = v.faturamentoMes * v.mesesDecorridos
+      const pctUsado = (faturadoEstimado / limiteAnual) * 100
+      const projecaoAnual = v.faturamentoMes * 12
+      const pctProjecao = (projecaoAnual / limiteAnual) * 100
+      const pctMes = (v.faturamentoMes / limiteMensal) * 100
+      const alerta = projecaoAnual > limiteAnual
+        ? `Projeção anual (R$ ${projecaoAnual.toFixed(2)}) ultrapassa o limite MEI. Considere migrar para o Simples Nacional.`
+        : undefined
+      return {
+        principal: { valor: pctProjecao, label: '% do limite MEI (projeção anual)', fmt: 'pct' },
+        detalhes: [
+          { l: 'Faturado estimado no ano', v: faturadoEstimado, fmt: 'brl' },
+          { l: 'Projeção anual completa', v: projecaoAnual, fmt: 'brl' },
+          { l: 'Limite MEI anual (2026)', v: limiteAnual, fmt: 'brl' },
+          { l: '% do limite mensal usado', v: pctMes, fmt: 'pct' },
+          { l: 'Margem restante no ano', v: Math.max(0, limiteAnual - faturadoEstimado), fmt: 'brl' },
+        ],
+        aviso: alerta,
+      }
+    },
+    dis: DIS_EMP,
+  },
+  {
+    slug: 'calculadora-clt-vs-pj',
+    titulo: 'Calculadora CLT vs PJ 2026',
+    desc: 'Descubra quanto você precisa ganhar como PJ para igualar seu salário CLT',
+    cat: 'Criar e Empreender',
+    icon: '⚖️',
+    campos: [
+      { k: 'salarioCLT', l: 'Salário bruto CLT (R$)', t: 'num', p: '5000', min: 0 },
+      { k: 'impostoPJPct', l: 'Imposto estimado PJ (%) — ex: 13.5', t: 'num', p: '13.5', min: 0, max: 50 },
+    ],
+    fn: (v) => {
+      const fgts = v.salarioCLT * 0.08
+      const decimoTerceiro = v.salarioCLT / 12
+      const ferias = (v.salarioCLT / 12) * (1 + 1/3)
+      const inssPatronal = v.salarioCLT * 0.20
+      const custoEmpresa = v.salarioCLT + fgts + decimoTerceiro + ferias + inssPatronal
+      const pjMinimo = v.salarioCLT * 1.35
+      const pjLiquidoEstimado = pjMinimo * (1 - v.impostoPJPct / 100)
+      // INSS empregado simplificado (alíquota ~9% na faixa R$3k-5k)
+      const inssEmp = Math.min(v.salarioCLT * 0.09, 7786.02 * 0.14)
+      const liquidoCLT = v.salarioCLT - inssEmp
+      return {
+        principal: { valor: pjMinimo, label: 'PJ mínimo para equivaler ao CLT', fmt: 'brl' },
+        detalhes: [
+          { l: 'Custo total para empresa (CLT)', v: custoEmpresa, fmt: 'brl' },
+          { l: 'FGTS mensal (8%)', v: fgts, fmt: 'brl' },
+          { l: '13º salário provisionado', v: decimoTerceiro, fmt: 'brl' },
+          { l: 'Férias + 1/3 provisionadas', v: ferias, fmt: 'brl' },
+          { l: 'Líquido CLT estimado', v: liquidoCLT, fmt: 'brl' },
+          { l: 'Líquido PJ estimado', v: pjLiquidoEstimado, fmt: 'brl' },
+        ],
+        aviso: 'Regra: CLT + 35% ≈ PJ mínimo para equilibrar. O PJ também precisa guardar para férias e 13º próprios.',
+      }
+    },
+    dis: DIS_EMP,
+  },
+  {
+    slug: 'calculadora-pro-labore',
+    titulo: 'Calculadora de Pró-Labore 2026',
+    desc: 'Calcule o pró-labore ideal e os impostos: INSS + IR do sócio',
+    cat: 'Criar e Empreender',
+    icon: '💼',
+    campos: [
+      { k: 'proLabore', l: 'Valor do pró-labore (R$)', t: 'num', p: '3000', min: 1518 },
+    ],
+    fn: (v) => {
+      const inss = Math.min(v.proLabore * 0.11, 7786.02 * 0.11)
+      const inssPatronal = v.proLabore * 0.20
+      const baseIR = v.proLabore - inss
+      let ir = 0
+      if (baseIR > 6601.07) ir = baseIR * 0.275 - 1173.49
+      else if (baseIR > 4664.69) ir = baseIR * 0.225 - 842.60
+      else if (baseIR > 3751.06) ir = baseIR * 0.15 - 492.60
+      else if (baseIR > 2824) ir = baseIR * 0.075 - 211.80
+      ir = Math.max(0, ir)
+      const liquido = v.proLabore - inss - ir
+      const custoEmpresa = v.proLabore + inssPatronal
+      return {
+        principal: { valor: liquido, label: 'Pró-labore líquido do sócio', fmt: 'brl' },
+        detalhes: [
+          { l: 'INSS sócio (11%)', v: inss, fmt: 'brl' },
+          { l: 'IR sobre pró-labore', v: ir, fmt: 'brl' },
+          { l: 'INSS patronal (20%)', v: inssPatronal, fmt: 'brl' },
+          { l: 'Custo total para empresa', v: custoEmpresa, fmt: 'brl' },
+          { l: 'Alíquota efetiva total', v: ((inss + ir + inssPatronal) / v.proLabore) * 100, fmt: 'pct' },
+        ],
+        aviso: 'O pró-labore mínimo recomendado é o salário mínimo (R$1.518). Distribuição de lucros é isenta de IR.',
+      }
+    },
+    dis: DIS_EMP,
+  },
+  {
+    slug: 'calculadora-simples-nacional',
+    titulo: 'Calculadora Simples Nacional 2026',
+    desc: 'Calcule o DAS do Simples Nacional por faturamento anual e anexo',
+    cat: 'Criar e Empreender',
+    icon: '🏛️',
+    campos: [
+      { k: 'faturamentoAnual', l: 'Faturamento anual (R$)', t: 'num', p: '360000', min: 0 },
+      { k: 'anexo', l: 'Anexo do Simples', t: 'sel', op: [['0','Anexo I — Comércio (4% a 19%)'], ['1','Anexo III — Serviços gerais (6% a 33%)'], ['2','Anexo V — Serviços intelectuais (15,5% a 30,5%)']] },
+    ],
+    fn: (v) => {
+      const fatAnual = v.faturamentoAnual
+      const idx = Math.min(Math.round(v.anexo), 2)
+      // Faixas: Anexo I, III, V — alíquotas nominais e deduções
+      const faixas = [
+        // Anexo I (comércio)
+        [{ate:180000,a:0.04,pd:0},{ate:360000,a:0.073,pd:5940},{ate:720000,a:0.095,pd:13860},{ate:1800000,a:0.107,pd:22500},{ate:3600000,a:0.143,pd:87300},{ate:Infinity,a:0.19,pd:378000}],
+        // Anexo III (serviços)
+        [{ate:180000,a:0.06,pd:0},{ate:360000,a:0.112,pd:9360},{ate:720000,a:0.135,pd:17640},{ate:1800000,a:0.16,pd:35640},{ate:3600000,a:0.21,pd:125640},{ate:Infinity,a:0.33,pd:648000}],
+        // Anexo V (intelectuais)
+        [{ate:180000,a:0.155,pd:0},{ate:360000,a:0.18,pd:4500},{ate:720000,a:0.195,pd:9900},{ate:1800000,a:0.205,pd:17100},{ate:3600000,a:0.23,pd:62100},{ate:Infinity,a:0.305,pd:540000}],
+      ]
+      const tabFaixa = faixas[idx]
+      let faixa = tabFaixa[tabFaixa.length - 1]
+      for (const f of tabFaixa) { if (fatAnual <= f.ate) { faixa = f; break } }
+      const efetiva = fatAnual > 0 ? (fatAnual * faixa.a - faixa.pd) / fatAnual : faixa.a
+      const dasAnual = fatAnual * efetiva
+      const dasMensal = dasAnual / 12
+      return {
+        principal: { valor: dasMensal, label: 'DAS mensal estimado', fmt: 'brl' },
+        detalhes: [
+          { l: 'Alíquota efetiva anual', v: efetiva * 100, fmt: 'pct' },
+          { l: 'DAS anual total', v: dasAnual, fmt: 'brl' },
+          { l: 'Faturamento mensal médio', v: fatAnual / 12, fmt: 'brl' },
+          { l: 'Alíquota nominal da faixa', v: faixa.a * 100, fmt: 'pct' },
+        ],
+        aviso: 'A alíquota efetiva é menor que a nominal pois considera a dedução da faixa. Simples Nacional: limite R$4,8M/ano.',
+      }
+    },
+    dis: DIS_EMP,
+  },
+  {
+    slug: 'calculadora-pj-vs-mei',
+    titulo: 'Calculadora PJ vs MEI — Qual Paga Menos Imposto?',
+    desc: 'Compare o imposto de quem é MEI vs Simples Nacional para o mesmo faturamento',
+    cat: 'Criar e Empreender',
+    icon: '🔄',
+    campos: [
+      { k: 'faturamentoMes', l: 'Faturamento mensal (R$)', t: 'num', p: '5000', min: 0 },
+      { k: 'tipoServico', l: 'Tipo de serviço', t: 'sel', op: [['0','Serviços gerais (Anexo III Simples)'], ['1','Comércio (Anexo I Simples)'], ['2','Serviços intelectuais (Anexo V Simples)']] },
+    ],
+    fn: (v) => {
+      const mensal = v.faturamentoMes
+      const anual = mensal * 12
+      const tipo = Math.round(v.tipoServico)
+      // MEI: DAS fixo
+      const dasMEI = tipo === 1 ? 76.90 : 80.90
+      const pctMEI = (dasMEI / mensal) * 100
+      // Simples: alíquotas mínimas por anexo
+      const aliqSimples = [0.06, 0.04, 0.155]
+      const pd = [0, 0, 0]
+      let efetiva = aliqSimples[tipo] ?? 0.06
+      if (anual > 180000) {
+        const tabs = [[0.073,5940],[0.112,9360],[0.18,4500]]
+        const [a, d] = tabs[tipo] ?? tabs[0]
+        efetiva = (anual * a - d) / anual
+      }
+      const dasSimplesMes = mensal * efetiva
+      const economia = dasMEI < dasSimplesMes ? dasSimplesMes - dasMEI : 0
+      const melhor = dasMEI < dasSimplesMes ? 'MEI' : 'Simples Nacional'
+      return {
+        principal: { valor: dasMEI, label: 'DAS MEI mensal', fmt: 'brl' },
+        detalhes: [
+          { l: 'DAS Simples Nacional mensal (est.)', v: dasSimplesMes, fmt: 'brl' },
+          { l: '% imposto MEI s/ faturamento', v: pctMEI, fmt: 'pct' },
+          { l: '% imposto Simples s/ faturamento', v: efetiva * 100, fmt: 'pct' },
+          { l: 'Economia com MEI por mês', v: economia, fmt: 'brl' },
+        ],
+        aviso: mensal > 6750
+          ? `Faturamento acima do limite MEI (R$6.750/mês). Obrigatório migrar para o Simples Nacional. Melhor: ${melhor}.`
+          : `Para este faturamento, o ${melhor} paga menos imposto. Mas o MEI tem limite de R$81.000/ano.`,
+      }
+    },
+    dis: DIS_EMP,
+  },
+  {
+    slug: 'calculadora-encargos-funcionario',
+    titulo: 'Calculadora de Encargos do Funcionário CLT',
+    desc: 'Calcule o custo total de contratar um funcionário com carteira assinada',
+    cat: 'Criar e Empreender',
+    icon: '👤',
+    campos: [
+      { k: 'salario', l: 'Salário bruto do funcionário (R$)', t: 'num', p: '2500', min: 1518 },
+    ],
+    fn: (v) => {
+      const inssPatronal = v.salario * 0.20
+      const fgts = v.salario * 0.08
+      const provisaoFerias = (v.salario / 12) * (1 + 1/3)
+      const provisao13 = v.salario / 12
+      const totalMensal = v.salario + inssPatronal + fgts + provisaoFerias + provisao13
+      const pct = ((totalMensal / v.salario) - 1) * 100
+      return {
+        principal: { valor: totalMensal, label: 'Custo total mensal para empresa', fmt: 'brl' },
+        detalhes: [
+          { l: 'Salário bruto', v: v.salario, fmt: 'brl' },
+          { l: 'INSS patronal (20%)', v: inssPatronal, fmt: 'brl' },
+          { l: 'FGTS (8%)', v: fgts, fmt: 'brl' },
+          { l: 'Provisão férias + 1/3', v: provisaoFerias, fmt: 'brl' },
+          { l: 'Provisão 13º salário', v: provisao13, fmt: 'brl' },
+          { l: 'Custo adicional s/ salário', v: pct, fmt: 'pct' },
+        ],
+        aviso: 'O custo real de um funcionário CLT é aproximadamente 72% a mais que o salário. Valores estimados — consulte seu contador.',
+      }
+    },
+    dis: DIS_EMP,
+  },
+  {
+    slug: 'calculadora-distribuicao-lucros',
+    titulo: 'Calculadora de Distribuição de Lucros',
+    desc: 'Calcule quanto o sócio recebe na distribuição de lucros e se há imposto',
+    cat: 'Criar e Empreender',
+    icon: '💰',
+    campos: [
+      { k: 'lucroLiquido', l: 'Lucro líquido da empresa no mês (R$)', t: 'num', p: '15000', min: 0 },
+      { k: 'proLabore', l: 'Pró-labore do sócio (R$)', t: 'num', p: '2000', min: 0 },
+      { k: 'numSocios', l: 'Número de sócios', t: 'num', p: '1', min: 1, max: 20 },
+    ],
+    fn: (v) => {
+      const lucroDistribuir = Math.max(0, v.lucroLiquido - v.proLabore * v.numSocios)
+      const porSocio = lucroDistribuir / v.numSocios
+      const inssProLabore = Math.min(v.proLabore * 0.11, 7786.02 * 0.11)
+      const baseIR = Math.max(0, v.proLabore - inssProLabore)
+      let ir = 0
+      if (baseIR > 6601.07) ir = baseIR * 0.275 - 1173.49
+      else if (baseIR > 4664.69) ir = baseIR * 0.225 - 842.60
+      else if (baseIR > 3751.06) ir = baseIR * 0.15 - 492.60
+      else if (baseIR > 2824) ir = baseIR * 0.075 - 211.80
+      ir = Math.max(0, ir)
+      const rendimentoTotal = v.proLabore - inssProLabore - ir + porSocio
+      return {
+        principal: { valor: porSocio, label: 'Lucros distribuídos por sócio (isento IR)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Lucro disponível para distribuição', v: lucroDistribuir, fmt: 'brl' },
+          { l: 'Pró-labore líquido (após INSS + IR)', v: v.proLabore - inssProLabore - ir, fmt: 'brl' },
+          { l: 'Rendimento total do sócio', v: rendimentoTotal, fmt: 'brl' },
+          { l: 'IR sobre lucros distribuídos', v: 0, fmt: 'brl' },
+        ],
+        aviso: 'Distribuição de lucros é isenta de IR no Brasil (Lei 9.249/95). Mas precisa de escrituração contábil. Consulte seu contador.',
+      }
+    },
+    dis: DIS_EMP,
+  },
 ]

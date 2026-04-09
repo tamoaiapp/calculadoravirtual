@@ -8,6 +8,11 @@ import { SLUGS_EMPRESTIMOS } from '@/lib/emprestimos/slugs'
 import { SLUGS_CANETA } from '@/lib/caneta/slugs'
 import { SLUGS_IR } from '@/lib/ir/slugs'
 import { SLUGS_CONCURSOS } from '@/lib/concursos/slugs'
+import { SLUGS_VEICULOS } from '@/lib/veiculos/slugs'
+import { SLUGS_IMOVEIS } from '@/lib/imoveis/slugs'
+import { SLUGS_MEI } from '@/lib/mei/slugs'
+import { SLUGS_NUTRICAO } from '@/lib/nutricao/slugs'
+import { SLUGS_SAUDE } from '@/lib/saude/slugs'
 
 const BASE_URL = 'https://calculadoravirtual.com.br'
 
@@ -212,5 +217,85 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ]
 
-  return [...paginas, ...categorias, ...calculadoras, ...blog, ...duvidas, ...salarios, ...periodica, ...medicamentos, ...caneta, ...ir, ...concursos, ...trabalhista, ...emprestimos]
+  // Veículos — hub + 500+ páginas
+  const veiculos: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/veiculos`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_VEICULOS.map(slug => ({
+      url: `${BASE_URL}/veiculos/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
+  ]
+
+  // Imóveis — hub + 400+ páginas
+  const imoveis: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/imoveis`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_IMOVEIS.map(slug => ({
+      url: `${BASE_URL}/imoveis/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
+  ]
+
+  // MEI, PJ e Autônomo — hub + 350+ páginas
+  const mei: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/mei`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_MEI.map(slug => ({
+      url: `${BASE_URL}/mei/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
+  ]
+
+  // Nutrição — hub + 300+ páginas
+  const nutricao: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/nutricao`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_NUTRICAO.map(slug => ({
+      url: `${BASE_URL}/nutricao/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
+  ]
+
+  // Saúde — hub + 229 páginas
+  const saude: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/saude`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_SAUDE.map(slug => ({
+      url: `${BASE_URL}/saude/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
+  ]
+
+  return [...paginas, ...categorias, ...calculadoras, ...blog, ...duvidas, ...salarios, ...periodica, ...medicamentos, ...caneta, ...ir, ...concursos, ...trabalhista, ...emprestimos, ...veiculos, ...imoveis, ...mei, ...nutricao, ...saude]
 }

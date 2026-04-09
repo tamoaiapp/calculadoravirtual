@@ -655,4 +655,361 @@ export const CALCS_VEICULOS: CalcConfig[] = [
     },
     dis: DIS_VEI,
   },
+  // ──────────────────────────────────────────
+  // Novas calculadoras — seção Veículos 2026
+  // ──────────────────────────────────────────
+  {
+    slug: 'calculadora-ipva',
+    titulo: 'Calculadora de IPVA 2026',
+    desc: 'Calcule o IPVA do seu veículo por estado com alíquotas reais 2026',
+    cat: 'Veículos',
+    icon: '🏛️',
+    campos: [
+      { k: 'valor', l: 'Valor do veículo (R$)', t: 'num', p: '50000', min: 0 },
+      {
+        k: 'estado',
+        l: 'Estado',
+        t: 'sel',
+        op: [
+          ['4', 'SP — São Paulo (4%)'],
+          ['4', 'RJ — Rio de Janeiro (4%)'],
+          ['4', 'MG — Minas Gerais (4%)'],
+          ['3.5', 'PR — Paraná (3,5%)'],
+          ['3.5', 'SC — Santa Catarina (3,5%)'],
+          ['3.5', 'BA — Bahia (3,5%)'],
+          ['3.5', 'GO — Goiás (3,5%)'],
+          ['3.5', 'DF — Distrito Federal (3,5%)'],
+          ['3', 'RS — Rio Grande do Sul (3%)'],
+          ['3', 'MT — Mato Grosso (3%)'],
+          ['3', 'MS — Mato Grosso do Sul (3%)'],
+          ['3', 'ES — Espírito Santo (3%)'],
+          ['3.5', 'CE — Ceará (3,5%)'],
+          ['3.5', 'PE — Pernambuco (3,5%)'],
+          ['3', 'AM — Amazonas (3%)'],
+          ['3.5', 'PA — Pará (3,5%)'],
+          ['3.5', 'MA — Maranhão (3,5%)'],
+          ['3', 'RN — Rio Grande do Norte (3%)'],
+          ['3', 'PB — Paraíba (3%)'],
+          ['3', 'AL — Alagoas (3%)'],
+          ['3', 'SE — Sergipe (3%)'],
+          ['3', 'PI — Piauí (3%)'],
+          ['2.5', 'TO — Tocantins (2,5%)'],
+          ['2.5', 'RO — Rondônia (2,5%)'],
+          ['2.5', 'AC — Acre (2,5%)'],
+          ['2.5', 'RR — Roraima (2,5%)'],
+          ['2.5', 'AP — Amapá (2,5%)'],
+        ],
+      },
+    ],
+    fn: (v) => {
+      const aliquota = v.estado / 100
+      const ipvaAnual = v.valor * aliquota
+      const parcelamento3x = ipvaAnual / 3
+      const comDesconto = ipvaAnual * 0.95
+      return {
+        principal: { valor: ipvaAnual, label: 'IPVA anual', fmt: 'brl' },
+        detalhes: [
+          { l: 'Alíquota aplicada', v: v.estado, fmt: 'pct' },
+          { l: 'Parcela 1/3', v: parcelamento3x, fmt: 'brl' },
+          { l: 'À vista com 5% de desconto', v: comDesconto, fmt: 'brl', cor: 'green' },
+          { l: 'Por mês (provisão)', v: ipvaAnual / 12, fmt: 'brl' },
+        ],
+        aviso: 'Alíquotas reais 2026. O valor venal pode diferir da FIPE — consulte a SEFAZ do seu estado.',
+      }
+    },
+    dis: 'Dados das SEFAZ estaduais 2026. Consulte o Detran para o valor venal exato do seu veículo.',
+  },
+  {
+    slug: 'calculadora-custo-km',
+    titulo: 'Calculadora de Custo por Km Rodado',
+    desc: 'Descubra o custo real por quilômetro rodado no seu veículo',
+    cat: 'Veículos',
+    icon: '🗺️',
+    campos: [
+      { k: 'kmMes', l: 'Km rodados por mês', t: 'num', p: '1500', min: 1 },
+      { k: 'litros100km', l: 'Consumo (litros por 100 km)', t: 'num', p: '10', min: 1 },
+      { k: 'precoCombustivel', l: 'Preço do combustível (R$/litro)', t: 'num', p: '6.20', min: 0 },
+    ],
+    fn: (v) => {
+      const litrosMes = (v.kmMes / 100) * v.litros100km
+      const combustivelMes = litrosMes * v.precoCombustivel
+      const custoPorKm = combustivelMes / v.kmMes
+      const custoAnual = combustivelMes * 12
+      return {
+        principal: { valor: custoPorKm, label: 'Custo de combustível por km', fmt: 'brl' },
+        detalhes: [
+          { l: 'Litros por mês', v: litrosMes, fmt: 'num' },
+          { l: 'Gasto mensal com combustível', v: combustivelMes, fmt: 'brl' },
+          { l: 'Gasto anual com combustível', v: custoAnual, fmt: 'brl' },
+          { l: 'Custo por 100 km', v: custoPorKm * 100, fmt: 'brl' },
+        ],
+        aviso: 'Para o custo total por km inclua também IPVA, seguro e manutenção — use a calculadora de Custo Mensal Total.',
+      }
+    },
+    dis: DIS_VEI,
+  },
+  {
+    slug: 'calculadora-gasolina-vs-etanol',
+    titulo: 'Calculadora Gasolina vs Etanol 2026',
+    desc: 'Descubra qual combustível compensa mais pela regra dos 70%',
+    cat: 'Veículos',
+    icon: '⛽',
+    campos: [
+      { k: 'precoGasolina', l: 'Preço da gasolina (R$/litro)', t: 'num', p: '6.20', min: 0 },
+      { k: 'precoEtanol', l: 'Preço do etanol (R$/litro)', t: 'num', p: '4.10', min: 0 },
+      { k: 'kmMes', l: 'Km rodados por mês', t: 'num', p: '1500', min: 1 },
+      { k: 'consumoGasolina', l: 'Consumo com gasolina (km/L)', t: 'num', p: '12', min: 1 },
+    ],
+    fn: (v) => {
+      const relacao = v.precoEtanol / v.precoGasolina
+      const percentual = relacao * 100
+      const etanolCompensa = relacao < 0.70
+      // Consumo com etanol é ~30% menor
+      const consumoEtanol = v.consumoGasolina * 0.70
+      const custoGasolina = (v.kmMes / v.consumoGasolina) * v.precoGasolina
+      const custoEtanol = (v.kmMes / consumoEtanol) * v.precoEtanol
+      const economia = Math.abs(custoGasolina - custoEtanol)
+      return {
+        principal: {
+          valor: percentual,
+          label: etanolCompensa ? 'Etanol compensa! (< 70%)' : 'Gasolina compensa! (> 70%)',
+          fmt: 'pct',
+        },
+        detalhes: [
+          { l: 'Relação etanol/gasolina', v: percentual, fmt: 'pct' },
+          { l: 'Custo mensal com gasolina', v: custoGasolina, fmt: 'brl' },
+          { l: 'Custo mensal com etanol', v: custoEtanol, fmt: 'brl' },
+          { l: `Economia mensal com ${etanolCompensa ? 'etanol' : 'gasolina'}`, v: economia, fmt: 'brl', cor: 'green' },
+        ],
+        aviso: etanolCompensa
+          ? 'Etanol compensa quando custa menos de 70% da gasolina. Ponto de equilíbrio: R$ ' + (v.precoGasolina * 0.70).toFixed(2).replace('.', ',')
+          : 'Gasolina é mais econômica neste momento. O etanol compensaria abaixo de R$ ' + (v.precoGasolina * 0.70).toFixed(2).replace('.', ',') + '/L.',
+      }
+    },
+    dis: 'Consumo do etanol é ~30% menor que gasolina em veículos flex. A regra dos 70% é uma estimativa geral.',
+  },
+  {
+    slug: 'calculadora-depreciacao-veiculo',
+    titulo: 'Calculadora de Depreciação de Veículo',
+    desc: 'Estime o valor atual do seu carro com base na depreciação por categoria',
+    cat: 'Veículos',
+    icon: '📉',
+    campos: [
+      { k: 'valorCompra', l: 'Valor de compra (R$)', t: 'num', p: '80000', min: 0 },
+      { k: 'anos', l: 'Anos desde a compra', t: 'num', p: '3', min: 0, max: 30 },
+      {
+        k: 'categoria',
+        l: 'Categoria do veículo',
+        t: 'sel',
+        op: [
+          ['15', 'Carro popular (15% ao ano)'],
+          ['12', 'Carro médio (12% ao ano)'],
+          ['10', 'SUV / utilitário (10% ao ano)'],
+          ['18', 'Carro de luxo (18% ao ano)'],
+          ['12', 'Moto (12% ao ano)'],
+          ['8', 'Caminhão / comercial (8% ao ano)'],
+        ],
+      },
+    ],
+    fn: (v) => {
+      const taxaAnual = v.categoria / 100
+      const valorAtual = v.valorCompra * Math.pow(1 - taxaAnual, v.anos)
+      const totalDepreciado = v.valorCompra - valorAtual
+      const percentualPerdido = (totalDepreciado / v.valorCompra) * 100
+      return {
+        principal: { valor: valorAtual, label: 'Valor estimado atual', fmt: 'brl' },
+        detalhes: [
+          { l: 'Valor de compra', v: v.valorCompra, fmt: 'brl' },
+          { l: 'Total depreciado', v: totalDepreciado, fmt: 'brl', cor: 'red' },
+          { l: 'Percentual perdido', v: percentualPerdido, fmt: 'pct' },
+          { l: 'Taxa anual usada', v: v.categoria, fmt: 'pct' },
+          { l: 'Depreciação média mensal', v: totalDepreciado / Math.max(v.anos * 12, 1), fmt: 'brl', cor: 'red' },
+        ],
+        aviso: 'A depreciação real varia com conservação, quilometragem e demanda de mercado. Consulte a Tabela FIPE para o valor exato.',
+      }
+    },
+    dis: 'Estimativa baseada em taxas médias de mercado. Consulte a Tabela FIPE para precisão.',
+  },
+  {
+    slug: 'calculadora-seguro-auto-estimado',
+    titulo: 'Estimativa de Seguro Auto 2026',
+    desc: 'Estime o prêmio do seguro com base no valor FIPE e perfil do motorista',
+    cat: 'Veículos',
+    icon: '🛡️',
+    campos: [
+      { k: 'valorFipe', l: 'Valor FIPE do veículo (R$)', t: 'num', p: '60000', min: 0 },
+      {
+        k: 'perfil',
+        l: 'Perfil do condutor principal',
+        t: 'sel',
+        op: [
+          ['8', 'Jovem até 25 anos (alto risco)'],
+          ['5.5', 'Adulto 26-35 anos (risco médio)'],
+          ['3.5', 'Adulto 36-60 anos (risco baixo)'],
+          ['4.5', 'Sênior 60+ anos (risco moderado)'],
+        ],
+      },
+      {
+        k: 'garagem',
+        l: 'Tem garagem coberta?',
+        t: 'sel',
+        op: [
+          ['1', 'Sim — desconto no prêmio'],
+          ['0', 'Não'],
+        ],
+      },
+    ],
+    fn: (v) => {
+      const taxaBase = v.perfil / 100
+      const desconto = v.garagem === 1 ? 0.10 : 0
+      const taxaFinal = taxaBase * (1 - desconto)
+      const premioAnual = v.valorFipe * taxaFinal
+      const premioMensal = premioAnual / 12
+      const franquia = v.valorFipe * 0.08
+      return {
+        principal: { valor: premioAnual, label: 'Prêmio anual estimado', fmt: 'brl' },
+        detalhes: [
+          { l: 'Taxa base do perfil', v: v.perfil, fmt: 'pct' },
+          { l: 'Taxa com descontos', v: taxaFinal * 100, fmt: 'pct' },
+          { l: 'Mensalidade estimada', v: premioMensal, fmt: 'brl' },
+          { l: 'Franquia estimada', v: franquia, fmt: 'brl' },
+          { l: 'Desconto de garagem', v: desconto * 100, fmt: 'pct', cor: 'green' },
+        ],
+        aviso: 'Estimativa baseada em dados do mercado. A cotação real depende do CEP, histórico e seguradora.',
+      }
+    },
+    dis: 'Valores estimados com base em dados do mercado de seguros (CNseg 2026). Faça cotação em pelo menos 5 seguradoras.',
+  },
+  {
+    slug: 'calculadora-multa-transito-2026',
+    titulo: 'Calculadora de Multa de Trânsito 2026',
+    desc: 'Calcule o valor real da multa, pontos na CNH e desconto por pagamento antecipado',
+    cat: 'Veículos',
+    icon: '🚨',
+    campos: [
+      {
+        k: 'tipo',
+        l: 'Classificação da infração',
+        t: 'sel',
+        op: [
+          ['0', 'Leve — R$ 88,38 (3 pontos)'],
+          ['1', 'Média — R$ 130,16 (4 pontos)'],
+          ['2', 'Grave — R$ 195,23 (5 pontos)'],
+          ['3', 'Gravíssima — R$ 293,47 (7 pontos)'],
+          ['4', 'Gravíssima ×3 — R$ 880,41 (7 pontos)'],
+        ],
+      },
+      {
+        k: 'reincidencia',
+        l: 'Reincidência nos últimos 12 meses?',
+        t: 'sel',
+        op: [
+          ['0', 'Não'],
+          ['1', 'Sim — valor dobrado'],
+        ],
+      },
+    ],
+    fn: (v) => {
+      const valores = [88.38, 130.16, 195.23, 293.47, 880.41]
+      const pontos = [3, 4, 5, 7, 7]
+      const idx = Math.min(Math.floor(v.tipo), 4)
+      const valorBase = valores[idx] ?? 293.47
+      const pontosBase = pontos[idx] ?? 7
+      const reincidente = v.reincidencia === 1
+      const valorFinal = reincidente ? valorBase * 2 : valorBase
+      const comDesconto40 = valorFinal * 0.60 // pagar antecipado = 40% desconto
+      return {
+        principal: { valor: valorFinal, label: reincidente ? 'Valor (reincidente ×2)' : 'Valor da multa', fmt: 'brl' },
+        detalhes: [
+          { l: 'Valor com 40% de desconto (pagar em 30 dias)', v: comDesconto40, fmt: 'brl', cor: 'green' },
+          { l: 'Pontos na CNH', v: pontosBase, fmt: 'num' },
+          { l: 'Prazo para recurso', v: '30 dias após notificação', fmt: 'txt' } as any,
+        ],
+        aviso: 'Pagar dentro de 30 dias garante 40% de desconto. Apresentar recurso não exige pagamento prévio.',
+      }
+    },
+    dis: 'Valores CTB 2026. Reincidência em 12 meses dobra o valor. Consulte o órgão autuador para situação específica.',
+  },
+  {
+    slug: 'calculadora-financiamento-carro',
+    titulo: 'Calculadora de Financiamento de Carro',
+    desc: 'Calcule a parcela, total pago e juros do financiamento do seu veículo',
+    cat: 'Veículos',
+    icon: '🏦',
+    campos: [
+      { k: 'valor', l: 'Valor do veículo (R$)', t: 'num', p: '60000', min: 0 },
+      { k: 'entrada', l: 'Valor de entrada (R$)', t: 'num', p: '12000', min: 0 },
+      { k: 'meses', l: 'Prazo (meses)', t: 'num', p: '48', min: 6, max: 96 },
+      { k: 'taxa', l: 'Taxa de juros ao mês (%) — ex: 1.5', t: 'num', p: '1.5', min: 0.1, max: 10 },
+    ],
+    fn: (v) => {
+      const principal = v.valor - v.entrada
+      const taxaMensal = v.taxa / 100
+      // Fórmula Price (parcela fixa)
+      const parcela = taxaMensal === 0
+        ? principal / v.meses
+        : (principal * taxaMensal * Math.pow(1 + taxaMensal, v.meses)) / (Math.pow(1 + taxaMensal, v.meses) - 1)
+      const totalPago = parcela * v.meses + v.entrada
+      const totalJuros = totalPago - v.valor
+      const taxaAnual = (Math.pow(1 + taxaMensal, 12) - 1) * 100
+      return {
+        principal: { valor: parcela, label: 'Parcela mensal (Price)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Valor financiado', v: principal, fmt: 'brl' },
+          { l: 'Total pago (com entrada)', v: totalPago, fmt: 'brl' },
+          { l: 'Total de juros pagos', v: totalJuros, fmt: 'brl', cor: 'red' },
+          { l: 'Custo efetivo anual (CET est.)', v: taxaAnual, fmt: 'pct' },
+        ],
+        aviso: totalJuros > principal * 0.5
+          ? 'Os juros totalizam mais de 50% do valor financiado. Considere aumentar a entrada.'
+          : 'Simule sempre diferentes prazos e compare o CET entre bancos.',
+      }
+    },
+    dis: 'Simulação pelo sistema Price (parcelas fixas). Consulte o banco para CET exato e IOF.',
+  },
+  {
+    slug: 'calculadora-custo-mensal-carro',
+    titulo: 'Custo Mensal Total do Carro',
+    desc: 'Calcule o custo real mensal somando IPVA, seguro, combustível e manutenção',
+    cat: 'Veículos',
+    icon: '💰',
+    campos: [
+      { k: 'valorCarro', l: 'Valor do carro (R$)', t: 'num', p: '60000', min: 0 },
+      { k: 'kmMes', l: 'Km rodados por mês', t: 'num', p: '1500', min: 1 },
+      { k: 'precoCombustivel', l: 'Preço do combustível (R$/L)', t: 'num', p: '6.20', min: 0 },
+      { k: 'consumo', l: 'Consumo do carro (km/L)', t: 'num', p: '12', min: 1 },
+      { k: 'aliquotaIPVA', l: 'Alíquota IPVA do estado (%) — ex: 4 para SP', t: 'num', p: '3.5', min: 0, max: 5 },
+    ],
+    fn: (v) => {
+      // IPVA mensal
+      const ipvaAnual = (v.valorCarro * v.aliquotaIPVA) / 100
+      const ipvaMensal = ipvaAnual / 12
+      // Seguro estimado (adulto médio ~4,5% FIPE)
+      const seguroAnual = v.valorCarro * 0.045
+      const seguroMensal = seguroAnual / 12
+      // Licenciamento mensal
+      const licenciamentoMensal = 200 / 12
+      // Combustível
+      const combustivelMensal = (v.kmMes / v.consumo) * v.precoCombustivel
+      // Manutenção estimada (1,5% ao ano)
+      const manutencaoMensal = (v.valorCarro * 0.015) / 12
+      // Total
+      const totalMensal = ipvaMensal + seguroMensal + licenciamentoMensal + combustivelMensal + manutencaoMensal
+      const custoPorKm = totalMensal / v.kmMes
+      return {
+        principal: { valor: totalMensal, label: 'Custo total mensal estimado', fmt: 'brl' },
+        detalhes: [
+          { l: 'IPVA mensal', v: ipvaMensal, fmt: 'brl' },
+          { l: 'Seguro mensal (estimado)', v: seguroMensal, fmt: 'brl' },
+          { l: 'Licenciamento mensal', v: licenciamentoMensal, fmt: 'brl' },
+          { l: 'Combustível mensal', v: combustivelMensal, fmt: 'brl' },
+          { l: 'Manutenção mensal (estimada)', v: manutencaoMensal, fmt: 'brl' },
+          { l: 'Custo por km rodado', v: custoPorKm, fmt: 'brl' },
+          { l: 'Custo anual total', v: totalMensal * 12, fmt: 'brl' },
+        ],
+        aviso: 'Seguro e manutenção são estimativas baseadas em médias de mercado. Parcela de financiamento não está incluída.',
+      }
+    },
+    dis: 'Cálculo com médias de mercado 2026. Seguro estimado em 4,5% do valor (adulto, garagem, sem sinistros).',
+  },
 ]

@@ -79,4 +79,244 @@ export const CALCS_SAUDE: CalcConfig[] = [
   { slug: 'calculadora-custo-transplante-capilar', titulo: 'Custo Transplante Capilar', desc: 'Estime o custo de transplante capilar FUE ou FUT.', cat: 'saude', icon: '💇', campos: [{ k: 'grafts', l: 'Grafts necessários', p: '2000', min: 500 }, { k: 'precoPorGraft', l: 'Preço por graft (R$)', p: '12', min: 5 }], fn: (v) => { const total = v.grafts * v.precoPorGraft; return { principal: { valor: Math.round(total * 100) / 100, label: 'Custo Estimado Transplante', fmt: 'brl' }, detalhes: [{ l: 'Grafts', v: v.grafts, fmt: 'num' }, { l: 'Preço por graft', v: v.precoPorGraft, fmt: 'brl' }] } }, dis: DIS_SAUDE },
   { slug: 'calculadora-custo-parto', titulo: 'Custo do Parto Hospitalar', desc: 'Estime o custo total do parto em hospital particular ou SUS.', cat: 'saude', icon: '🏥', campos: [{ k: 'tipo', l: 'Tipo de parto', t: 'sel', op: [['1','Normal (particular ~R$8k)'],['2','Cesárea (particular ~R$12k)'],['3','SUS (gratuito)']] }], fn: (v) => { const custos: Record<number, number> = { 1: 8000, 2: 12000, 3: 0 }; const custo = custos[v.tipo] || 0; return { principal: { valor: custo, label: 'Custo Estimado do Parto', fmt: 'brl' }, detalhes: [{ l: 'SUS', v: 'Parto gratuito pelo SUS', fmt: 'txt' }, { l: 'Plano de saúde', v: 'Verifique cobertura maternidade', fmt: 'txt' }] } } },
   { slug: 'calculadora-custo-pre-natal', titulo: 'Custo Pré-Natal Completo', desc: 'Calcule o custo total das consultas e exames do pré-natal.', cat: 'saude', icon: '🤰', campos: [{ k: 'valorConsulta', l: 'Consulta com obstetra', p: '300', u: 'R$' }, { k: 'exames', l: 'Exames por trimestre', p: '300', u: 'R$' }], fn: (v) => { const consultas = v.valorConsulta * 14; /* ~14 consultas total */ const examesTotal = v.exames * 3; const total = consultas + examesTotal; return { principal: { valor: Math.round(total * 100) / 100, label: 'Custo Total Pré-Natal', fmt: 'brl' }, detalhes: [{ l: 'Consultas (14 total)', v: Math.round(consultas * 100) / 100, fmt: 'brl' }, { l: 'Exames (3 trimestres)', v: Math.round(examesTotal * 100) / 100, fmt: 'brl' }, { l: 'SUS: gratuito com pré-natal completo', v: 'Procure uma UBS', fmt: 'txt' }] } } },
+
+  // ─── Nutrição e Dieta (8 calculadoras novas) ────────────────────────────────
+
+  {
+    slug: 'calculadora-calorias-diarias',
+    titulo: 'Calculadora de Calorias Diárias',
+    desc: 'Calcule seu TDEE (gasto calórico total) com a fórmula Mifflin-St Jeor. Metas para emagrecer, manter ou ganhar massa.',
+    cat: 'saude', icon: '🔥',
+    campos: [
+      { k: 'peso', l: 'Peso (kg)', p: '70', min: 20, max: 300 },
+      { k: 'altura', l: 'Altura (cm)', p: '170', min: 100, max: 250 },
+      { k: 'idade', l: 'Idade (anos)', p: '30', min: 10, max: 100 },
+      { k: 'sexo', l: 'Sexo biológico', t: 'sel', op: [['1', 'Masculino'], ['0', 'Feminino']] },
+      { k: 'atividade', l: 'Nível de atividade', t: 'sel', op: [['1', 'Sedentário (sem exercício)'], ['2', 'Leve (1–3 dias/semana)'], ['3', 'Moderado (3–5 dias/semana)'], ['4', 'Ativo (6–7 dias/semana)'], ['5', 'Atleta (treino 2x/dia)']] },
+    ],
+    fn: (v) => {
+      const base = 10 * v.peso + 6.25 * v.altura - 5 * v.idade
+      const tmb = Math.round(v.sexo === 1 ? base + 5 : base - 161)
+      const fat: Record<number, number> = { 1: 1.2, 2: 1.375, 3: 1.55, 4: 1.725, 5: 1.9 }
+      const tdee = Math.round(tmb * (fat[v.atividade] ?? 1.55))
+      return {
+        principal: { valor: tdee, label: 'TDEE — Gasto Calórico Diário (kcal)', fmt: 'num' },
+        detalhes: [
+          { l: 'TMB (em repouso total)', v: tmb, fmt: 'num' },
+          { l: 'Para emagrecer (–500 kcal/dia)', v: tdee - 500, fmt: 'num' },
+          { l: 'Para manter o peso', v: tdee, fmt: 'num' },
+          { l: 'Para ganhar massa (+300 kcal/dia)', v: tdee + 300, fmt: 'num' },
+        ],
+        info: 'Fórmula Mifflin-St Jeor (1990) — padrão ouro para estimativa de TMB em adultos.',
+      }
+    },
+    dis: DIS_SAUDE,
+  },
+
+  {
+    slug: 'calculadora-macros',
+    titulo: 'Calculadora de Macros',
+    desc: 'Calcule a distribuição ideal de proteínas, carboidratos e gorduras para seu objetivo (emagrecer, manter ou ganhar massa).',
+    cat: 'saude', icon: '🥗',
+    campos: [
+      { k: 'calorias', l: 'Meta calórica diária (kcal)', p: '2000', min: 800, max: 6000 },
+      { k: 'peso', l: 'Peso corporal (kg)', p: '70', min: 20, max: 300 },
+      { k: 'objetivo', l: 'Objetivo', t: 'sel', op: [['1', 'Emagrecer'], ['2', 'Manter peso'], ['3', 'Ganhar massa muscular']] },
+    ],
+    fn: (v) => {
+      const prot_g_kg = v.objetivo === 3 ? 2.0 : v.objetivo === 1 ? 1.6 : 1.4
+      const prot_g = Math.round(v.peso * prot_g_kg)
+      const prot_kcal = prot_g * 4
+      const gord_pct = v.objetivo === 1 ? 0.28 : 0.30
+      const gord_g = Math.round((v.calorias * gord_pct) / 9)
+      const gord_kcal = gord_g * 9
+      const carb_g = Math.round(Math.max(v.calorias - prot_kcal - gord_kcal, 100) / 4)
+      return {
+        principal: { valor: prot_g, label: 'Proteína diária (g)', fmt: 'num' },
+        detalhes: [
+          { l: 'Carboidratos (g/dia)', v: carb_g, fmt: 'num' },
+          { l: 'Gorduras (g/dia)', v: gord_g, fmt: 'num' },
+          { l: 'Proteína por kg', v: Math.round(prot_g_kg * 10) / 10, fmt: 'num' },
+        ],
+        info: 'Proteína: 4 kcal/g | Carboidrato: 4 kcal/g | Gordura: 9 kcal/g',
+      }
+    },
+    dis: DIS_SAUDE,
+  },
+
+  {
+    slug: 'calculadora-peso-ideal',
+    titulo: 'Calculadora de Peso Ideal',
+    desc: 'Saiba qual é a faixa de peso saudável para a sua altura e sexo, baseado nos critérios de IMC da OMS.',
+    cat: 'saude', icon: '🎯',
+    campos: [
+      { k: 'altura', l: 'Altura (cm)', p: '170', min: 120, max: 250 },
+      { k: 'sexo', l: 'Sexo', t: 'sel', op: [['1', 'Masculino'], ['0', 'Feminino']] },
+    ],
+    fn: (v) => {
+      const altM = v.altura / 100
+      const minIMC = v.sexo === 1 ? 20.0 : 18.5
+      const maxIMC = v.sexo === 1 ? 25.0 : 24.9
+      const pesoMin = Math.round(minIMC * altM * altM * 10) / 10
+      const pesoMax = Math.round(maxIMC * altM * altM * 10) / 10
+      const pesoIdeal = Math.round(((pesoMin + pesoMax) / 2) * 10) / 10
+      return {
+        principal: { valor: pesoIdeal, label: 'Peso Ideal (kg)', fmt: 'num' },
+        detalhes: [
+          { l: 'Faixa saudável mínima (kg)', v: pesoMin, fmt: 'num' },
+          { l: 'Faixa saudável máxima (kg)', v: pesoMax, fmt: 'num' },
+          { l: 'IMC correspondente', v: '18,5 – 24,9 kg/m²', fmt: 'txt' },
+        ],
+        info: 'Baseado nos critérios de IMC da OMS para adultos. O IMC não diferencia massa muscular de gordura.',
+      }
+    },
+    dis: DIS_SAUDE,
+  },
+
+  {
+    slug: 'calculadora-tempo-emagrecer',
+    titulo: 'Tempo para Emagrecer',
+    desc: 'Calcule em quantas semanas você atingirá seu peso meta com um déficit calórico específico.',
+    cat: 'saude', icon: '📉',
+    campos: [
+      { k: 'pesoAtual', l: 'Peso atual (kg)', p: '80', min: 20, max: 300 },
+      { k: 'pesoMeta', l: 'Peso meta (kg)', p: '70', min: 20, max: 300 },
+      { k: 'deficit', l: 'Déficit calórico diário (kcal)', p: '500', min: 100, max: 1200 },
+    ],
+    fn: (v) => {
+      const kgPerder = Math.max(0, v.pesoAtual - v.pesoMeta)
+      if (kgPerder <= 0) {
+        return {
+          principal: { valor: 0, label: 'Sem perda necessária', fmt: 'num' },
+          alerta: 'O peso meta deve ser menor que o peso atual.',
+        }
+      }
+      const diasNecessarios = (kgPerder * 7700) / v.deficit
+      const semanas = Math.ceil(diasNecessarios / 7)
+      const meses = Math.round((diasNecessarios / 30) * 10) / 10
+      return {
+        principal: { valor: semanas, label: 'Semanas para atingir o peso meta', fmt: 'num' },
+        detalhes: [
+          { l: 'Meses estimados', v: meses, fmt: 'num' },
+          { l: 'Kg a perder', v: kgPerder, fmt: 'num' },
+          { l: 'Perda semanal estimada (kg)', v: Math.round((v.deficit * 7 / 7700) * 100) / 100, fmt: 'num' },
+        ],
+        info: '1 kg de gordura ≈ 7.700 kcal. Déficit de 500 kcal/dia = ~0,5 kg/semana.',
+      }
+    },
+    dis: DIS_SAUDE,
+  },
+
+  {
+    slug: 'calculadora-calorias-exercicio',
+    titulo: 'Calorias Gastas no Exercício',
+    desc: 'Calcule quantas calorias você queima em diferentes atividades físicas com base no peso e duração.',
+    cat: 'saude', icon: '🏃',
+    campos: [
+      { k: 'peso', l: 'Peso corporal (kg)', p: '70', min: 20, max: 300 },
+      { k: 'minutos', l: 'Duração (minutos)', p: '45', min: 5, max: 480 },
+      { k: 'atividade', l: 'Atividade', t: 'sel', op: [['3', 'Caminhada leve (3 MET)'], ['5', 'Caminhada rápida (5 MET)'], ['8', 'Corrida (8 MET)'], ['7', 'Ciclismo moderado (7 MET)'], ['6', 'Natação moderada (6 MET)'], ['5', 'Musculação (5 MET)'], ['10', 'HIIT (10 MET)'], ['3', 'Yoga (3 MET)'], ['4', 'Dança (4 MET)']] },
+    ],
+    fn: (v) => {
+      const kcal = Math.round(v.atividade * v.peso * (v.minutos / 60))
+      const gordura_g = Math.round((kcal / 9) * 10) / 10
+      return {
+        principal: { valor: kcal, label: 'Calorias Queimadas (kcal)', fmt: 'num' },
+        detalhes: [
+          { l: 'Gordura queimada (estimativa, g)', v: gordura_g, fmt: 'num' },
+          { l: 'MET utilizado', v: v.atividade, fmt: 'num' },
+        ],
+        info: 'Fórmula: MET × peso(kg) × tempo(h). Fonte: ACSM Compendium of Physical Activities.',
+      }
+    },
+    dis: DIS_SAUDE,
+  },
+
+  {
+    slug: 'calculadora-agua-diaria',
+    titulo: 'Calculadora de Água Diária',
+    desc: 'Calcule a quantidade ideal de água por dia com base no peso e nível de atividade física.',
+    cat: 'saude', icon: '💧',
+    campos: [
+      { k: 'peso', l: 'Peso (kg)', p: '70', min: 20, max: 300 },
+      { k: 'atividade', l: 'Nível de atividade', t: 'sel', op: [['1', 'Sedentário'], ['2', 'Moderado'], ['3', 'Ativo / Atleta']] },
+    ],
+    fn: (v) => {
+      const base = v.peso * 35
+      const extra = v.atividade === 2 ? v.peso * 5 : v.atividade === 3 ? v.peso * 10 : 0
+      const mlTotal = base + extra
+      const litros = Math.round(mlTotal / 100) / 10
+      const copos = Math.round(mlTotal / 200)
+      return {
+        principal: { valor: litros, label: 'Litros de Água por Dia (L)', fmt: 'num' },
+        detalhes: [
+          { l: 'Em mililitros (mL)', v: Math.round(mlTotal), fmt: 'num' },
+          { l: 'Copos de 200 mL', v: copos, fmt: 'num' },
+        ],
+        info: 'Recomendação base: 35 mL por kg de peso. Ajuste conforme clima, sudorese e atividade.',
+      }
+    },
+    dis: DIS_SAUDE,
+  },
+
+  {
+    slug: 'calculadora-gordura-corporal-imc',
+    titulo: 'Estimativa de Gordura Corporal pelo IMC',
+    desc: 'Estime o percentual de gordura corporal com base no IMC, sexo e idade (fórmula Deurenberg).',
+    cat: 'saude', icon: '📊',
+    campos: [
+      { k: 'peso', l: 'Peso (kg)', p: '75', min: 20, max: 300 },
+      { k: 'altura', l: 'Altura (cm)', p: '170', min: 100, max: 250 },
+      { k: 'idade', l: 'Idade (anos)', p: '35', min: 10, max: 100 },
+      { k: 'sexo', l: 'Sexo', t: 'sel', op: [['1', 'Masculino'], ['0', 'Feminino']] },
+    ],
+    fn: (v) => {
+      const altM = v.altura / 100
+      const imc = v.peso / (altM * altM)
+      // Fórmula Deurenberg et al. (1991)
+      const gordura = 1.2 * imc + 0.23 * v.idade - 10.8 * v.sexo - 5.4
+      const gc = Math.round(Math.max(0, gordura) * 10) / 10
+      const saudavel = v.sexo === 1 ? '10–20%' : '20–30%'
+      const classificacao = v.sexo === 1
+        ? (gc < 10 ? 'Abaixo do ideal' : gc < 20 ? 'Saudável' : gc < 25 ? 'Acima do ideal' : 'Obesidade')
+        : (gc < 18 ? 'Abaixo do ideal' : gc < 30 ? 'Saudável' : gc < 35 ? 'Acima do ideal' : 'Obesidade')
+      return {
+        principal: { valor: gc, label: '% Gordura Corporal Estimada', fmt: 'pct' },
+        detalhes: [
+          { l: 'Classificação', v: classificacao, fmt: 'txt' },
+          { l: 'Faixa saudável', v: saudavel, fmt: 'txt' },
+          { l: 'IMC calculado', v: Math.round(imc * 10) / 10, fmt: 'num' },
+        ],
+        info: 'Fórmula Deurenberg (1991). Estimativa — para precisão, use bioimpedância ou DEXA.',
+      }
+    },
+    dis: DIS_SAUDE,
+  },
+
+  {
+    slug: 'calculadora-proteina-diaria',
+    titulo: 'Calculadora de Proteína Diária',
+    desc: 'Saiba quanto de proteína você precisa por dia com base no peso, objetivo e nível de atividade.',
+    cat: 'saude', icon: '💪',
+    campos: [
+      { k: 'peso', l: 'Peso corporal (kg)', p: '70', min: 20, max: 300 },
+      { k: 'objetivo', l: 'Objetivo', t: 'sel', op: [['1', 'Emagrecimento (1,6 g/kg)'], ['2', 'Manutenção (1,4 g/kg)'], ['3', 'Hipertrofia (2,0 g/kg)'], ['4', 'Atleta de elite (2,2 g/kg)']] },
+    ],
+    fn: (v) => {
+      const fatores: Record<number, number> = { 1: 1.6, 2: 1.4, 3: 2.0, 4: 2.2 }
+      const fator = fatores[v.objetivo] ?? 1.6
+      const prot_g = Math.round(v.peso * fator)
+      const prot_kcal = prot_g * 4
+      return {
+        principal: { valor: prot_g, label: 'Proteína Diária Recomendada (g)', fmt: 'num' },
+        detalhes: [
+          { l: 'Por kg de peso', v: fator, fmt: 'num' },
+          { l: 'Calorias da proteína', v: prot_kcal, fmt: 'num' },
+          { l: 'Equivale a (filés de frango 120g)', v: Math.round(prot_g / 37), fmt: 'num' },
+        ],
+        info: 'Referências: ACSM/AND/DC Joint Position Statement (2016) e Stokes et al. (2018).',
+      }
+    },
+    dis: DIS_SAUDE,
+  },
 ]
