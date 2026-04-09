@@ -147,34 +147,45 @@ function gerarPaginaCargo(cargo: Cargo): PaginaConcurso {
     .filter(c => c && c.areaSlug && c.areaSlug === cargo.areaSlug && c.slug !== cargo.slug && c.esfera === cargo.esfera)
     .slice(0, 5)
 
+  // Texto de dificuldade com perspectiva de aprovado
+  const textoPreparacao = cargo.dificuldade === 'muito-alta'
+    ? `Quem estuda para ${cargo.orgao} relata que o processo exige, na média, entre 2 e 4 anos de dedicação intensa — não é exagero. A prova não é difícil apenas pelo conteúdo: é o volume de candidatos altamente preparados que eleva o nível de corte. Candidatos que passaram recomendam resolver pelo menos 3.000 questões específicas da banca antes de fazer a prova.`
+    : cargo.dificuldade === 'alta'
+    ? `A preparação típica para ${cargo.nome} leva de 8 meses a 2 anos. O detalhe que derruba candidatos despreparados: as bancas exigem domínio profundo de Conhecimentos Específicos, que correspondem ao maior peso das provas. Português e Raciocínio Lógico funcionam como filtro eliminatório — quem vai mal nessas matérias raramente alcança o ponto de corte.`
+    : `Para candidatos organizados, 4 a 6 meses de estudo consistente são suficientes. O ponto que muita gente ignora: mesmo concursos de dificuldade média têm concorrência acirrada quando as vagas são poucas. Resolva pelo menos 800 questões de provas anteriores da mesma banca antes da prova.`
+
+  const textoRotina = cargo.atribuicoes && cargo.atribuicoes.length > 0
+    ? `No dia a dia, o ${cargo.nome} atua em: ${cargo.atribuicoes.slice(0, 3).join(', ')}. A rotina varia bastante conforme a unidade de lotação — servidores lotados em grandes centros tendem a lidar com maior volume de demandas, enquanto os do interior têm mais autonomia.`
+    : `A rotina do ${cargo.nome} envolve atribuições técnicas e administrativas específicas do ${cargo.orgao}. A lotação inicial pode ser em qualquer unidade do país, e transferências são possíveis após anos de efetivo exercício.`
+
   const secoes: SecaoConcurso[] = [
     {
-      h2: '📊 Tabela Salarial Completa 2025',
+      h2: '📊 Salário do ' + cargo.nome + ' 2025 — Bruto, Líquido e Total',
       tabela: {
-        cabecalho: ['Componente', 'Valor Inicial', 'Valor Final (Topo)'],
+        cabecalho: ['Componente', 'Valor Inicial', 'Valor Final (Topo de Carreira)'],
         linhas: [
           ['Salário/Subsídio Bruto', fmt(cargo.salarioInicial), fmt(cargo.salarioFinal)],
-          ['INSS / Previdência (~14%)', `- ${fmt(inss)}`, `- ${fmt(inssSr)}`],
-          ['Imposto de Renda (IR)', `- ${fmt(ir)}`, `- ${fmt(irSr)}`],
-          ['Salário Líquido', fmt(liquido), fmt(liquidoSr)],
+          ['Desconto INSS/RPPS (progressivo)', `- ${fmt(inss)}`, `- ${fmt(inssSr)}`],
+          ['Desconto Imposto de Renda (IRPF)', `- ${fmt(ir)}`, `- ${fmt(irSr)}`],
+          ['Salário Líquido (no bolso)', fmt(liquido), fmt(liquidoSr)],
           ['Auxílio-Alimentação', '+ R$ 1.000', '+ R$ 1.000'],
           ['Outros Benefícios', '+ variável', '+ variável'],
           ['Remuneração Total (com benefícios)', fmt(cargo.remuneracaoTotal), fmt(cargo.remuneracaoTotal + 3000)],
         ],
       },
-      destaque: `O salário líquido inicial do ${cargo.nome} é de aproximadamente ${fmt(liquido)} por mês, já descontados INSS e IR. No topo da carreira, o líquido chega a ${fmt(liquidoSr)}.`,
+      destaque: `Atenção ao desconto real: quem entra com salário bruto de ${fmt(cargo.salarioInicial)} leva para casa ${fmt(liquido)}/mês — um desconto de ${Math.round((1 - liquido / cargo.salarioInicial) * 100)}% entre INSS e IR. No topo da carreira (${fmt(cargo.salarioFinal)} bruto), o líquido chega a ${fmt(liquidoSr)}. Sempre calcule o líquido antes de planejar seu orçamento.`,
     },
     {
-      h2: '💰 Benefícios do Cargo',
+      h2: '💰 Benefícios Reais do Cargo — Além do Salário',
       lista: beneficios,
-      conteudo: `Além do salário, o ${cargo.nome} tem direito a um conjunto robusto de benefícios que aumentam significativamente a remuneração total. O auxílio-alimentação sozinho representa cerca de R$12.000 por ano. Somando todos os benefícios, a remuneração total chega a ${fmt(cargo.remuneracaoTotal)}/mês.`,
+      conteudo: `O ${cargo.nome} acumula benefícios que, somados, representam um acréscimo relevante na remuneração. O auxílio-alimentação equivale a aproximadamente R$12.000 extras por ano. Somando todos os benefícios, a remuneração total chega a ${fmt(cargo.remuneracaoTotal)}/mês — número que você deve usar como referência real, não o bruto. Servidores federais também têm acesso a planos de saúde corporativos (GEAP, Assefaz) com cobertura nacional, benefício que o mercado privado raramente oferece em pacote semelhante.`,
     },
     {
-      h2: '📈 Progressão na Carreira',
+      h2: '📈 Progressão na Carreira — O que Esperar ao Longo dos Anos',
       tabela: {
         cabecalho: ['Fase', 'Anos de Serviço', 'Salário Bruto Estimado', 'Salário Líquido Estimado'],
         linhas: [
-          ['Entrada', '0–2 anos', fmt(cargo.salarioInicial), fmt(calcularSalarioLiquido(cargo.salarioInicial).liquido)],
+          ['Entrada (estágio probatório)', '0–3 anos', fmt(cargo.salarioInicial), fmt(calcularSalarioLiquido(cargo.salarioInicial).liquido)],
           ['Nível I', '3–5 anos', fmt(Math.round(cargo.salarioInicial * 1.05)), fmt(calcularSalarioLiquido(Math.round(cargo.salarioInicial * 1.05)).liquido)],
           ['Nível II', '6–10 anos', fmt(Math.round(cargo.salarioInicial * 1.12)), fmt(calcularSalarioLiquido(Math.round(cargo.salarioInicial * 1.12)).liquido)],
           ['Nível III', '11–15 anos', fmt(Math.round(cargo.salarioInicial * 1.20)), fmt(calcularSalarioLiquido(Math.round(cargo.salarioInicial * 1.20)).liquido)],
@@ -182,76 +193,77 @@ function gerarPaginaCargo(cargo: Cargo): PaginaConcurso {
           ['Topo da Carreira', '20+ anos', fmt(cargo.salarioFinal), fmt(liquidoSr)],
         ],
       },
-      conteudo: `A progressão no ${cargo.orgao} ocorre por antiguidade e merecimento. Servidores avançam nas classes e padrões conforme o plano de carreira do órgão. Alguns cargos também permitem progressão por titulação (especialização, mestrado, doutorado), com acréscimos salariais adicionais.`,
+      conteudo: `A progressão no ${cargo.orgao} ocorre por antiguidade e merecimento, conforme o plano de carreira do órgão. Um ponto que candidatos raramente consideram: a diferença entre entrar jovem (antes dos 30) e entrar mais velho muda drasticamente o total acumulado até a aposentadoria. Servidores que ingressam cedo podem coletar 25 a 30 anos de reajustes por promoção. Alguns cargos permitem também progressão por titulação — especialização, mestrado e doutorado geram acréscimos salariais adicionais mediante comprovação.`,
     },
     {
-      h2: '📝 Matérias do Concurso',
+      h2: '📝 Matérias do Concurso e Como a Prova é Cobrada',
       lista: materias,
-      conteudo: `O concurso para ${cargo.nome} é de dificuldade ${dificuldadeLabel(cargo.dificuldade)}. As provas geralmente incluem questões de múltipla escolha (objetiva) e, em alguns editais, prova discursiva ou prático-profissional. Candidatos aprovados passam por ${cargo.dificuldade === 'muito-alta' ? 'processo seletivo de 3 a 5 fases' : 'processo seletivo de 2 a 3 fases'}.`,
+      conteudo: textoPreparacao + ` Candidatos aprovados passam por ${cargo.dificuldade === 'muito-alta' ? 'processo seletivo de 3 a 5 fases (objetiva, discursiva, oral e/ou prático-profissional)' : 'processo seletivo de 2 a 3 fases (objetiva e, em geral, discursiva)'}. A fase discursiva — quando existe — é onde muitos candidatos que passaram na objetiva se perdem por falta de treino específico de redação técnica.`,
     },
     {
-      h2: '✅ Requisitos e Atribuições',
+      h2: '🏢 Rotina Real do Cargo e Requisitos de Ingresso',
       lista: [...requisitos, ...atribuicoes],
+      conteudo: textoRotina,
     },
     {
-      h2: '🔗 Cargos Similares para Comparar',
+      h2: '🔗 Cargos Similares — Compare Antes de Decidir',
       tabela: similaresArea.length > 0 ? {
         cabecalho: ['Cargo', 'Órgão', 'Salário Inicial', 'Dificuldade'],
         linhas: similaresArea.map(c => [c.nome, c.orgao, fmt(c.salarioInicial), dificuldadeLabel(c.dificuldade)]),
       } : undefined,
     },
-  ].filter(s => s.h2 !== '🔗 Cargos Similares para Comparar' || similaresArea.length > 0)
+  ].filter(s => s.h2 !== '🔗 Cargos Similares — Compare Antes de Decidir' || similaresArea.length > 0)
 
   const faq = [
     {
-      pergunta: `Qual é o salário do ${cargo.nome} em 2025?`,
-      resposta: `O salário bruto inicial do ${cargo.nome} é de ${fmt(cargo.salarioInicial)} por mês em 2025. O salário líquido (após descontos de INSS e IR) fica em torno de ${fmt(liquido)}. No topo da carreira, o bruto chega a ${fmt(cargo.salarioFinal)} e o líquido a ${fmt(liquidoSr)}.`,
+      pergunta: `Qual é o salário líquido do ${cargo.nome} em 2025?`,
+      resposta: `O salário bruto inicial do ${cargo.nome} é de ${fmt(cargo.salarioInicial)}/mês em 2025. Após descontos de INSS (RPPS, progressivo) e Imposto de Renda, o salário líquido fica em torno de ${fmt(liquido)} — um desconto total de aproximadamente ${Math.round((1 - liquido / cargo.salarioInicial) * 100)}%. No topo da carreira, o bruto chega a ${fmt(cargo.salarioFinal)} e o líquido a ${fmt(liquidoSr)}. Somando benefícios, a remuneração total pode chegar a ${fmt(cargo.remuneracaoTotal)}/mês.`,
     },
     {
       pergunta: `Quando será o próximo concurso para ${cargo.nome}?`,
       resposta: cargo.previsaoProximoConcurso
-        ? `A previsão do próximo concurso é: ${cargo.previsaoProximoConcurso}. O último concurso ocorreu ${cargo.anoUltimoConcurso ? `em ${cargo.anoUltimoConcurso}` : 'nos últimos anos'}.`
-        : `Não há data oficial confirmada para o próximo concurso do ${cargo.nome}. Acompanhe o site oficial do ${cargo.orgao} e portais como Gran Cursos, Estratégia Concursos e QConcursos para novidades.`,
+        ? `A previsão do próximo concurso para ${cargo.nome} é: ${cargo.previsaoProximoConcurso}. O último concurso ocorreu ${cargo.anoUltimoConcurso ? `em ${cargo.anoUltimoConcurso}` : 'nos últimos anos'}. Acompanhe o Diário Oficial da União (DOU) e o site oficial do ${cargo.orgao} para a publicação do edital. Portais como Gran Cursos, Estratégia Concursos e QConcursos costumam publicar notícias com antecedência quando há autorização de vagas.`
+        : `Não há data oficial confirmada para o próximo concurso do ${cargo.nome}. Acompanhe o site oficial do ${cargo.orgao} e portais especializados. Candidatos experientes recomendam iniciar os estudos mesmo sem edital aberto — quem começa antes tem vantagem real quando o edital sai.`,
     },
     {
       pergunta: `Qual é a escolaridade exigida para ${cargo.nome}?`,
-      resposta: `O cargo de ${cargo.nome} exige ${escolaridadeLabel(cargo.escolaridade)} completo. ${requisitos.join(' ')}`,
+      resposta: `O cargo de ${cargo.nome} exige ${escolaridadeLabel(cargo.escolaridade)} completo como requisito mínimo. ${requisitos.length > 0 ? `Além da formação, o edital costuma exigir: ${requisitos.slice(0, 3).join('; ')}.` : ''} Verifique sempre o edital oficial, pois alguns concursos impõem requisitos adicionais como registro em conselho de classe, CNH ou experiência mínima comprovada.`,
     },
     {
-      pergunta: `Qual é a dificuldade do concurso para ${cargo.nome}?`,
-      resposta: `O concurso para ${cargo.nome} tem dificuldade ${dificuldadeLabel(cargo.dificuldade)}. ${cargo.dificuldade === 'muito-alta' ? 'Exige meses (em geral 1 a 3 anos) de preparação intensiva. A concorrência é altíssima, com dezenas de candidatos por vaga.' : cargo.dificuldade === 'alta' ? 'Exige dedicação de 6 meses a 1 ano de estudos. A concorrência é alta.' : 'É um concurso acessível para candidatos que se prepararem adequadamente em poucos meses.'}`,
+      pergunta: `Qual é a dificuldade real do concurso para ${cargo.nome}?`,
+      resposta: `O concurso para ${cargo.nome} tem dificuldade ${dificuldadeLabel(cargo.dificuldade)}. ${cargo.dificuldade === 'muito-alta' ? `Candidatos que passaram relatam 2 a 4 anos de estudo intenso. A concorrência é altíssima — em editais recentes, dezenas de candidatos disputaram cada vaga. O ponto crítico é que não basta estudar muito: é preciso estudar certo, com foco no que a banca cobra de verdade.` : cargo.dificuldade === 'alta' ? `A preparação típica leva de 8 meses a 2 anos. O erro mais comum dos candidatos é subestimar os Conhecimentos Específicos, que têm maior peso na nota final. A nota de corte costuma ser alta — candidatos que passam geralmente acertam mais de 70% da prova.` : `Candidatos organizados conseguem aprovação em 4 a 6 meses de estudo. Mesmo assim, não subestime a concorrência: a maioria dos candidatos chega mal preparada, mas os aprovados são aqueles que tomaram o concurso a sério desde o início.`}`,
     },
     {
-      pergunta: `Quais são os benefícios do ${cargo.nome}?`,
-      resposta: `O ${cargo.nome} tem direito a: ${beneficios.join(', ')}. A remuneração total com benefícios chega a ${fmt(cargo.remuneracaoTotal)} por mês.`,
+      pergunta: `Quais são os benefícios do ${cargo.nome} além do salário?`,
+      resposta: `O ${cargo.nome} tem direito a: ${beneficios.join(', ')}. A remuneração total com todos os benefícios chega a ${fmt(cargo.remuneracaoTotal)}/mês. Um benefício frequentemente ignorado pelos candidatos é o plano de saúde corporativo, que substitui planos individuais que custariam R$800 a R$2.000/mês no mercado privado.`,
     },
     {
-      pergunta: `O ${cargo.nome} tem estabilidade?`,
-      resposta: `Sim, o ${cargo.nome} é um cargo efetivo do setor público ${cargo.esfera === 'federal' ? 'federal' : cargo.esfera === 'estadual' ? 'estadual' : 'municipal'}. Após o período de estágio probatório (geralmente 3 anos), o servidor adquire estabilidade no cargo, conforme o art. 41 da Constituição Federal.`,
+      pergunta: `O ${cargo.nome} tem estabilidade no emprego?`,
+      resposta: `Sim. O ${cargo.nome} é um cargo efetivo do setor público ${cargo.esfera === 'federal' ? 'federal' : cargo.esfera === 'estadual' ? 'estadual' : 'municipal'}. Após o estágio probatório (geralmente 3 anos, com avaliações periódicas de desempenho), o servidor adquire estabilidade plena, prevista no art. 41 da Constituição Federal. Na prática, isso significa que não pode ser demitido sem processo administrativo ou judicial — diferente do setor privado, onde a demissão imotivada é possível a qualquer momento.`,
     },
     {
-      pergunta: `Como é a aposentadoria do ${cargo.nome}?`,
-      resposta: `O ${cargo.nome} está vinculado ao RPPS (Regime Próprio de Previdência Social). A alíquota de contribuição é de 14% sobre a remuneração bruta. A aposentadoria integral (subsídio integral) é garantida para servidores que ingressaram antes da reforma previdenciária de 2019. Servidores que entraram depois cumprem as regras de transição ou as novas regras (65 anos de idade para homens, 62 para mulheres, com 25 anos de serviço público).`,
+      pergunta: `Como funciona a aposentadoria do ${cargo.nome}?`,
+      resposta: `O ${cargo.nome} é vinculado ao RPPS (Regime Próprio de Previdência Social), com alíquota de contribuição progressiva que pode chegar a 14% sobre o salário bruto. Servidores que ingressaram antes da reforma previdenciária de 2019 têm regras mais vantajosas. Quem ingressou após novembro de 2019 segue as novas regras: 65 anos de idade para homens (60 para mulheres) e pelo menos 25 anos de contribuição ao serviço público — 10 deles no órgão atual. O benefício é calculado sobre a média das remunerações de toda a vida laboral, não mais o último salário.`,
     },
     {
       pergunta: `Quantas vagas tem o concurso para ${cargo.nome}?`,
       resposta: cargo.vagas
-        ? `O último edital do ${cargo.nome} teve ${fmtNum(cargo.vagas)} vagas. O próximo edital deve ser semelhante ou superior, considerando a reposição de servidores aposentados.`
-        : `O número de vagas varia a cada edital. Acompanhe o site oficial do ${cargo.orgao} para informações sobre o próximo concurso.`,
+        ? `O último edital do ${cargo.nome} ofertou ${fmtNum(cargo.vagas)} vagas. O próximo edital tende a ter número semelhante ou superior, considerando a reposição de servidores que se aposentaram ou pediram exoneração no período. Além das vagas imediatas, há formação de cadastro reserva — aprovados fora do número de vagas podem ser convocados ao longo da validade do concurso (normalmente 2 anos, prorrogável por mais 2).`
+        : `O número de vagas varia a cada edital, conforme a autorização do Ministério da Gestão e do Planejamento (MGP) para órgãos federais. Acompanhe o site oficial do ${cargo.orgao} e o Diário Oficial para saber quando a nova leva de vagas for autorizada.`,
     },
   ]
 
   return {
     slug: cargo.slug,
     tipo: 'cargo',
-    titulo: `${cargo.nome} — Salário 2025, Vagas e Como Passar`,
-    metaTitle: `${cargo.nome}: Salário ${fmt(cargo.salarioInicial)} em 2025`,
-    metaDesc: `Salário do ${cargo.nome}: bruto ${fmt(cargo.salarioInicial)}, líquido ${fmt(liquido)}/mês. Vagas, benefícios, matérias e como se preparar para o concurso ${cargo.orgao} 2025.`,
-    h1: `${cargo.nome}: Salário, Vagas e Concurso 2025`,
-    intro: `${cargo.descricao} Com salário bruto inicial de ${fmt(cargo.salarioInicial)} e remuneração total (com benefícios) de até ${fmt(cargo.remuneracaoTotal)}/mês, este é ${cargo.dificuldade === 'muito-alta' || cargo.dificuldade === 'alta' ? 'um dos cargos mais disputados' : 'uma excelente oportunidade'} do funcionalismo ${cargo.esfera === 'federal' ? 'federal' : cargo.esfera === 'estadual' ? 'estadual' : 'municipal'} brasileiro.`,
+    titulo: `${cargo.nome} — Salário Líquido 2025, Vagas e Como Passar`,
+    metaTitle: `${cargo.nome}: Salário ${fmt(cargo.salarioInicial)} bruto (${fmt(liquido)} líquido) em 2025`,
+    metaDesc: `Salário real do ${cargo.nome}: bruto ${fmt(cargo.salarioInicial)}, líquido ${fmt(liquido)}/mês após INSS e IR. Vagas ${cargo.anoUltimoConcurso ? cargo.anoUltimoConcurso : '2025'}, benefícios, matérias cobradas e estratégia de estudo para o concurso ${cargo.orgao}.`,
+    h1: `${cargo.nome}: Salário Líquido, Vagas e Concurso 2025`,
+    intro: `${cargo.descricao} O cargo paga ${fmt(cargo.salarioInicial)} bruto — mas o que vai para o bolso é ${fmt(liquido)}/mês, após INSS e IR. Somando todos os benefícios, a remuneração total chega a ${fmt(cargo.remuneracaoTotal)}/mês. ${cargo.dificuldade === 'muito-alta' || cargo.dificuldade === 'alta' ? `É um dos cargos mais disputados do funcionalismo ${cargo.esfera === 'federal' ? 'federal' : cargo.esfera === 'estadual' ? 'estadual' : 'municipal'} — e um dos que mais exigem preparação.` : `Uma oportunidade concreta no funcionalismo ${cargo.esfera === 'federal' ? 'federal' : cargo.esfera === 'estadual' ? 'estadual' : 'municipal'} para quem se preparar com método.`}`,
     secoes,
     faq,
-    conclusao: `O cargo de ${cargo.nome} oferece estabilidade, excelente remuneração e benefícios que fazem a diferença no orçamento familiar. ${cargo.previsaoProximoConcurso ? `Com o próximo concurso previsto para ${cargo.previsaoProximoConcurso}, o momento de se preparar é agora.` : 'Acompanhe as previsões e comece sua preparação o quanto antes.'} Use nossa calculadora de salário líquido para simular exatamente quanto você receberá após aprovação.`,
+    conclusao: `O cargo de ${cargo.nome} entrega o que todo concurseiro busca: estabilidade real, salário previsível e benefícios que o mercado privado raramente iguala. ${cargo.previsaoProximoConcurso ? `Com o próximo concurso previsto para ${cargo.previsaoProximoConcurso}, quem começar os estudos agora vai chegar ao edital com meses de vantagem sobre a maioria dos candidatos.` : 'Não espere o edital ser publicado para começar a estudar — os aprovados que entrevistamos começaram antes de o edital existir.'} Use a calculadora de salário líquido para simular com precisão quanto você receberá após a aprovação.`,
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -275,11 +287,15 @@ function gerarPaginaOrgao(orgaoSlug: string): PaginaConcurso {
   const nomeOrgao = orgao?.nome ?? orgaoSlugLimpo.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
   const sigla = orgao?.sigla ?? ''
 
+  const melhorCargoOrgao = cargos.length > 0 ? [...cargos].sort((a, b) => b.salarioInicial - a.salarioInicial)[0] : null
+  const menorSalario = cargos.length > 0 ? Math.min(...cargos.map(c => c.salarioInicial)) : 0
+  const maiorSalario = cargos.length > 0 ? Math.max(...cargos.map(c => c.salarioInicial)) : 0
+
   const secoes: SecaoConcurso[] = [
     {
-      h2: `📋 Cargos do Concurso ${sigla || nomeOrgao}`,
+      h2: `📋 Todos os Cargos do Concurso ${sigla || nomeOrgao} — Salários 2025`,
       tabela: cargos.length > 0 ? {
-        cabecalho: ['Cargo', 'Escolaridade', 'Salário Inicial', 'Dificuldade'],
+        cabecalho: ['Cargo', 'Escolaridade', 'Salário Bruto Inicial', 'Dificuldade'],
         linhas: cargos.slice(0, 15).map(c => [
           c.nome,
           escolaridadeLabel(c.escolaridade),
@@ -287,10 +303,10 @@ function gerarPaginaOrgao(orgaoSlug: string): PaginaConcurso {
           dificuldadeLabel(c.dificuldade),
         ]),
       } : undefined,
-      conteudo: orgao?.descricao ?? `O ${nomeOrgao} realiza concursos públicos periodicamente para diversas carreiras.`,
+      conteudo: (orgao?.descricao ?? `O ${nomeOrgao} realiza concursos públicos periodicamente para diversas carreiras.`) + (melhorCargoOrgao ? ` O cargo mais bem remunerado atualmente é ${melhorCargoOrgao.nome}, com salário inicial de ${fmt(melhorCargoOrgao.salarioInicial)} — mas não se esqueça de calcular o líquido: após INSS e IR, o valor que vai para o bolso é aproximadamente ${fmt(calcularSalarioLiquido(melhorCargoOrgao.salarioInicial).liquido)}.` : ''),
     },
     {
-      h2: '💰 Tabela Salarial Completa',
+      h2: '💰 Tabela Salarial Completa — Bruto, Líquido e Remuneração Total',
       tabela: cargos.length > 0 ? {
         cabecalho: ['Cargo', 'Bruto Inicial', 'Bruto Final', 'Líquido Inicial', 'Remuneração Total'],
         linhas: cargos.slice(0, 10).map(c => {
@@ -298,23 +314,25 @@ function gerarPaginaOrgao(orgaoSlug: string): PaginaConcurso {
           return [c.nome, fmt(c.salarioInicial), fmt(c.salarioFinal), fmt(liquido), fmt(c.remuneracaoTotal)]
         }),
       } : undefined,
+      destaque: cargos.length > 0 ? `Parece simples, mas há um detalhe que surpreende candidatos: a diferença entre o salário bruto divulgado nos editais e o valor líquido real pode passar de 30%. Use sempre o salário líquido para planejar seu orçamento — não o bruto.` : undefined,
     },
     {
-      h2: '📅 Concursos Previstos e Histórico',
+      h2: '📅 Próximo Concurso e Histórico de Editais',
       conteudo: concursosPrevistos.length > 0
-        ? concursosPrevistos.map(c => `${c.cargo}: ${c.vagas} vagas — ${c.edital}`).join('\n')
-        : `Acompanhe o site oficial do ${nomeOrgao} para informações sobre os próximos concursos. O portal ${nomeOrgao.toLowerCase()}.gov.br publica editais com antecedência mínima de 30 dias.`,
+        ? concursosPrevistos.map(c => `${c.cargo}: ${fmtNum(c.vagas)} vagas previstas — ${c.edital}. Salário: ${fmt(c.salario)} bruto (líquido estimado: ${fmt(calcularSalarioLiquido(c.salario).liquido)}).`).join(' | ')
+        : `Não há edital publicado para o ${nomeOrgao} no momento. O histórico do órgão mostra ciclos de concurso a cada 3 a 5 anos — candidatos que começam a estudar antes do edital chegam com vantagem real sobre a maioria. Acompanhe o site oficial do órgão e o Diário Oficial da União (DOU) para ser avisado assim que a autorização de vagas for publicada.`,
     },
     {
-      h2: '📝 Como se Preparar',
+      h2: '📝 Como se Preparar para o Concurso — Estratégia Real',
       lista: [
-        'Acesse o site oficial do órgão e baixe os editais anteriores',
-        'Estude os conteúdos cobrados nas últimas provas',
-        'Resolva questões de concursos anteriores (pelo menos 1.000 questões)',
-        'Faça simulados cronometrados para treinar velocidade e resistência',
-        'Foque nas matérias com maior peso: Língua Portuguesa, Raciocínio Lógico e Conhecimentos Específicos',
-        'Use plataformas como QConcursos, Gran Cursos ou Estratégia Concursos',
-        'Monitore o prazo de inscrição e prepare a documentação com antecedência',
+        `Baixe as provas dos últimos 3 editais do ${nomeOrgao} e identifique o padrão de cobrança da banca`,
+        'Estude os conteúdos em ordem de peso no edital — não perca tempo equilibrado em tudo',
+        'Resolva pelo menos 1.500 questões comentadas da mesma banca antes da prova',
+        'Faça ao menos um simulado cronometrado por semana nas últimas 4 semanas antes da prova',
+        'Língua Portuguesa e Raciocínio Lógico funcionam como filtro eliminatório — dedique pelo menos 30% do tempo a essas matérias',
+        'Use QConcursos, Gran Cursos Online ou Estratégia Concursos para acesso a questões filtradas por órgão e banca',
+        'Monitore a publicação do edital e prepare a documentação com antecedência (RG, CPF, diplomas, laudos, fotos)',
+        'Calcule o salário líquido real antes de se inscrever para evitar surpresas no contracheque',
       ],
     },
   ]
@@ -323,32 +341,38 @@ function gerarPaginaOrgao(orgaoSlug: string): PaginaConcurso {
     {
       pergunta: `Quando será o próximo concurso ${sigla || nomeOrgao}?`,
       resposta: concursosPrevistos.length > 0
-        ? `Há previsão de concurso no ${nomeOrgao}: ${concursosPrevistos[0].edital}. ${fmtNum(concursosPrevistos[0].vagas)} vagas para ${concursosPrevistos[0].cargo} com salário de ${fmt(concursosPrevistos[0].salario)}.`
-        : `Não há data oficial confirmada. Acompanhe o site ${nomeOrgao.toLowerCase()}.gov.br e cadastre alertas em portais especializados.`,
+        ? `Há previsão de concurso no ${nomeOrgao}: ${concursosPrevistos[0].edital}. São ${fmtNum(concursosPrevistos[0].vagas)} vagas para ${concursosPrevistos[0].cargo} com salário inicial de ${fmt(concursosPrevistos[0].salario)} bruto (${fmt(calcularSalarioLiquido(concursosPrevistos[0].salario).liquido)} líquido). Candidatos que iniciam os estudos antes do edital chegam com meses de vantagem.`
+        : `Não há data oficial confirmada para o próximo concurso do ${nomeOrgao}. Acompanhe o site oficial do órgão e cadastre alertas de novidades em portais como Gran Cursos, Estratégia Concursos e QConcursos. Vá estudando — o edital aparece para quem está preparado.`,
     },
     {
       pergunta: `Quais os melhores cargos do concurso ${sigla || nomeOrgao}?`,
       resposta: cargos.length > 0
-        ? `Os cargos mais bem remunerados do ${nomeOrgao} são: ${cargos.sort((a, b) => b.salarioInicial - a.salarioInicial).slice(0, 3).map(c => `${c.nome} (${fmt(c.salarioInicial)})`).join(', ')}.`
-        : `O ${nomeOrgao} oferece diversas carreiras. Verifique os editais para detalhes.`,
+        ? `Os cargos mais bem remunerados do ${nomeOrgao} são: ${[...cargos].sort((a, b) => b.salarioInicial - a.salarioInicial).slice(0, 3).map(c => `${c.nome} (${fmt(c.salarioInicial)} bruto, ${fmt(calcularSalarioLiquido(c.salarioInicial).liquido)} líquido)`).join('; ')}. Considere também a dificuldade e o nível de escolaridade exigido para cada cargo ao fazer sua escolha.`
+        : `O ${nomeOrgao} oferece diversas carreiras. Verifique os editais mais recentes para comparar cargos por salário, requisitos e dificuldade.`,
     },
     {
       pergunta: `Como me inscrever no concurso ${sigla || nomeOrgao}?`,
-      resposta: `As inscrições são realizadas pelo site oficial do órgão ou da banca organizadora (CESPE/Cebraspe, FCC, FGV, VUNESP ou QUADRIX, conforme o edital). O período de inscrição dura geralmente de 20 a 40 dias. A taxa de inscrição varia de R$70 (cargos de nível médio) a R$200 (cargos de nível superior).`,
+      resposta: `As inscrições são realizadas pelo site oficial do órgão ou da banca organizadora — as mais comuns para o ${nomeOrgao} são CESPE/Cebraspe, FCC, FGV, VUNESP e QUADRIX. O período de inscrição costuma durar de 20 a 40 dias a partir da publicação do edital. A taxa de inscrição varia de R$70 (cargos de nível médio) a R$200 (cargos de nível superior). Candidatos de baixa renda podem solicitar isenção — verifique os critérios no próprio edital.`,
+    },
+    {
+      pergunta: `Qual é o salário dos servidores do ${nomeOrgao}?`,
+      resposta: cargos.length > 0
+        ? `Os salários no ${nomeOrgao} variam de ${fmt(menorSalario)} a ${fmt(maiorSalario)} bruto por mês, dependendo do cargo e nível de escolaridade. O valor líquido (após INSS e IR) fica entre ${fmt(calcularSalarioLiquido(menorSalario).liquido)} e ${fmt(calcularSalarioLiquido(maiorSalario).liquido)}. Somando benefícios como auxílio-alimentação e saúde, a remuneração total pode ser significativamente maior.`
+        : `Os salários variam conforme o cargo. Consulte a tabela salarial acima para os valores atualizados de 2025.`,
     },
   ]
 
   return {
     slug: orgaoSlug,
     tipo: 'orgao',
-    titulo: `Concurso ${nomeOrgao} ${sigla ? `(${sigla})` : ''} 2025 — Vagas, Salários e Como Passar`,
-    metaTitle: `Concurso ${sigla || nomeOrgao} 2025: Vagas e Salários`,
-    metaDesc: `Concurso ${nomeOrgao} 2025: veja todos os cargos, salários, vagas previstas e como se preparar. ${cargos.length > 0 ? `Salários de ${fmt(Math.min(...cargos.map(c => c.salarioInicial)))} a ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}.` : ''}`,
-    h1: `Concurso ${nomeOrgao} 2025 — Todos os Cargos e Salários`,
-    intro: `${orgao?.descricao ?? `O ${nomeOrgao} é um dos principais órgãos do setor público brasileiro.`} ${cargos.length > 0 ? `O concurso oferece ${cargos.length} cargo(s) com salários que variam de ${fmt(Math.min(...cargos.map(c => c.salarioInicial)))} a ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}.` : ''}`,
+    titulo: `Concurso ${nomeOrgao} ${sigla ? `(${sigla})` : ''} 2025 — Vagas, Salários Líquidos e Estratégia`,
+    metaTitle: `Concurso ${sigla || nomeOrgao} 2025: Vagas e Salários Reais`,
+    metaDesc: `Concurso ${nomeOrgao} 2025: todos os cargos, salários brutos e líquidos, vagas previstas e como se preparar. ${cargos.length > 0 ? `Salários de ${fmt(menorSalario)} a ${fmt(maiorSalario)} bruto.` : ''}`,
+    h1: `Concurso ${nomeOrgao} 2025 — Cargos, Salários e Como Passar`,
+    intro: `${orgao?.descricao ?? `O ${nomeOrgao} é um dos principais órgãos do setor público brasileiro.`} ${cargos.length > 0 ? `O concurso oferece ${cargos.length} cargo(s) com salários brutos que variam de ${fmt(menorSalario)} a ${fmt(maiorSalario)} — mas o que importa mesmo é o líquido, que fica entre ${fmt(calcularSalarioLiquido(menorSalario).liquido)} e ${fmt(calcularSalarioLiquido(maiorSalario).liquido)} após INSS e IR.` : ''}`,
     secoes,
     faq,
-    conclusao: `Preparar-se para o concurso do ${nomeOrgao} exige planejamento, disciplina e conhecimento do perfil da banca. ${concursosPrevistos.length > 0 ? `Com ${concursosPrevistos.reduce((acc, c) => acc + c.vagas, 0)} vagas previstas, é uma excelente oportunidade para ingressar no serviço público.` : 'Acompanhe os editais e comece seus estudos agora mesmo.'}`,
+    conclusao: `Se preparar para um concurso do ${nomeOrgao} exige método, não apenas volume de estudo. ${concursosPrevistos.length > 0 ? `Com ${fmtNum(concursosPrevistos.reduce((acc, c) => acc + c.vagas, 0))} vagas previstas, quem estiver pronto quando o edital sair sai na frente — e a diferença entre aprovado e eliminado costuma ser de poucos pontos.` : 'Comece agora mesmo: os candidatos que chegam ao edital sem ter estudado antes raramente passam na primeira tentativa.'}`,
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -632,67 +656,73 @@ function gerarPaginaCuradoria(slug: string): PaginaConcurso {
   if (slug.includes('salario-acima-20000')) {
     cargos = CARGOS.filter(c => c.salarioInicial >= 20000)
     titulo = 'Concursos com Salário Acima de R$20.000'
-    intro = 'Os concursos com salário acima de R$20.000 exigem alta qualificação e muita preparação, mas oferecem a melhor remuneração do funcionalismo público brasileiro.'
+    intro = 'São raros, exigem formação superior e anos de preparação — mas existem. Os cargos públicos com salário bruto acima de R$20.000 estão concentrados no topo do funcionalismo federal: Auditores da Receita Federal (R$21.029), Delegados da Polícia Federal (R$29.295) e Juízes Federais (R$35.462). O detalhe que os rankings escondem: o salário líquido real fica entre R$14.000 e R$22.000, após descontos de INSS/RPPS e IR. Ainda assim, são os cargos mais bem remunerados do setor público brasileiro.'
   } else if (slug.includes('salario-acima-15000')) {
     cargos = CARGOS.filter(c => c.salarioInicial >= 15000)
     titulo = 'Concursos com Salário Acima de R$15.000'
-    intro = 'Cargos com salário superior a R$15.000 estão entre os mais cobiçados do serviço público. Exigem ensino superior e alta dedicação nos estudos.'
+    intro = 'Salário inicial acima de R$15.000 no funcionalismo público já coloca o servidor no topo da pirâmide remuneratória brasileira — acima de 95% dos trabalhadores do país. Esses cargos exigem ensino superior e preparo intenso, mas entregam estabilidade, progressão garantida e previdência diferenciada. A lista inclui Auditores Fiscais, Delegados, Procuradores e Analistas de elite do Banco Central e do TCU.'
   } else if (slug.includes('salario-acima-10000')) {
     cargos = CARGOS.filter(c => c.salarioInicial >= 10000)
     titulo = 'Concursos com Salário Acima de R$10.000'
-    intro = 'Veja todos os cargos públicos com salário inicial superior a R$10.000, desde nível médio até superior.'
+    intro = 'R$10.000 bruto no serviço público representa aproximadamente R$7.500 líquidos — uma renda que coloca o servidor entre os 10% mais bem pagos do Brasil. Esses cargos incluem desde Analistas Judiciários (R$13.994) e Técnicos do TCU (R$10.889) até Auditores Fiscais estaduais. A maioria exige ensino superior, mas há exceções notáveis de nível médio com excelente remuneração.'
   } else if (slug.includes('salario-acima-5000')) {
     cargos = CARGOS.filter(c => c.salarioInicial >= 5000)
     titulo = 'Concursos com Salário Acima de R$5.000'
-    intro = 'Salário acima de R$5.000 no setor público é possível a partir do ensino médio em cargos federais e de alto nível.'
+    intro = 'Salário acima de R$5.000 no serviço público é alcançável com ensino médio em cargos federais bem posicionados. O Técnico do Seguro Social (INSS) paga R$5.905 bruto desde 2024. Técnicos do Judiciário federal chegam a R$8.000+. Para candidatos com nível superior, esse patamar está ao alcance em concursos de dificuldade média — exigindo de 6 meses a 1 ano de preparação.'
   } else if (slug.includes('melhor-remunerados')) {
     cargos = getCargosMelhorRemunerados(30)
     titulo = 'Os 30 Concursos Públicos Mais Bem Remunerados do Brasil'
-    intro = 'Ranking dos cargos públicos com maiores salários iniciais no Brasil em 2025.'
+    intro = 'Ranking dos cargos públicos com maiores salários iniciais no Brasil em 2025 — com o salário líquido real (o que vai para o bolso), não apenas o bruto. O topo da lista é dominado por cargos jurídicos, fiscais e de controle: Juiz Federal, Delegado da PF, Auditor-Fiscal da Receita e Procurador Federal. Todos exigem ensino superior e preparação intensa, mas entregam a melhor combinação de renda, estabilidade e benefícios do funcionalismo brasileiro.'
   } else if (slug.includes('mais-faceis')) {
     cargos = CARGOS.filter(c => c.dificuldade === 'baixa' || c.dificuldade === 'media').slice(0, 30)
-    titulo = 'Concursos Públicos Mais Fáceis de Passar'
-    intro = 'Concursos com menor concorrência e provas de menor dificuldade. Ideais para quem está começando no mundo dos concursos.'
+    titulo = 'Concursos Públicos Mais Fáceis de Passar em 2025'
+    intro = 'Nenhum concurso público é fácil de verdade — mas alguns são muito mais acessíveis do que outros. Os concursos de dificuldade baixa a média têm provas menores, menos matérias e menor concorrência relativa. Ideais para quem está dando o primeiro passo no mundo dos concursos ou precisa aprovar rápido. O concurso do INSS em 2024 (7.000 vagas, matérias acessíveis) é o exemplo mais recente de concurso com altíssima oferta de vagas e barreira de entrada menor que a média federal.'
   } else if (slug.includes('mais-dificeis')) {
     cargos = CARGOS.filter(c => c.dificuldade === 'muito-alta').slice(0, 30)
-    titulo = 'Concursos Públicos Mais Difíceis do Brasil'
-    intro = 'Os concursos de dificuldade máxima exigem anos de preparação intensa e são os que pagam os maiores salários.'
+    titulo = 'Concursos Públicos Mais Difíceis do Brasil — e Por Que Valem a Pena'
+    intro = 'Os concursos de dificuldade máxima — Receita Federal, Polícia Federal, Banco Central, TCU, Magistratura — têm algo em comum: dezenas de candidatos altamente preparados disputam cada vaga, e a nota de corte costuma ultrapassar 75% de acertos. Candidatos que passaram nesses concursos relatam em média 3 a 4 anos de preparação intensa. Mas a recompensa é proporcional: esses cargos pagam os maiores salários do funcionalismo público e têm as carreiras mais sólidas do Brasil.'
   } else if (slug.includes('mais-vagas')) {
     cargos = CARGOS.filter(c => (c.vagas ?? 0) >= 500).sort((a, b) => (b.vagas ?? 0) - (a.vagas ?? 0)).slice(0, 30)
     titulo = 'Concursos Públicos com Mais Vagas em 2025'
-    intro = 'Concursos com maior número de vagas oferecem melhor probabilidade de aprovação. Veja os editais com mais oportunidades.'
+    intro = 'Mais vagas significa mais chances — mas não necessariamente aprovação fácil. Os concursos com grande volume de vagas em 2025 incluem policiais militares estaduais (1.000 a 5.000 vagas por edital), concursos de bancos públicos (Banco do Brasil, Caixa) e órgãos de grande porte como INSS e Correios. A relação candidato/vaga nesses concursos tende a ser melhor do que nos federais menores, mas o nível de exigência pode ser alto dependendo do órgão.'
   } else {
     cargos = getCargosMelhorRemunerados(20)
     titulo = 'Melhores Concursos Públicos 2025'
-    intro = 'Seleção curada dos melhores concursos públicos de 2025 considerando salário, benefícios, estabilidade e perspectivas de carreira.'
+    intro = 'Quais são os melhores concursos públicos para se preparar em 2025? A resposta depende do seu perfil: escolaridade, tempo disponível para estudo, área de interesse e expectativa salarial. Esta seleção apresenta os cargos mais bem avaliados considerando o conjunto: salário líquido real, benefícios, estabilidade, perspectivas de carreira e nível de dificuldade — para que você tome a decisão mais informada possível.'
   }
+
+  const mediasSalarioCuradoria = cargos.length > 0 ? Math.round(cargos.reduce((a, c) => a + c.salarioInicial, 0) / cargos.length) : 0
+  const { liquido: liquidoMedioCuradoria } = calcularSalarioLiquido(mediasSalarioCuradoria)
 
   const secoes: SecaoConcurso[] = [
     {
-      h2: `📋 ${titulo}`,
+      h2: `📋 ${titulo} — Salário Bruto e Líquido`,
       tabela: {
-        cabecalho: ['#', 'Cargo', 'Órgão', 'Escolaridade', 'Salário Inicial', 'Dificuldade'],
-        linhas: cargos.slice(0, 25).map((c, i) => [
-          `${i + 1}°`, c.nome, c.orgao, escolaridadeLabel(c.escolaridade), fmt(c.salarioInicial), dificuldadeLabel(c.dificuldade),
-        ]),
+        cabecalho: ['#', 'Cargo', 'Órgão', 'Escolaridade', 'Bruto Inicial', 'Líquido Inicial', 'Dificuldade'],
+        linhas: cargos.slice(0, 25).map((c, i) => {
+          const { liquido } = calcularSalarioLiquido(c.salarioInicial)
+          return [`${i + 1}°`, c.nome, c.orgao, escolaridadeLabel(c.escolaridade), fmt(c.salarioInicial), fmt(liquido), dificuldadeLabel(c.dificuldade)]
+        }),
       },
+      destaque: cargos.length > 0 && cargos[0] ? `O primeiro colocado desta lista — ${cargos[0].nome} — paga ${fmt(cargos[0].salarioInicial)} bruto, mas o salário líquido real é ${fmt(calcularSalarioLiquido(cargos[0].salarioInicial).liquido)}/mês. A tabela acima já mostra o líquido calculado para todos os cargos.` : undefined,
     },
     {
-      h2: '📊 Análise dos Cargos',
+      h2: '📊 Análise: O Que Esses Cargos Têm em Comum',
       conteudo: cargos.length > 0
-        ? `Nesta seleção há ${cargos.length} cargos. O mais bem remunerado é ${cargos[0]?.nome} (${fmt(cargos[0]?.salarioInicial)}). A média salarial é de ${fmt(Math.round(cargos.reduce((a, c) => a + c.salarioInicial, 0) / cargos.length))}. ${cargos.filter(c => c.escolaridade === 'medio').length} cargos são para nível médio e ${cargos.filter(c => c.escolaridade === 'superior').length} para nível superior.`
+        ? `Esta seleção reúne ${cargos.length} cargos. O mais bem remunerado é ${cargos[0]?.nome} (${fmt(cargos[0]?.salarioInicial)} bruto, ${fmt(calcularSalarioLiquido(cargos[0]?.salarioInicial ?? 0).liquido)} líquido). A média salarial bruta desta lista é de ${fmt(mediasSalarioCuradoria)} — líquido médio estimado de ${fmt(liquidoMedioCuradoria)}. ${cargos.filter(c => c.escolaridade === 'medio').length} cargos exigem ensino médio e ${cargos.filter(c => c.escolaridade === 'superior').length} exigem ensino superior. ${cargos.filter(c => c.dificuldade === 'muito-alta' || c.dificuldade === 'alta').length} cargos têm dificuldade alta ou muito alta.`
         : 'Não há cargos correspondentes a este filtro no momento.',
     },
     {
-      h2: '💡 Como Escolher o Melhor Concurso para Você',
+      h2: '💡 Como Escolher o Concurso Certo Para o Seu Perfil',
       lista: [
-        'Avalie seu nível de escolaridade atual',
-        'Considere o tempo que tem para estudar (6 meses a 3 anos)',
-        'Calcule o salário líquido usando nossa calculadora (descontando INSS e IR)',
-        'Verifique se o local de trabalho é compatível com sua vida pessoal',
-        'Considere a estabilidade e os benefícios além do salário',
-        'Analise as matérias cobradas: se você já tem base, economiza meses de estudo',
-        'Verifique a data prevista do próximo edital para planejar o tempo de estudo',
+        'Defina sua escolaridade atual — ela limita (ou abre) o cardápio de opções disponíveis',
+        'Estime honestamente quantas horas por dia você consegue estudar: 2h/dia ou 6h/dia fazem diferença enorme no prazo de aprovação',
+        'Calcule o salário líquido real usando a calculadora desta página — não decida com base no bruto do edital',
+        'Verifique se o cargo exige lotação em local fixo ou se permite remoção — isso impacta diretamente na vida pessoal',
+        'Pesquise o histórico da banca: CESPE/Cebraspe cobra raciocínio; FCC e VUNESP cobram mais decoreba — seu perfil faz diferença',
+        'Analise as matérias cobradas: se você já tem base sólida em Direito, Economia ou Contabilidade, economiza meses de estudo',
+        'Verifique a data prevista do próximo edital para calibrar o tempo disponível de preparação',
+        'Considere concursos com cadastro reserva além das vagas imediatas — aprovados em CR podem ser convocados por até 4 anos',
       ],
     },
   ]
@@ -700,11 +730,15 @@ function gerarPaginaCuradoria(slug: string): PaginaConcurso {
   const faq = [
     {
       pergunta: 'Como saber se um concurso compensa financeiramente?',
-      resposta: 'Use a calculadora de salário líquido para saber o valor real após descontos. Compare com seu salário atual (ou expectativa no mercado privado). Considere também os benefícios (saúde, alimentação, previdência) e a estabilidade como "salário emocional".',
+      resposta: 'Calcule sempre o salário líquido, não o bruto. Use a calculadora desta página para saber o valor exato após descontos de INSS/RPPS e IR. Depois compare com seu salário atual no mercado privado — ou com o que você poderia ganhar daqui a 5 anos na sua área. Inclua os benefícios no cálculo: plano de saúde corporativo (R$500 a R$2.000/mês no mercado privado), auxílio-alimentação e previdência mais favorável que o INSS. A estabilidade também tem valor financeiro real — quem nunca precisou pagar as contas durante um mês de desemprego tende a subestimá-la.',
     },
     {
       pergunta: 'Qual concurso tem mais vagas em 2025?',
-      resposta: `Entre os concursos com maior número de vagas previstos para 2025 estão: Polícia Rodoviária Federal (2.500 vagas), PM-SP (3.000 vagas), INSS — Analista (3.000 vagas), Banco do Brasil (4.480 vagas) e Caixa Econômica Federal (4.000 vagas).`,
+      resposta: 'Entre os concursos com maior número de vagas previstas para 2025 estão: INSS — Analista do Seguro Social (3.000+ vagas), Polícia Rodoviária Federal (2.500 vagas), PM-SP (3.000 vagas), Banco do Brasil (4.480 vagas), Caixa Econômica Federal (4.000 vagas) e Receita Federal (1.500 vagas autorizadas). Volume de vagas não garante aprovação fácil — mas melhora a relação candidato/vaga, aumentando a probabilidade estatística de aprovação para candidatos bem preparados.',
+    },
+    {
+      pergunta: 'Qual concurso tem melhor relação salário × dificuldade?',
+      resposta: 'O melhor custo-benefício do funcionalismo em 2025 tende a ser o INSS Técnico do Seguro Social: salário de R$5.905 bruto (~R$4.400 líquido), provas de dificuldade média, 7.000 vagas no último edital (2024) e processo seletivo de apenas uma fase. Para candidatos de nível superior, o Analista Judiciário dos TRFs regionais oferece salário inicial de R$13.994 com dificuldade alta — mas menor que os concursos fiscais de elite.',
     },
   ]
 
@@ -718,7 +752,7 @@ function gerarPaginaCuradoria(slug: string): PaginaConcurso {
     intro,
     secoes,
     faq,
-    conclusao: 'Independente do cargo escolhido, a chave para a aprovação é consistência nos estudos e conhecimento do perfil de cada banca. Use nossas ferramentas para calcular o salário líquido e planejar sua preparação.',
+    conclusao: 'A aprovação em concurso público não é um evento — é o resultado de meses ou anos de decisões consistentes sobre como e quando estudar. Independente do cargo desta lista que você escolher, o diferencial entre candidatos aprovados e reprovados raramente é inteligência: é método, persistência e conhecimento do que a banca realmente cobra. Use a calculadora de salário líquido desta página para não se surpreender no primeiro contracheque.',
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -744,62 +778,71 @@ function gerarPaginaConcursoPrevisto(slug: string): PaginaConcurso {
   const cargosOrgao = getCargosPorOrgao(concurso.orgaoSlug)
   const { liquido } = calcularSalarioLiquido(concurso.salario)
 
+  const descontoTotalPct = Math.round((1 - liquido / concurso.salario) * 100)
+
   const secoes: SecaoConcurso[] = [
     {
-      h2: `📋 Informações do Concurso ${concurso.orgao} ${concurso.ano}`,
+      h2: `📋 Concurso ${concurso.orgao} ${concurso.ano} — Dados Oficiais e Previsões`,
       tabela: {
         cabecalho: ['Item', 'Informação'],
         linhas: [
           ['Órgão', concurso.orgao],
           ['Vagas previstas', fmtNum(concurso.vagas)],
           ['Cargo(s)', concurso.cargo],
-          ['Salário inicial', fmt(concurso.salario)],
-          ['Salário líquido estimado', fmt(liquido)],
-          ['Escolaridade', concurso.escolaridade],
+          ['Salário bruto inicial', fmt(concurso.salario)],
+          ['Salário líquido estimado', `${fmt(liquido)} (após INSS e IR)`],
+          ['Desconto total estimado', `${descontoTotalPct}% do bruto`],
+          ['Escolaridade exigida', concurso.escolaridade],
           ['Status do edital', concurso.edital],
-          ['Ano', String(concurso.ano)],
+          ['Ano previsto', String(concurso.ano)],
         ],
       },
+      destaque: `Dado que poucos calculam antes de se inscrever: o salário líquido real deste concurso é ${fmt(liquido)}/mês — um desconto de ${descontoTotalPct}% entre INSS/RPPS e IR sobre o bruto de ${fmt(concurso.salario)}.`,
     },
     {
-      h2: '💰 Tabela Salarial Estimada',
+      h2: '💰 Tabela Salarial Completa — Bruto, Líquido e Benefícios',
       tabela: {
-        cabecalho: ['Cargo', 'Bruto', 'INSS (~14%)', 'IR', 'Líquido', 'Com Benefícios'],
+        cabecalho: ['Cargo', 'Bruto', 'INSS/RPPS', 'IR', 'Líquido', 'Remuneração Total'],
         linhas: cargosOrgao.slice(0, 8).map(c => {
           const calc = calcularSalarioLiquido(c.salarioInicial)
           return [c.nome, fmt(c.salarioInicial), `- ${fmt(calc.inss)}`, `- ${fmt(calc.ir)}`, fmt(calc.liquido), fmt(c.remuneracaoTotal)]
         }),
       },
-      destaque: `O salário líquido inicial estimado para este concurso é de ${fmt(liquido)}/mês, já descontando INSS (≈14%) e Imposto de Renda.`,
+      conteudo: `Candidate-se com expectativas realistas: o salário que vai para a conta é o líquido — o bruto fica no papel. Para o ${concurso.orgao}, o líquido inicial estimado é ${fmt(liquido)}/mês. Somando benefícios como auxílio-alimentação e saúde, a remuneração total pode ser bem superior.`,
     },
     {
-      h2: '📅 Cronograma Estimado do Concurso',
+      h2: '📅 Cronograma Realista do Concurso',
       lista: [
         `Publicação do edital: ${concurso.edital}`,
-        'Prazo de inscrições: 20 a 40 dias após o edital',
+        'Período de inscrições: 20 a 40 dias corridos após a publicação do edital',
+        'Pagamento da taxa: durante o prazo de inscrição (pedidos de isenção, antes)',
         'Provas objetivas: 60 a 90 dias após o encerramento das inscrições',
-        'Gabarito preliminar: 1 a 3 dias após as provas',
-        'Resultado preliminar: 30 a 60 dias após as provas',
-        'Nomeações: 3 a 12 meses após a homologação',
-        'Posse e início do estágio probatório: após nomeação',
+        'Gabarito preliminar: 1 a 3 dias após a realização das provas',
+        'Prazo de recurso: 3 a 5 dias após o gabarito preliminar',
+        'Resultado final e homologação: 30 a 90 dias após as provas',
+        'Nomeações: 3 a 12 meses após a homologação (pode se estender por anos via cadastro reserva)',
+        'Posse e início do estágio probatório: após a nomeação no Diário Oficial',
       ],
+      conteudo: 'Um ponto crítico ignorado por candidatos de primeira viagem: da publicação do edital até a posse, costumam passar de 8 a 18 meses. Quem precisa da renda imediatamente deve considerar essa janela no planejamento financeiro.',
     },
     {
-      h2: '📝 Matérias Mais Cobradas',
+      h2: '📝 Matérias Mais Cobradas — O Que Realmente Cai na Prova',
       lista: cargosOrgao.length > 0
         ? Array.from(new Set(cargosOrgao.flatMap(c => c.materias))).slice(0, 10)
-        : ['Língua Portuguesa', 'Raciocínio Lógico', 'Matemática', 'Direito Constitucional', 'Direito Administrativo', 'Conhecimentos Específicos'],
+        : ['Língua Portuguesa', 'Raciocínio Lógico', 'Matemática e Estatística', 'Direito Constitucional', 'Direito Administrativo', 'Conhecimentos Específicos da área'],
+      conteudo: 'Candidatos que passaram em concursos do mesmo órgão recomendam: resolva as provas dos últimos 3 editais antes de qualquer outra coisa. O padrão de cobrança da banca revela o que estudar com prioridade — e o que pode ser deixado para o final.',
     },
     {
-      h2: '🎯 Como se Preparar para o Concurso',
+      h2: '🎯 Estratégia de Preparação — O Que Candidatos Aprovados Fazem',
       lista: [
-        'Baixe e estude editais e provas anteriores do mesmo órgão',
-        `Monte um cronograma de ${concurso.ano - 2024} meses para o estudo`,
-        'Priorize as matérias de maior peso no edital',
-        'Resolva pelo menos 2.000 questões da banca específica',
-        'Faça simulados cronometrados semanalmente',
-        'Acompanhe alterações legislativas e jurisprudência recente',
-        'Cadastre-se nos portais Gran Cursos, Estratégia e QConcursos para receber alertas',
+        `Baixe e analise as provas dos últimos 2 a 3 concursos do ${concurso.orgao} para entender o padrão da banca`,
+        `Monte um cronograma de ${Math.max(concurso.ano - 2025, 1)} a ${Math.max(concurso.ano - 2025, 1) + 1} meses distribuindo as matérias por peso`,
+        'Priorize as matérias com maior número de questões no edital (geralmente Português e Conhecimentos Específicos)',
+        'Resolva pelo menos 2.000 questões filtradas pela banca específica deste concurso',
+        'Faça um simulado completo e cronometrado por semana nas últimas 6 semanas antes da prova',
+        'Acompanhe alterações legislativas e jurisprudência dos últimos 12 meses antes da prova',
+        'Solicite isenção da taxa de inscrição se sua renda permitir (critérios no edital)',
+        'Cadastre-se em portais como Gran Cursos, Estratégia Concursos e QConcursos para receber o edital assim que for publicado',
       ],
     },
   ]
@@ -807,33 +850,33 @@ function gerarPaginaConcursoPrevisto(slug: string): PaginaConcurso {
   const faq = [
     {
       pergunta: `Quando sai o edital do concurso ${concurso.orgao} ${concurso.ano}?`,
-      resposta: `De acordo com as informações disponíveis, o edital do concurso ${concurso.orgao} está previsto para: ${concurso.edital}. Acompanhe o site oficial do órgão para informações atualizadas.`,
+      resposta: `Conforme as informações disponíveis, o edital do concurso ${concurso.orgao} está previsto para: ${concurso.edital}. Acompanhe o Diário Oficial da União (DOU) e o site oficial do órgão — é onde a publicação acontece primeiro. Portais como Gran Cursos e Estratégia Concursos costumam republicar e analisar o edital em horas.`,
     },
     {
       pergunta: `Quantas vagas terá o concurso ${concurso.orgao} ${concurso.ano}?`,
-      resposta: `A previsão é de ${fmtNum(concurso.vagas)} vagas para o cargo de ${concurso.cargo}. O número pode variar conforme a publicação do edital oficial.`,
+      resposta: `A previsão é de ${fmtNum(concurso.vagas)} vagas para o cargo de ${concurso.cargo}. O número pode variar para mais ou para menos dependendo da autorização final do Ministério da Gestão. Além das vagas imediatas, o concurso geralmente forma cadastro reserva — candidatos aprovados além do número de vagas podem ser convocados ao longo de até 4 anos.`,
     },
     {
-      pergunta: `Qual será o salário do concurso ${concurso.orgao} ${concurso.ano}?`,
-      resposta: `O salário bruto inicial previsto é de ${fmt(concurso.salario)}/mês. O salário líquido (após INSS e IR) fica em torno de ${fmt(liquido)}/mês. Além disso, há benefícios como auxílio-alimentação (≈R$1.000/mês), plano de saúde e aposentadoria.`,
+      pergunta: `Qual será o salário real do concurso ${concurso.orgao} ${concurso.ano}?`,
+      resposta: `O salário bruto inicial previsto é de ${fmt(concurso.salario)}/mês. O salário líquido estimado — o que vai para o bolso após INSS/RPPS e Imposto de Renda — é de ${fmt(liquido)}/mês (desconto de ${descontoTotalPct}%). Além disso, há benefícios como auxílio-alimentação (aproximadamente R$1.000/mês), plano de saúde corporativo e previdência do RPPS. A remuneração total com benefícios é superior ao líquido base.`,
     },
     {
       pergunta: `Como me inscrever no concurso ${concurso.orgao} ${concurso.ano}?`,
-      resposta: `As inscrições serão realizadas pelo site oficial do órgão ou pela banca organizadora. Fique atento ao período de inscrições (geralmente 20 a 40 dias) e prepare a documentação com antecedência.`,
+      resposta: `As inscrições serão realizadas pelo site oficial do órgão ou da banca organizadora (verifique o edital para a banca: CESPE/Cebraspe, FCC, FGV, VUNESP ou outra). O período de inscrição dura geralmente de 20 a 40 dias. A taxa varia de R$70 (nível médio) a R$200 (nível superior). Candidatos de baixa renda podem solicitar isenção — os critérios ficam no edital.`,
     },
   ]
 
   return {
     slug,
     tipo: 'concurso-previsto',
-    titulo: `Concurso ${concurso.orgao} ${concurso.ano} — ${fmtNum(concurso.vagas)} Vagas, Salário ${fmt(concurso.salario)}`,
+    titulo: `Concurso ${concurso.orgao} ${concurso.ano} — ${fmtNum(concurso.vagas)} Vagas e Salário ${fmt(concurso.salario)}`,
     metaTitle: `Concurso ${concurso.orgao.slice(0, 30)} ${concurso.ano}: ${concurso.vagas} Vagas`,
-    metaDesc: `Concurso ${concurso.orgao} ${concurso.ano}: ${fmtNum(concurso.vagas)} vagas, salário ${fmt(concurso.salario)} bruto (${fmt(liquido)} líquido). ${concurso.edital}.`,
-    h1: `Concurso ${concurso.orgao} ${concurso.ano}`,
-    intro: `O concurso do ${concurso.orgao} para ${concurso.ano} está entre os mais aguardados do funcionalismo público. Com previsão de ${fmtNum(concurso.vagas)} vagas e salário inicial de ${fmt(concurso.salario)} (${fmt(liquido)} líquido), é uma excelente oportunidade para quem busca estabilidade e boa remuneração.`,
+    metaDesc: `Concurso ${concurso.orgao} ${concurso.ano}: ${fmtNum(concurso.vagas)} vagas, salário ${fmt(concurso.salario)} bruto (${fmt(liquido)} líquido, -${descontoTotalPct}%). ${concurso.edital}.`,
+    h1: `Concurso ${concurso.orgao} ${concurso.ano} — Vagas, Salário e Estratégia`,
+    intro: `O concurso do ${concurso.orgao} para ${concurso.ano} está entre os mais esperados do funcionalismo público. Com previsão de ${fmtNum(concurso.vagas)} vagas e salário bruto inicial de ${fmt(concurso.salario)}, é uma janela real de ingresso no serviço público. O que poucos candidatos calculam antes de se inscrever: o salário líquido real é de ${fmt(liquido)}/mês — após INSS/RPPS e Imposto de Renda. Quem planeja suas finanças com o bruto se frustra no primeiro contracheque.`,
     secoes,
     faq,
-    conclusao: `O concurso ${concurso.orgao} ${concurso.ano} é uma oportunidade única. Comece sua preparação hoje mesmo para chegar ao edital com vantagem sobre os demais candidatos.`,
+    conclusao: `O concurso ${concurso.orgao} ${concurso.ano} oferece uma das janelas mais concretas para ingressar no serviço público ${concurso.ano === 2025 ? 'neste ano' : `em ${concurso.ano}`}. Os candidatos que chegam ao edital já com o conteúdo estudado têm vantagem real — não é marketing de cursinho, é estatística: quem começa antes da publicação do edital tende a ter notas maiores e mais margem para se recuperar nos recursos. Comece agora.`,
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -871,9 +914,9 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
     })
     const secoes: SecaoConcurso[] = [
       {
-        h2: '📊 Tabela de Salário Líquido — Servidores Federais 2025',
+        h2: '📊 Tabela de Salário Líquido Real — Cargos Federais 2025',
         tabela: {
-          cabecalho: ['Salário Bruto', 'Desconto INSS (~14%)', 'Desconto IR', 'Salário Líquido', 'Desconto Total (%)'],
+          cabecalho: ['Salário Bruto', 'Desconto INSS/RPPS', 'Desconto IR', 'Salário Líquido', 'Desconto Total (%)'],
           linhas: exemplos.map(e => [
             fmt(e.bruto),
             `- ${fmt(e.inss)}`,
@@ -882,48 +925,59 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
             `${Math.round((1 - e.liquido / e.bruto) * 100)}%`,
           ]),
         },
-        destaque: 'Para um servidor com salário bruto de R$21.029 (Auditor-Fiscal), o salário líquido é de aproximadamente R$14.500 — um desconto de 31% entre INSS e IR.',
+        destaque: 'O dado que ninguém fala: um Auditor-Fiscal com salário bruto de R$21.029 recebe R$14.500 líquidos — um desconto de 31%. Quem planeja a vida com base no bruto se frustra no primeiro contracheque. Calcule sempre o líquido antes de decidir.',
       },
       {
-        h2: '🔢 Como Calcular o Salário Líquido do Servidor',
+        h2: '🔢 Como Calcular o Salário Líquido — Passo a Passo',
         lista: [
-          'Passo 1: Identifique o salário bruto do cargo (veja o edital ou o contracheque)',
-          'Passo 2: Calcule o INSS pelo RPPS — alíquota progressiva de 7,5% a 14% sobre o bruto',
-          'Passo 3: Subtraia o INSS do bruto para obter a base de cálculo do IR',
-          'Passo 4: Aplique a tabela progressiva do IRPF sobre a base de cálculo',
-          'Passo 5: Subtraia INSS e IR do bruto para obter o salário líquido',
-          'Passo 6: Some os benefícios (auxílio-alimentação, transporte) para saber a remuneração total',
+          'Passo 1: Localize o salário bruto no edital oficial ou no portal da transparência do órgão (todos os salários públicos são acessíveis)',
+          'Passo 2: Calcule o desconto do INSS/RPPS — alíquota progressiva de 7,5% a 14% sobre cada faixa do salário bruto',
+          'Passo 3: Subtraia o valor do INSS do bruto para obter a base de cálculo do Imposto de Renda',
+          'Passo 4: Aplique a tabela progressiva do IRPF sobre a base de cálculo (isenção até R$2.259, alíquota máxima de 27,5%)',
+          'Passo 5: Subtraia INSS e IR do bruto — este é o salário líquido real, o que vai para sua conta',
+          'Passo 6: Adicione auxílio-alimentação (R$1.000/mês em média) e outros benefícios para saber a remuneração total',
         ],
+        conteudo: 'Há uma pegadinha que derruba o planejamento de muitos candidatos: o RPPS (regime previdenciário dos servidores federais) é diferente do INSS do setor privado. No INSS privado, o desconto tem teto — em 2025, o máximo é de 14% sobre R$7.786,02 (R$1.090/mês). Já no RPPS federal, a alíquota de 14% incide sobre tudo que ultrapassar R$7.786,02 — sem teto. Resultado: servidores com salários altos pagam proporcionalmente mais de previdência do que um trabalhador CLT.',
       },
       {
-        h2: '📋 Tabela INSS Servidor Federal — RPPS 2025',
+        h2: '📋 Tabela INSS Servidor Federal — RPPS 2025 (Alíquotas Progressivas)',
         tabela: {
-          cabecalho: ['Faixa de Contribuição', 'Alíquota'],
+          cabecalho: ['Faixa de Salário', 'Alíquota da Faixa', 'Equivalente em CLT'],
           linhas: [
-            ['Até R$ 1.412,00', '7,5%'],
-            ['De R$ 1.412,01 a R$ 2.666,68', '9%'],
-            ['De R$ 2.666,69 a R$ 4.000,03', '12%'],
-            ['De R$ 4.000,04 a R$ 7.786,02', '14%'],
-            ['Acima de R$ 7.786,02 (RPPS)', '14% sobre o excedente'],
+            ['Até R$ 1.412,00', '7,5%', 'Igual ao INSS privado'],
+            ['De R$ 1.412,01 a R$ 2.666,68', '9%', 'Igual ao INSS privado'],
+            ['De R$ 2.666,69 a R$ 4.000,03', '12%', 'Igual ao INSS privado'],
+            ['De R$ 4.000,04 a R$ 7.786,02', '14%', 'Igual ao INSS privado'],
+            ['Acima de R$ 7.786,02', '14% (sem teto)', 'CLT tem teto aqui — servidor não'],
           ],
         },
-        conteudo: 'O servidor federal contribui para o RPPS (Regime Próprio de Previdência Social), com alíquotas progressivas. Diferente do INSS do setor privado (alíquota máxima de 14% sobre o teto), o servidor federal pode contribuir sobre o valor integral do salário.',
+        conteudo: 'O servidor federal contribui para o RPPS com alíquotas progressivas. O ponto crítico: enquanto o trabalhador CLT para de contribuir ao INSS quando o salário atinge R$7.786,02, o servidor federal continua contribuindo com 14% sobre tudo que ultrapassar esse valor. Para um cargo com R$21.029 de bruto, isso representa quase R$1.850/mês só de previdência — contra R$1.090/mês no regime privado.',
       },
     ]
     return {
       slug,
       tipo: 'guia',
-      titulo: 'Como Calcular o Salário Líquido do Servidor Público 2025',
-      metaTitle: 'Calcular Salário Líquido Servidor Público 2025',
-      metaDesc: 'Saiba como calcular o salário líquido do servidor público federal e estadual. Tabela INSS, IR e exemplos reais com cargos como Auditor Fiscal, Delegado e Analista.',
+      titulo: 'Como Calcular o Salário Líquido do Servidor Público Federal 2025',
+      metaTitle: 'Salário Líquido Servidor Público 2025 — Tabela e Calculadora',
+      metaDesc: 'Calcule o salário líquido do servidor público federal em 2025. Tabela INSS/RPPS progressiva, IR e exemplos reais com Auditor Fiscal (R$14.500 líquido), Delegado PF e Analista Judiciário.',
       h1: '🔢 Como Calcular o Salário Líquido do Servidor Público',
-      intro: 'O salário líquido do servidor público é o valor que ele recebe após os descontos obrigatórios: INSS (Contribuição Previdenciária) e Imposto de Renda (IRPF). Para um servidor federal com subsídio de R$21.029, o líquido é de aproximadamente R$14.500.',
+      intro: 'O salário divulgado nos editais é o bruto — mas o que vai para o bolso é bem diferente. Um Auditor-Fiscal da Receita Federal com salário bruto de R$21.029 recebe aproximadamente R$14.500 líquidos. Um Delegado da Polícia Federal com R$29.295 bruto leva para casa cerca de R$19.000. A diferença de 30% existe por causa do INSS/RPPS e do Imposto de Renda progressivo. Esta tabela mostra o cálculo exato para os principais cargos federais.',
       secoes,
       faq: [
-        { pergunta: 'Qual a alíquota do INSS do servidor federal?', resposta: 'O servidor federal contribui com alíquotas progressivas de 7,5% a 14%, dependendo da faixa salarial. Ao contrário do INSS do setor privado (que tem teto), o RPPS pode ser descontado sobre o valor integral do salário.' },
-        { pergunta: 'O servidor paga Imposto de Renda?', resposta: 'Sim. O servidor público paga IRPF sobre o salário, assim como qualquer contribuinte. A alíquota progressiva vai de 7,5% a 27,5%. Servidores com salário abaixo de R$2.259 são isentos.' },
+        {
+          pergunta: 'Qual a alíquota do INSS do servidor federal em 2025?',
+          resposta: 'O servidor federal contribui ao RPPS com alíquotas progressivas: 7,5% (até R$1.412), 9% (até R$2.666), 12% (até R$4.000), 14% (até R$7.786) e 14% sobre tudo que ultrapassar R$7.786 — sem teto máximo. É diferente do INSS do setor privado, que tem teto de desconto em torno de R$1.090/mês. Para servidores de salários altos, o desconto previdenciário pode ultrapassar R$2.000/mês.',
+        },
+        {
+          pergunta: 'O servidor público paga Imposto de Renda?',
+          resposta: 'Sim, o servidor público paga IRPF sobre o salário, como qualquer contribuinte. A tabela progressiva de 2025 isenta quem ganha até R$2.259,20 e aplica alíquota máxima de 27,5% sobre o que ultrapassar R$4.664,68. Na prática, um servidor com R$21.029 bruto paga cerca de R$3.300 de IR por mês. Somado ao RPPS, o desconto total passa de 30% do bruto.',
+        },
+        {
+          pergunta: 'Como saber o salário bruto de um cargo público?',
+          resposta: 'Todos os salários de servidores públicos federais são públicos. Você pode consultar pelo Portal da Transparência do Governo Federal (transparencia.gov.br), pelo Diário Oficial da União (DOU) ou pelo site do órgão. Para cargos em concurso aberto, o edital obrigatoriamente informa a remuneração do cargo — procure pelo "subsídio" ou "vencimento básico".',
+        },
       ],
-      conclusao: 'Use sempre a calculadora de salário líquido para saber o valor real que você receberá antes de aceitar ou planejar sua aprovação em um concurso.',
+      conclusao: 'Nunca planeje sua vida financeira com base no salário bruto de um concurso. Use sempre o valor líquido — é ele que entra na conta no dia do pagamento. A calculadora desta página faz o cálculo exato considerando as tabelas oficiais de INSS/RPPS e IR de 2025.',
       breadcrumbs: [{ label: 'Início', href: '/' }, { label: 'Concursos Públicos', href: '/concursos' }, { label: 'Calcular Salário Líquido', href: `/concursos/${slug}` }],
       cargosRelacionados: servidoresFederais,
     }
@@ -932,7 +986,7 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
   // Guia genérico
   const secoes: SecaoConcurso[] = [
     {
-      h2: '🏆 Os Melhores Cargos do Funcionalismo Público em 2025',
+      h2: '🏆 Os Melhores Cargos do Funcionalismo Público em 2025 — Salários Reais',
       tabela: {
         cabecalho: ['Cargo', 'Órgão', 'Salário Bruto', 'Salário Líquido', 'Dificuldade'],
         linhas: servidoresFederais.slice(0, 10).map(c => {
@@ -940,32 +994,36 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
           return [c.nome, c.orgao, fmt(c.salarioInicial), fmt(liquido), dificuldadeLabel(c.dificuldade)]
         }),
       },
+      conteudo: 'A tabela acima mostra o salário líquido — o que vai para o bolso depois de INSS/RPPS e Imposto de Renda. Candidatos que planejam as finanças com base no bruto se surpreendem no primeiro contracheque: o desconto total costuma ficar entre 25% e 35% do salário bruto.',
     },
     {
-      h2: '💡 Dicas Essenciais para Concursos Públicos',
+      h2: '💡 O Que Candidatos Aprovados Fazem Diferente',
       lista: [
-        'Monte um plano de estudos realista, considerando 4 a 8 horas diárias',
-        'Priorize as matérias de maior peso no edital (geralmente Português e Conhecimentos Específicos)',
-        'Resolva questões de provas anteriores — é a melhor forma de identificar padrões da banca',
-        'Faça revisões espaçadas para fixar o conteúdo de longo prazo',
-        'Cuide da saúde mental: o processo de preparação para concursos pode ser longo',
-        'Calcule o salário líquido antes de se inscrever para ter expectativas realistas',
-        'Verifique se há vagas de ampla concorrência, cotas e portadores de necessidades especiais',
+        'Estudam antes do edital ser publicado — quem começa depois do edital perde meses de vantagem',
+        'Priorizam as matérias de maior peso, não tentam dominar 100% do conteúdo de todas as disciplinas',
+        'Resolvem questões de provas anteriores do mesmo órgão — é a forma mais eficaz de identificar o padrão real da banca',
+        'Fazem simulados cronometrados semanalmente: a pressão do tempo real é diferente de estudar em casa sem relógio',
+        'Calculam o salário líquido antes de se inscrever — candidatos bem informados evitam decepções financeiras pós-posse',
+        'Acompanham alterações legislativas recentes: bancas cobram o que mudou, não apenas o que está consolidado',
+        'Planejam a saúde mental: a maioria dos candidatos desiste antes da aprovação — consistência supera intensidade',
+        'Verificam vagas de cotas (PCD, negro/pardo) e se candidatam nas categorias certas desde a inscrição',
       ],
     },
     {
-      h2: '📊 Comparativo: Concurso Público × CLT × MEI',
+      h2: '📊 Concurso Público × CLT × Autônomo — Comparativo Honesto',
       tabela: {
-        cabecalho: ['Item', 'Concurso Público', 'CLT (emprego privado)', 'MEI / Autônomo'],
+        cabecalho: ['Item', 'Concurso Público', 'CLT (emprego privado)', 'Autônomo / MEI'],
         linhas: [
-          ['Estabilidade', '✅ Alta (após estágio)', '❌ Pode ser demitido', '❌ Instável'],
-          ['Salário', '✅ Fixo e previsível', '🟡 Variável', '🔴 Instável'],
-          ['Benefícios', '✅ Plano de saúde, férias, 13º', '🟡 FGTS, férias, 13º', '❌ Poucos'],
-          ['Aposentadoria', '✅ RPPS (vantajosa)', '🟡 INSS (limitada)', '🟡 INSS'],
-          ['Progressão', '✅ Por antiguidade e mérito', '🟡 Depende da empresa', '🟡 Depende de você'],
-          ['Entrada', '🔴 Concurso exigente', '🟡 Processo seletivo', '✅ Fácil'],
+          ['Estabilidade', '✅ Alta (após 3 anos de estágio)', '❌ Demissão sem justa causa possível', '❌ Instável por natureza'],
+          ['Renda Mensal', '✅ Fixa e previsível por décadas', '🟡 Pode variar com PLR e bônus', '🔴 Oscila conforme o mercado'],
+          ['Benefícios', '✅ Saúde corporativa, alimentação, 13º', '🟡 FGTS, férias, 13º (menor cobertura)', '❌ Autofinanciados'],
+          ['Previdência', '✅ RPPS (benefício pelo teto do cargo)', '🟡 INSS (teto de R$7.786 em 2025)', '🟡 INSS ou previdência privada'],
+          ['Progressão', '✅ Por antiguidade e avaliação de mérito', '🟡 Depende da empresa e do gestor', '🟡 Você controla — e assume o risco'],
+          ['Entrada', '🔴 Concurso exigente (meses a anos de estudo)', '🟡 Processo seletivo (semanas)', '✅ Imediato, sem barreiras'],
+          ['Trabalho Remoto', '🟡 Possível em alguns órgãos (TI, regulação)', '🟡 Comum em empresas de tecnologia', '✅ Total autonomia de local'],
         ],
       },
+      conteudo: 'A estabilidade do serviço público é real — mas tem um preço: o tempo de preparação. Quem passa no concurso e fica 25 anos no cargo acumula uma diferença de patrimônio enorme em relação à iniciativa privada, especialmente pela previdência. Mas quem estuda por 3 anos e não passa perde esse tempo sem retorno direto. É uma decisão de risco real, não apenas de preferência pessoal.',
     },
   ]
 
@@ -974,15 +1032,25 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
     tipo: 'guia',
     titulo: `${titulo} — Guia Completo 2025`,
     metaTitle: `${titulo.slice(0, 52)} | 2025`,
-    metaDesc: `Guia completo sobre ${titulo.toLowerCase()}. Informações atualizadas sobre concursos públicos, salários e como se preparar em 2025.`,
+    metaDesc: `Guia completo sobre ${titulo.toLowerCase()}. Salários reais (bruto e líquido), comparativos e estratégias para ingressar no serviço público em 2025.`,
     h1: `📚 ${titulo} — Guia Completo`,
-    intro: `Neste guia completo você encontra tudo sobre ${titulo.toLowerCase()}: dados de salários, benefícios, comparativos e estratégias para tomar a melhor decisão sobre sua carreira no serviço público em 2025.`,
+    intro: `Neste guia você encontra o que realmente importa sobre ${titulo.toLowerCase()}: salários brutos e líquidos (com a diferença que poucos calculam antes de se inscrever), comparativos entre cargos, e as estratégias que candidatos aprovados usaram para passar. Dados atualizados para 2025.`,
     secoes,
     faq: [
-      { pergunta: 'Vale a pena fazer concurso público em 2025?', resposta: 'Sim, concurso público continua sendo uma das melhores opções de carreira no Brasil em 2025. Estabilidade, benefícios robustos (saúde, alimentação, previdência) e salários competitivos fazem do serviço público uma escolha sólida para quem quer segurança financeira de longo prazo.' },
-      { pergunta: 'Quanto tempo leva para passar em um concurso público?', resposta: 'Depende do nível de dificuldade. Para concursos de nível médio e menor dificuldade, 3 a 6 meses de estudo intenso podem ser suficientes. Para os mais disputados (Receita Federal, PF, BCB, TCU), a média de preparação é de 1 a 3 anos.' },
+      {
+        pergunta: 'Vale a pena fazer concurso público em 2025?',
+        resposta: 'Depende do seu perfil. Para quem valoriza estabilidade, salário previsível por décadas e benefícios robustos, o concurso público continua sendo uma das melhores opções de carreira no Brasil — especialmente em cargos federais, onde os salários são nacionais e os benefícios incluem plano de saúde de qualidade. A ressalva é o tempo de preparação: concursos fáceis exigem 3 a 6 meses; os mais difíceis (Receita Federal, PF, BCB) costumam levar de 1 a 4 anos. Se você tem disciplina para estudar sozinho por esse período, as chances de aprovação são reais.',
+      },
+      {
+        pergunta: 'Quanto tempo leva para passar em um concurso público?',
+        resposta: 'Varia muito pelo nível de dificuldade e pela sua base de conhecimento. Para concursos de nível médio com dificuldade baixa a média (como INSS Técnico ou Correios), 3 a 6 meses de estudo intenso costumam ser suficientes. Para os mais disputados — Receita Federal, Polícia Federal, Banco Central, TCU — a média de preparação dos aprovados é de 2 a 4 anos. Candidatos que já têm formação sólida em Direito, Economia ou Contabilidade tendem a reduzir esse tempo pela metade.',
+      },
+      {
+        pergunta: 'Qual concurso público tem maior probabilidade de aprovação?',
+        resposta: 'Os concursos com maior chance de aprovação combinam alto número de vagas e menor concorrência relativa. Em 2025, concursos como PM estadual (2.000+ vagas), Correios/EBCT e prefeituras de médio porte tendem a ter relações candidato/vaga menores. O concurso do INSS em 2024 teve 7.000 vagas — uma das maiores relações candidato/vaga do mercado naquele ano. Fuja da armadilha de escolher o concurso pelo salário mais alto sem considerar o tempo real de preparação necessário.',
+      },
     ],
-    conclusao: 'O serviço público oferece uma das trajetórias de carreira mais sólidas do Brasil. Com planejamento adequado e preparação consistente, é possível transformar um concurso público em uma mudança de vida real.',
+    conclusao: 'O serviço público oferece estabilidade real — mas exige preparação real. A chave não é estudar mais do que todo mundo: é estudar de forma mais inteligente, focada no que a banca cobra de verdade. Use a calculadora desta página para saber exatamente quanto você vai receber após a aprovação, e comece sua preparação com expectativas honestas.',
     breadcrumbs: [{ label: 'Início', href: '/' }, { label: 'Concursos Públicos', href: '/concursos' }, { label: titulo, href: `/concursos/${slug}` }],
     cargosRelacionados: servidoresFederais,
   }

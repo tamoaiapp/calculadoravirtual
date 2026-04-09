@@ -135,86 +135,89 @@ function gerarPaginaDeducao(slug: string, d: typeof DEDUCOES[0], ano: 2025 | 202
     publishedAt: '2026-04-07',
     tags: ['dedução IR', d.nome.toLowerCase(), `IR ${anoStr}`, 'imposto de renda', 'IRPF'],
     tempoLeitura: 10,
-    intro: `A dedução de <strong>${d.nome}</strong> é uma das formas legais de reduzir o valor do Imposto de Renda Pessoa Física (IRPF) que você deve pagar ou aumentar sua restituição.\n\n${d.limiteDesc ? `<strong>Limite ${anoStr}:</strong> ${d.limiteDesc}.` : ''} Neste guia, você vai aprender exatamente como funciona essa dedução, quais documentos guardar, como calcular o benefício e os erros que colocam contribuintes na malha fina.\n\nEssa informação vale dinheiro: usar corretamente as deduções disponíveis pode fazer diferença de centenas ou até milhares de reais na sua declaração.`,
+    intro: `Tem contribuinte que paga imposto a mais todo ano porque simplesmente não sabe que tem direito à dedução de <strong>${d.nome}</strong>. Não é falta de caráter — é falta de informação. A Receita Federal não vai te lembrar.\n\n${d.limiteDesc ? `<strong>Limite em ${anoStr}:</strong> ${d.limiteDesc}. Acima disso, o excedente não deduz — então o planejamento durante o ano importa.` : 'Sem limite fixo para essa dedução — tudo que for comprovado pode ser usado.'} \n\nEste guia explica como funciona essa dedução na prática, quais documentos guardar, como calcular o quanto você economiza e os erros que mandaram contribuintes para a malha fina nos últimos anos. Cada R$ 1.000 que você deduz numa alíquota de 27,5% significa R$ 275 a menos de imposto. Multiplica isso pelo que você paga ao longo do ano.`,
     secoes: [
       {
-        h2: `O que é a Dedução de ${d.nome}?`,
-        conteudo: `<p>${d.como_calcular}</p>`,
-        destaque: d.limiteDesc ? `💡 Limite ${anoStr}: ${d.limiteDesc}` : undefined,
+        h2: `Como Funciona a Dedução de ${d.nome} na Prática`,
+        conteudo: `<p>${d.como_calcular}</p><p>Essa dedução entra na base de cálculo do IRPF — ou seja, ela reduz o valor sobre o qual a alíquota incide, não o imposto diretamente. O efeito prático: menos base, menos imposto. Para quem está na faixa de 27,5%, cada R$ 1.000 deduzido vale R$ 275 de imposto real a menos.</p>`,
+        destaque: d.limiteDesc ? `Limite oficial em ${anoStr} (Instrução Normativa RFB): ${d.limiteDesc}` : 'Sem teto definido — comprove tudo e deduza o que foi efetivamente gasto.',
       },
       {
-        h2: 'Exemplo Prático com Cálculo',
-        conteudo: `<p>${d.exemplo}</p>`,
+        h2: 'Exemplo Real com Números',
+        conteudo: `<p>${d.exemplo}</p><p>Em termos práticos: um contribuinte na faixa de 27,5% que usa essa dedução corretamente reduz sua base tributável — e paga menos imposto. Vale a pena simular antes de escolher entre o modelo completo e o simplificado.</p>`,
         tabela: {
-          cabecalho: ['Situação', 'Valor'],
+          cabecalho: ['Informação', 'Detalhe'],
           linhas: [
             ['Tipo de dedução', d.nome],
-            ['Limite anual', d.limiteDesc ?? 'Sem limite definido'],
-            ['Categoria', d.categoria === 'saude' ? 'Saúde' : d.categoria === 'familia' ? 'Família' : d.categoria === 'previdencia' ? 'Previdência' : d.categoria === 'profissional' ? 'Profissional' : 'Outros'],
+            ['Limite anual em ' + anoStr, d.limiteDesc ?? 'Sem limite definido — use o que foi gasto e comprovado'],
+            ['Categoria fiscal', d.categoria === 'saude' ? 'Saúde — sem teto, comprovante obrigatório' : d.categoria === 'familia' ? 'Família — valor fixo por dependente' : d.categoria === 'previdencia' ? 'Previdência — até 12% da renda bruta' : d.categoria === 'profissional' ? 'Profissional — via livro-caixa para autônomos' : 'Outros — consulte as regras específicas'],
+            ['Onde informar', 'Modelo completo da declaração IRPF'],
           ],
         },
       },
       {
-        h2: 'Documentos Necessários',
-        intro: 'Guarde esses documentos por pelo menos 5 anos após a declaração:',
+        h2: 'Documentos para Guardar — Mínimo 5 Anos',
+        intro: 'A Receita Federal tem prazo de 5 anos para revisar declarações. Se vier a malha fina, você precisa comprovar o que declarou:',
         lista: d.documentos,
-        destaque: '⚠️ Sem comprovação documental, a Receita Federal pode glosar a dedução na malha fina e cobrar o imposto + multa.',
+        destaque: 'ATENÇÃO: Desde 2020, prestadores de saúde (médicos, dentistas, hospitais) informam os valores recebidos à Receita via DMED. Se o que você declarar for maior do que o que eles informaram, a Receita cruza automaticamente. Sem recibo = malha fina.',
       },
       {
-        h2: 'Tabela IRPF 2025 — Referência',
-        intro: 'Veja como essa dedução impacta sua faixa de tributação:',
+        h2: `Tabela IRPF ${anoStr} — Como essa Dedução Impacta Sua Faixa`,
+        intro: 'A dedução reduz a base de cálculo. Se você estiver na faixa de 27,5%, reduzir a base em R$ 5.000 economiza R$ 1.375 de imposto:',
         tabela: {
           cabecalho: cabecalhoTabela,
           linhas: linhasTabela2025,
         },
       },
       {
-        h2: 'Dicas Para Aproveitar ao Máximo',
+        h2: 'Como Aproveitar ao Máximo Essa Dedução',
         lista: [
           d.dica,
-          'Guarde todos os comprovantes durante o ano — a organização mensal evita dor de cabeça em março.',
-          'Compare o modelo completo com o simplificado antes de escolher — às vezes o simplificado (20%) é mais vantajoso.',
-          'Em caso de dúvida, consulte um contador — o custo do serviço é inferior ao imposto economizado.',
+          'Organize os comprovantes por mês em uma pasta digital — foto no celular já resolve. Em março, você vai agradecer.',
+          'Simule os dois modelos no programa IRPF antes de enviar — o simplificado (20% automático, teto R$ 16.754,34) às vezes supera o completo para quem tem poucas deduções.',
+          'Se tiver dúvida sobre o que entra e o que não entra, consulte um contador. O custo da consulta geralmente é bem menor do que o imposto que você perderia por não usar a dedução.',
+          'Para despesas de dependentes (filhos, cônjuge), mantenha os documentos no nome do dependente — não basta ter o CPF, o nome no recibo importa.',
         ],
       },
       {
-        h2: 'Comparativo: Com e Sem essa Dedução',
-        conteudo: '<p>Veja o impacto concreto de usar essa dedução na prática. Para um contribuinte com renda de R$ 8.000/mês:</p>',
+        h2: 'Quanto Você Economiza: Comparativo Real',
+        conteudo: '<p>Para um contribuinte com renda mensal de R$ 8.000, veja o impacto de usar essa dedução corretamente:</p>',
         tabela: {
-          cabecalho: ['', 'Sem Dedução', 'Com Dedução'],
+          cabecalho: ['', 'Sem Usar a Dedução', 'Usando a Dedução'],
           linhas: [
             ['Renda bruta mensal', 'R$ 8.000,00', 'R$ 8.000,00'],
-            ['Base de cálculo', 'R$ 8.000,00', 'Reduzida pela dedução'],
-            ['Alíquota', '27,5%', '27,5% (sobre base menor)'],
-            ['Imposto devido', 'Maior', 'Menor'],
+            ['Base de cálculo do IR', 'R$ 8.000,00', 'Reduzida pelo valor dedutível'],
+            ['Alíquota marginal aplicada', '27,5%', '27,5% (sobre base menor)'],
+            ['Imposto mensal', 'Máximo da faixa', 'Menor — economia real'],
+            ['Economia anual estimada', '—', 'Até R$ 3.300/ano (na faixa de 27,5%)'],
           ],
         },
-        destaque: 'Cada R$ 1.000 de dedução na base de cálculo de quem paga 27,5% representa R$ 275 a menos de IR.',
+        destaque: 'Cada R$ 1.000 deduzido por quem está na alíquota de 27,5% representa R$ 275 a menos de imposto. Multiplique por 12 meses e pelo total de deduções que você tem direito.',
       },
     ],
     faq: [
       {
         pergunta: `Posso usar a dedução de ${d.nome} no modelo simplificado?`,
-        resposta: 'No modelo simplificado, você usa automaticamente 20% de desconto sem comprovar nada. As deduções detalhadas (como esta) só são aplicadas no modelo completo. Calcule os dois cenários antes de escolher.',
+        resposta: 'Não. No modelo simplificado, você troca todas as deduções reais por um desconto automático de 20% (limite de R$ 16.754,34/ano). Se suas deduções reais — incluindo esta — somarem mais de 20% da sua renda tributável, o modelo completo é mais vantajoso. O programa IRPF calcula os dois e mostra qual vale mais. Não assuma — simule.',
       },
       {
         pergunta: `Qual é o limite de ${d.nome} em ${anoStr}?`,
-        resposta: d.limiteDesc ?? 'Não há limite específico definido — consulte as regras vigentes no site da Receita Federal.',
+        resposta: d.limiteDesc ? `Em ${anoStr}, o limite é: ${d.limiteDesc}. Gastos acima desse teto não são dedutíveis, mas os que ficarem dentro dele devem ser todos informados — não deixe passar nenhum real de dedução a que você tem direito.` : `Não há teto definido para essa dedução — declare o valor real com comprovação. Consulte sempre a Instrução Normativa RFB vigente no site da Receita Federal para confirmar eventuais mudanças.`,
       },
       {
         pergunta: 'O que acontece se eu declarar mais do que tenho comprovante?',
-        resposta: 'A Receita Federal pode cruzar suas informações com as das fontes pagadoras e prestadores de serviço. Sem comprovante, você vai para a malha fina e terá que pagar o imposto glosado mais multa de 75% a 150%.',
+        resposta: 'A Receita Federal cruza automaticamente com as informações enviadas pelos prestadores (DMED para saúde, DIRF para empregadores, e-Financeira para bancos). Se o que você declarou não bater, cai na malha fina. Aí você tem dois caminhos: apresentar o comprovante dentro do prazo dado pela Receita, ou retificar a declaração removendo o item. Quem retifica antes de ser notificado paga multa de até 20%. Após a notificação, a multa pode ser de 75% a 150% do imposto glosado.',
       },
       {
         pergunta: 'Preciso enviar os documentos junto com a declaração?',
-        resposta: 'Não. Os documentos ficam com você. Mas em caso de intimação ou malha fina, você deve apresentá-los à Receita Federal em até 30 dias.',
+        resposta: 'Não. Os documentos ficam com você e são apresentados apenas se a Receita Federal solicitar — o que acontece em casos de malha fina ou fiscalização. Você tem normalmente 30 dias para responder a uma intimação. Guarde tudo por pelo menos 5 anos após o envio da declaração.',
       },
       {
         pergunta: `${d.nome} vale para os dependentes também?`,
-        resposta: 'Depende do tipo. Despesas médicas e educação de dependentes são dedutíveis da mesma forma. Outras deduções são pessoais e não se replicam para dependentes.',
+        resposta: 'Depende do tipo de dedução. Despesas médicas e educação de dependentes (filhos, cônjuge, pais dependentes) entram normalmente no modelo completo. A dedução por dependente em si (R$ 2.275,08/ano) é um tipo específico — não se acumula com outros tipos. Em caso de dúvida sobre quem pode ser incluído como dependente, consulte o art. 35 do Decreto 9.580/2018 ou a orientação de um contador.',
       },
     ],
-    conclusao: `A dedução de ${d.nome} é um direito legal do contribuinte e deve ser aproveitada ao máximo. ${d.dica} Organize seus comprovantes durante o ano inteiro e, na hora da declaração, compare o modelo completo com o simplificado para garantir o maior benefício fiscal possível.`,
+    conclusao: `A dedução de ${d.nome} é um direito garantido pela legislação tributária brasileira — e não aproveitar é pagar imposto que não precisa ser pago. ${d.dica} A lógica é simples: organize os comprovantes ao longo do ano (não tente reconstituir tudo em março), compare completo e simplificado no programa IRPF antes de enviar, e guarde os documentos por 5 anos. Dinheiro de volta na restituição ou imposto menor na apuração — ambos valem o trabalho.`,
   }
 }
 
@@ -232,46 +235,48 @@ function gerarPaginaSituacao(slug: string, s: typeof SITUACOES[0], ano: 2025 | 2
     publishedAt: '2026-04-07',
     tags: [s.slug, `IR ${anoStr}`, 'declaração IR', s.nome.toLowerCase(), 'IRPF'],
     tempoLeitura: 12,
-    intro: `<strong>${s.nome}</strong> tem situação fiscal específica na declaração do Imposto de Renda ${anoStr}. ${s.descricao}\n\nNeste guia completo, você vai entender quais rendimentos declarar, quais deduções usar, os erros mais comuns que levam à malha fina e as melhores estratégias para pagar menos (dentro da lei).\n\n${s.obrigatorio_declarar ? `✅ <strong>Obrigado a declarar:</strong> Sim — ${s.nome} geralmente se enquadra nas regras de obrigatoriedade.` : `ℹ️ <strong>Obrigatoriedade:</strong> Pode não ser obrigado — verifique os critérios da Receita Federal para o ano de ${anoStr}.`}`,
+    intro: `<strong>${s.nome}</strong>: ${s.descricao}\n\nQuem declara errado não é necessariamente desonesto — na maior parte dos casos é alguém que não sabia qual rendimento informar, esqueceu um informe de rendimentos ou não conhecia uma dedução a que tinha direito. O resultado é o mesmo: malha fina, restituição retida, ou imposto a mais pago sem necessidade.\n\nEste guia foi escrito para a sua situação específica. Você vai saber o que declarar, onde informar, o que deduzir e os erros que mais mandaram pessoas como você para a malha fina nos últimos anos.\n\n${s.obrigatorio_declarar ? `<strong>Obrigatoriedade em ${anoStr}:</strong> Sim — ${s.nome} geralmente se enquadra nas regras. Mas mesmo quem não é obrigado pode declarar para recuperar imposto retido na fonte.` : `<strong>Obrigatoriedade em ${anoStr}:</strong> Depende dos valores. Verifique se você se enquadra nos critérios da Receita Federal — renda acima de R$ 33.888/ano, bens acima de R$ 300.000, operações em bolsa, entre outros.`}`,
     secoes: [
       {
-        h2: `Rendimentos que ${s.nome} Deve Declarar`,
-        intro: 'Todos esses rendimentos devem ser informados na declaração:',
+        h2: `O que ${s.nome} Precisa Declarar`,
+        intro: 'Cada um desses rendimentos tem um campo específico no programa IRPF. Não deixe nenhum de fora — a Receita Federal recebe essas informações das fontes pagadoras independentemente de você declarar:',
         lista: s.rendimentos,
-        destaque: `💡 Principal dedução para ${s.nome}: ${s.deducao_principal}`,
+        destaque: `Dedução principal para ${s.nome}: ${s.deducao_principal}. Use o modelo completo para aproveitar — no simplificado, você troca tudo por um desconto fixo de 20%.`,
       },
       {
-        h2: 'Deduções Disponíveis',
-        intro: 'Essas deduções se aplicam à sua situação — use o modelo completo para aproveitá-las:',
+        h2: 'Deduções que Valem Para Você',
+        intro: 'Cada dedução abaixo reduz a base de cálculo do IR — o que significa menos imposto ou mais restituição. Todas exigem o modelo completo:',
         lista: s.deducoes_aplicaveis.length > 0
           ? s.deducoes_aplicaveis.map(d => {
               const deducao = DEDUCOES.find(x => x.slug === d)
-              return deducao ? `${deducao.nome} — ${deducao.limiteDesc ?? 'sem limite definido'}` : d
+              return deducao ? `${deducao.nome}: ${deducao.limiteDesc ?? 'sem limite — comprove o gasto e deduza tudo'}` : d
             })
-          : ['Verifique as deduções aplicáveis à sua situação no site da Receita Federal'],
+          : ['Consulte as deduções aplicáveis no site da Receita Federal (receita.economia.gov.br)'],
       },
       {
-        h2: 'Tabela IRPF 2025 — Faixas de Tributação',
+        h2: `Tabela IRPF ${ano} — Quanto Você Paga de IR`,
         tabela: {
           cabecalho: cabecalhoTabela,
           linhas: linhasTabela2025,
         },
         destaque: ano === 2026
-          ? '🎉 Em 2026: isenção ampliada até R$ 5.000/mês — verifique o novo cálculo.'
-          : '📌 Tabela vigente para declaração de 2025 (ano-base 2024).',
+          ? 'Em 2026: isenção ampliada até R$ 5.000/mês. Quem ganhava R$ 3.000 e pagava cerca de R$ 55/mês passa a pagar zero.'
+          : 'Tabela vigente para a declaração de 2025 (ano-base 2024), conforme Instrução Normativa RFB 2.178/2024.',
       },
       {
-        h2: 'Armadilhas e Erros Comuns',
-        intro: 'Esses são os erros que levam contribuintes como você à malha fina:',
+        h2: 'Erros que Colocam na Malha Fina — Casos Reais',
+        intro: 'Esses são os erros mais frequentes de contribuintes na mesma situação que você. Cada um deles já gerou intimação da Receita Federal:',
         lista: s.armadilhas,
+        destaque: 'Se você se identificou com algum desses erros em declarações passadas, ainda dá tempo de retificar. Retificações espontâneas têm multa menor do que correções após intimação da Receita.',
       },
       {
-        h2: 'Documentos que Você Precisa Reunir',
+        h2: 'Documentos para Reunir Antes de Começar',
+        intro: 'Tente reunir tudo antes de abrir o programa — declarar com documentos faltando aumenta as chances de erro:',
         lista: s.documentos,
-        destaque: '📁 Organize os documentos por categoria (rendimentos, deduções, bens) para facilitar o preenchimento.',
+        destaque: 'Use a declaração pré-preenchida disponível no e-CAC (conta Gov.br nível prata ou ouro). Ela já carrega rendimentos informados por empregadores, bancos e corretoras — economiza tempo e reduz erros.',
       },
       {
-        h2: 'Dicas Exclusivas para sua Situação',
+        h2: 'Estratégias Específicas para Sua Situação',
         lista: s.dicas,
       },
     ],
@@ -279,27 +284,27 @@ function gerarPaginaSituacao(slug: string, s: typeof SITUACOES[0], ano: 2025 | 2
       {
         pergunta: `${s.nome} é obrigado a declarar IR em ${anoStr}?`,
         resposta: s.obrigatorio_declarar
-          ? `Sim. ${s.nome} geralmente se enquadra na obrigatoriedade. Em ${anoStr}, são obrigados a declarar: quem recebeu rendimentos tributáveis acima de R$ 33.888,00 no ano (2025); tinha bens acima de R$ 300.000; realizou operações em bolsa; atividade rural, entre outros.`
-          : `Depende dos valores. ${s.nome} pode não ser obrigado se a renda total ficar abaixo do mínimo (R$ 33.888,00 anuais em 2025). Mas verifique todos os critérios na Receita Federal.`,
+          ? `Sim. ${s.nome} geralmente se enquadra na obrigatoriedade. Em ${anoStr}, devem declarar: quem recebeu rendimentos tributáveis acima de R$ 33.888,00 no ano; quem tinha bens acima de R$ 300.000 em 31/dezembro; quem realizou operações em bolsa (qualquer valor); atividade rural com receita acima de R$ 169.440; e quem teve ganho de capital na venda de bens. Mesmo quem não é obrigado pode declarar para recuperar IR retido na fonte.`
+          : `Depende dos valores. ${s.nome} pode não ser obrigado se a renda tributável anual ficar abaixo de R$ 33.888,00 (cerca de R$ 2.824/mês em 2025). Mas há outros critérios além da renda — bens acima de R$ 300.000, operações em bolsa, atividade rural — que obrigam independentemente da renda. Verifique todos na Receita Federal.`,
       },
       {
-        pergunta: `Qual modelo de declaração usar — completo ou simplificado?`,
-        resposta: `Use o modelo <strong>completo</strong> se tiver muitas deduções reais (saúde, dependentes, PGBL, livro-caixa). Use o <strong>simplificado</strong> (20% de desconto automático, limite R$ 16.754,34) se tiver poucas despesas dedutíveis. O próprio programa IRPF calcula os dois e mostra qual é mais vantajoso.`,
+        pergunta: `Completo ou simplificado — qual modelo usar na minha situação?`,
+        resposta: `O modelo <strong>completo</strong> usa deduções reais comprovadas (saúde, dependentes, PGBL, livro-caixa). O <strong>simplificado</strong> aplica desconto automático de 20% sobre a renda tributável, limitado a R$ 16.754,34/ano — sem comprovar nada. Para ${s.nome}, o completo tende a ser mais vantajoso quando há dependentes, plano de saúde ou contribuição ao PGBL. O próprio programa IRPF calcula os dois automaticamente e mostra qual é mais vantajoso — não assuma, simule.`,
       },
       {
         pergunta: `Como declarar mais de uma fonte de renda?`,
-        resposta: `Se você tem renda de mais de uma fonte (ex: salário + aluguel + freelance), deve informar todas na declaração. Cada fonte tem seu campo específico no programa IRPF. O imposto retido em cada fonte é creditado no ajuste anual.`,
+        resposta: `Se você tem renda de mais de uma fonte — salário + aluguel, salário + freelance, aposentadoria + renda de aplicações — informe todas na declaração. Cada tipo tem seu campo no programa IRPF. O imposto retido em cada fonte (IRRF) é creditado no ajuste anual. Omitir qualquer fonte é o caminho mais rápido para a malha fina, já que a Receita recebe esses dados das fontes pagadoras via DIRF.`,
       },
       {
         pergunta: `Quais são as principais deduções para ${s.nome}?`,
-        resposta: `As principais são: ${s.deducao_principal}. Além disso, despesas médicas (sem limite) e dependentes (R$ 2.275,08/ano cada) são sempre aplicáveis.`,
+        resposta: `As mais relevantes: ${s.deducao_principal}. Além dessas, despesas médicas (médico, dentista, plano de saúde — sem limite) e dependentes (R$ 2.275,08/ano por dependente) se aplicam a praticamente qualquer contribuinte. Pensão alimentícia judicial também é 100% dedutível. Use todas as que se aplicam à sua situação no modelo completo.`,
       },
       {
         pergunta: 'Posso declarar pelo celular ou precisa ser pelo computador?',
-        resposta: 'Você pode declarar pelo app "Meu Imposto de Renda" (Android e iOS) para declarações simples. Para situações mais complexas (autônomo, investimentos, livro-caixa), use o programa IRPF no computador. A declaração pré-preenchida também está disponível no app para quem tem conta Gov.br nível prata ou ouro.',
+        resposta: 'Para situações simples (um emprego CLT, sem dependentes, sem investimentos), o app "Meu Imposto de Renda" (Android e iOS) funciona bem. Para casos mais complexos — autônomo com livro-caixa, investimentos em bolsa, vários dependentes, PGBL — use o programa IRPF no computador. A declaração pré-preenchida está disponível tanto no app quanto na versão web para quem tem conta Gov.br nível prata ou ouro.',
       },
     ],
-    conclusao: `Declarar corretamente o IR sendo ${s.nome} exige atenção aos tipos de rendimento, organização dos documentos e uso estratégico das deduções disponíveis. ${s.dicas[0]} Utilize o programa IRPF ${anoStr} — disponível no site da Receita Federal — e compare os modelos completo e simplificado antes de enviar.`,
+    conclusao: `Declarar o IR sendo ${s.nome} não precisa ser complicado. O que faz a diferença: saber o que declarar (todos os rendimentos, inclusive os isentos), usar as deduções certas (saúde, dependentes, ${s.deducao_principal.split('.')[0].toLowerCase()}) e não misturar o que é de uma fonte com o que é de outra. ${s.dicas[0]} Use o programa IRPF ${anoStr} disponível no site da Receita Federal, compare os modelos completo e simplificado antes de enviar, e guarde todos os comprovantes por 5 anos. Quem declara cedo recebe a restituição nos primeiros lotes.`,
   }
 }
 
@@ -323,53 +328,59 @@ function gerarPaginaProfissao(slug: string, p: typeof PROFISSOES_IR[0], ano: 202
     publishedAt: '2026-04-07',
     tags: [p.nome.toLowerCase(), p.area.toLowerCase(), `IR ${anoStr}`, 'declaração IR', regimelabel.toLowerCase()],
     tempoLeitura: 11,
-    intro: `<strong>${p.nome}</strong> tem características específicas na declaração do Imposto de Renda ${anoStr}. Regime típico: <strong>${regimelabel}</strong>. Área: ${p.area}.\n\n${p.dica_fiscal}\n\nNeste guia, você encontra as deduções específicas para a profissão, os documentos essenciais, as armadilhas mais comuns e exemplos práticos de cálculo para ${anoStr}.`,
+    intro: `Existe um erro fiscal clássico que boa parte dos ${p.nome}s comete: não aproveitar todas as deduções a que tem direito — ou usar deduções de forma incorreta e acabar na malha fina. Regime típico: <strong>${regimelabel}</strong>. Área: ${p.area}.\n\n${p.dica_fiscal}\n\nEste guia foi escrito para quem trabalha na área de ${p.area}. Você vai ver como funciona o IR para a sua profissão, quais deduções são específicas para você, quanto paga em diferentes faixas de renda e os erros que a Receita Federal detecta com mais frequência nessa categoria.`,
     secoes: [
       {
-        h2: `Regime Tributário do ${p.nome}`,
-        conteudo: `<p>A maioria dos ${p.nome}s trabalha no regime <strong>${regimelabel}</strong>. Isso define como os rendimentos entram na declaração e quais deduções são aplicáveis.</p>`,
+        h2: `Como Funciona o IR para ${p.nome} — Regime ${regimelabel}`,
+        conteudo: `<p>A maioria dos ${p.nome}s trabalha no regime <strong>${regimelabel}</strong>. Isso define onde os rendimentos entram na declaração e quais deduções são aplicáveis — e faz uma diferença enorme no imposto final.</p>`,
         subsecoes: [
           {
-            h3: p.regime === 'clt' ? 'Como CLT funciona no IR' : p.regime === 'autonomo' ? 'Como Autônomo/PF funciona no IR' : 'Como PJ funciona no IR',
+            h3: p.regime === 'clt' ? 'Como funciona para quem é CLT' : p.regime === 'autonomo' ? 'Como funciona para quem é Autônomo (PF)' : 'Como funciona para quem atua como PJ',
             conteudo: p.regime === 'clt'
-              ? '<p>CLT: o empregador já desconta IRRF mensalmente. Na declaração anual, você informa os rendimentos do informe e pode recuperar imposto pago a mais (ou pagar a diferença). Deduções de saúde, dependentes e educação são aplicadas no ajuste.</p>'
+              ? '<p>No CLT, o empregador já retém o IRRF mensalmente conforme a tabela progressiva. Na declaração anual, você informa os valores do informe de rendimentos (disponível até 28/fevereiro), aplica as deduções (saúde, dependentes, PGBL) e faz o ajuste. Se a retenção ao longo do ano foi maior que o IR calculado — você recebe restituição. Se foi menor — paga a diferença. O erro clássico é não incluir todas as fontes de renda (um bico, aluguel de imóvel, aplicação financeira) além do salário principal.</p>'
               : p.regime === 'autonomo'
-                ? '<p>Autônomo: você mesmo deve recolher Carnê-Leão mensalmente (até o último dia útil do mês seguinte). O livro-caixa é fundamental para registrar as despesas profissionais dedutíveis. Na declaração anual, faz o ajuste de tudo que foi pago no ano.</p>'
-                : '<p>PJ (empresa): você recebe pró-labore (tributável, com INSS e IR) e pode distribuir lucros (isentos de IR se empresa no Simples ou Lucro Presumido). Na declaração pessoal, informa o pró-labore como rendimento e os lucros como isentos.</p>',
+                ? '<p>Para autônomos que recebem de pessoas físicas, o Carnê-Leão é obrigatório mensalmente — até o último dia útil do mês seguinte ao recebimento. Quem recebe de empresas (PJ), a própria empresa retém 11% de IRRF e 11% de INSS sobre o RPA. Na declaração anual, consolida tudo. O livro-caixa é a maior vantagem do autônomo: permite deduzir aluguel de consultório, materiais, salário de auxiliar, anuidade do conselho — despesas que a Receita Federal aceita como dedução da base do Carnê-Leão e do IR anual.</p>'
+                : '<p>Quem atua como PJ recebe pró-labore (tributável — com INSS e IR retidos) e pode distribuir lucros (isentos de IR se a empresa estiver no Simples Nacional ou Lucro Presumido com escrituração contábil regular). Na declaração pessoal, o pró-labore entra como "rendimento tributável recebido de PJ". Os lucros distribuídos entram em "rendimentos isentos". Misturar os dois tipos ou não informar o pró-labore corretamente são erros que aparecem muito na malha fina.</p>',
           },
         ],
-        destaque: `💡 Dica fiscal para ${p.nome}: ${p.dica_fiscal}`,
+        destaque: `Dica fiscal para ${p.nome}: ${p.dica_fiscal}`,
       },
       {
-        h2: `Deduções Específicas para ${p.nome}`,
-        intro: 'Essas são as deduções mais relevantes para sua profissão:',
+        h2: `Deduções que Todo ${p.nome} Deveria Usar`,
+        intro: 'Essas deduções são especialmente relevantes para quem atua nessa área. Cada real deduzido reduz a base de cálculo do IR:',
         lista: p.deducoes_tipicas,
-        destaque: '📌 Anuidades de conselho profissional (CRM, OAB, CREA, etc.) são dedutíveis como despesa profissional no livro-caixa.',
+        destaque: 'Anuidades de conselhos profissionais obrigatórios (CRM para médicos, OAB para advogados, CREA para engenheiros, CRC para contadores, CRN para nutricionistas) são dedutíveis como despesa profissional no livro-caixa — guarde o comprovante de pagamento.',
       },
       {
-        h2: `Tabela IRPF ${anoStr}`,
+        h2: `Tabela IRPF ${anoStr} — Referência`,
         tabela: {
           cabecalho: cabecalhoTabela,
           linhas: ano === 2025 ? linhasTabela2025 : linhasTabela2026,
         },
+        destaque: ano === 2026
+          ? 'Em 2026: isenção até R$ 5.000/mês. Quem ganha até esse valor não paga IR — impacto direto para autônomos e PJs com retirada menor.'
+          : 'Tabela 2025 conforme Instrução Normativa RFB 2.178/2024. Em 2026 a isenção sobe para R$ 5.000/mês.',
       },
       {
-        h2: 'Documentos que Você Deve Reunir',
+        h2: 'Documentos Necessários — Organize Antes de Abrir o Programa',
         lista: situacaoRelacionada
           ? situacaoRelacionada.documentos
           : [
-              'Informe de rendimentos do empregador ou clientes',
-              'Recibos de honorários emitidos',
-              'Comprovantes de INSS pago',
-              'Notas fiscais de despesas profissionais',
-              'Anuidade do conselho profissional',
+              'Informe de rendimentos de todos os empregadores e clientes PJ',
+              'Recibos de honorários emitidos (RPA ou NF de serviços)',
+              'Comprovantes de INSS pago (carnê ou DAS)',
+              'Notas fiscais e recibos de despesas profissionais (livro-caixa)',
+              'Anuidade do conselho profissional paga no ano',
+              'Informes de rendimentos de bancos e corretoras',
+              'Comprovantes de despesas médicas e educação',
             ],
+        destaque: 'Use a declaração pré-preenchida no e-CAC — ela já carrega informes de empregadores e bancos, reduzindo trabalho e risco de erro de digitação.',
       },
       {
-        h2: `Quanto um ${p.nome} Paga de IR? Exemplos Reais`,
-        conteudo: `<p>Veja exemplos de cálculo para diferentes faixas de renda em ${anoStr}:</p>`,
+        h2: `Quanto um ${p.nome} Paga de IR? Simulação por Faixa de Renda`,
+        conteudo: `<p>Cálculo sem deduções (antes de INSS, dependentes e despesas profissionais). Na prática, o imposto efetivo é menor para quem usa as deduções corretamente:</p>`,
         tabela: {
-          cabecalho: ['Renda Mensal Bruta', 'Faixa IR', 'IR Estimado/mês', 'Alíquota Efetiva'],
+          cabecalho: ['Renda Mensal Bruta', 'Faixa IRPF', 'IR Estimado/mês', 'Alíquota Efetiva'],
           linhas: [
             ...([5000, 8000, 12000, 20000].map(renda => {
               const calc = calcularIR(renda, ano)
@@ -382,17 +393,19 @@ function gerarPaginaProfissao(slug: string, p: typeof PROFISSOES_IR[0], ano: 202
             })),
           ],
         },
-        destaque: 'Esses cálculos não consideram deduções. Com INSS, dependentes e despesas médicas, o imposto efetivo é menor.',
+        destaque: 'Com INSS deduzido (~11%), 2 dependentes e plano de saúde de R$ 800/mês, a alíquota efetiva real cai 4 a 8 pontos percentuais em relação ao calculado acima.',
       },
       {
-        h2: `Erros Comuns de ${p.nome} na Declaração`,
+        h2: `Erros que Mandam ${p.nome} para a Malha Fina`,
         lista: situacaoRelacionada
           ? situacaoRelacionada.armadilhas
           : [
-              'Não registrar todas as fontes de renda',
-              'Esquecer de declarar rendimentos de fontes pagadoras menores',
-              'Não usar o livro-caixa para deduções profissionais',
-              'Misturar despesas pessoais e profissionais',
+              'Não registrar todos os honorários recebidos — especialmente de clientes pessoa física',
+              'Esquecer rendimentos de fontes pagadoras menores (plantões, consultorias, aulas)',
+              'Não escriturar o livro-caixa e perder deduções de despesas profissionais',
+              'Misturar despesas pessoais com profissionais no livro-caixa',
+              'Não declarar o pró-labore se atua como PJ',
+              'Declarar anuidade do conselho como despesa médica (lugar errado — vai no livro-caixa)',
             ],
       },
     ],
@@ -400,30 +413,30 @@ function gerarPaginaProfissao(slug: string, p: typeof PROFISSOES_IR[0], ano: 202
       {
         pergunta: `${p.nome} precisa pagar Carnê-Leão?`,
         resposta: p.regime === 'autonomo' || p.regime === 'misto'
-          ? `Sim, se receber honorários de pessoas físicas. O Carnê-Leão deve ser recolhido mensalmente até o último dia útil do mês seguinte ao recebimento. Para recebimentos de pessoas jurídicas, a empresa retém o IR na fonte.`
-          : `Não necessariamente. CLT e PJ não pagam Carnê-Leão sobre a renda principal. Mas se tiver renda extra de pessoa física, o Carnê-Leão se aplica.`,
+          ? `Sim — se receber honorários de pessoas físicas. O Carnê-Leão deve ser recolhido mensalmente via Carnê-Leão Web (receita.economia.gov.br) até o último dia útil do mês seguinte ao recebimento. Quem atrasa paga 0,33%/dia de multa mais Selic. Para recebimentos de empresas (PJ), a empresa já retém o IR na fonte (11% sobre o RPA) — esses valores entram na declaração anual como "imposto retido na fonte".`
+          : `Não necessariamente. CLT e PJ não pagam Carnê-Leão sobre a renda principal. Mas se você tiver qualquer renda de pessoa física — aula particular, consulta avulsa, serviço prestado a vizinho — o Carnê-Leão se aplica sobre esses valores. Muita gente ignora isso e descobre na malha fina.`,
       },
       {
-        pergunta: `A anuidade do conselho profissional (${p.area}) é dedutível?`,
-        resposta: `Sim. A anuidade de conselhos profissionais obrigatórios (CRM, OAB, CREA, CRC, CRN, etc.) é dedutível como despesa de exercício da profissão no livro-caixa. Guarde o comprovante de pagamento.`,
+        pergunta: `A anuidade do conselho profissional da área de ${p.area} é dedutível?`,
+        resposta: `Sim. A anuidade de conselhos profissionais obrigatórios (CRM, OAB, CREA, CRC, CRN, CRP, CORECON, entre outros) é dedutível como despesa de exercício da profissão no livro-caixa — mas apenas para quem usa o modelo completo e é autônomo ou tem renda de trabalho não-assalariado. Guarde o comprovante de pagamento. Erro comum: lançar essa anuidade como despesa médica ou educação — lugar errado e causa glosa na malha fina.`,
       },
       {
-        pergunta: `Vale mais a pena ${p.nome} ser PF ou PJ?`,
-        resposta: `Depende da renda. Até R$ 4.000–6.000/mês, em geral PF é suficiente. Acima disso, abrir empresa (Simples Nacional) pode reduzir a carga tributária de 27,5% (IR + INSS PF) para 6%–15,5% (Simples). Consulte um contador para calcular o ponto de equilíbrio da sua situação.`,
+        pergunta: `Vale mais a pena ${p.nome} atuar como PF ou abrir PJ?`,
+        resposta: `Depende da renda mensal. PF autônomo com renda acima de R$ 6.000–8.000/mês costuma pagar muito mais do que precisaria: IR de até 27,5% + INSS de até 20% = carga de até 47,5% sobre os honorários. Uma empresa no Simples Nacional (anexo V para serviços profissionais) pode pagar de 15,5% a 19,5% total. A conta depende do faturamento anual e do tipo de serviço. Para a maioria dos profissionais liberais, o ponto de equilíbrio está entre R$ 6.000 e R$ 10.000/mês. Consulte um contador para calcular o seu caso específico — o custo de uma planilha personalizada geralmente se paga em um ou dois meses de economia.`,
       },
       {
         pergunta: `Como declarar cursos e especializações da profissão?`,
-        resposta: `Cursos de ensino formal (graduação, pós-graduação reconhecida pelo MEC) são dedutíveis no limite de R$ 3.561,50/ano como educação. Cursos livres e especializações profissionais são dedutíveis no livro-caixa se relacionados ao exercício da profissão (autônomo) — sem limite.`,
+        resposta: `Depende do tipo de curso. Graduação, pós-graduação stricto sensu (mestrado, doutorado) e cursos reconhecidos pelo MEC são dedutíveis como educação — limite de R$ 3.561,50/ano por pessoa. Cursos livres, especializações lato sensu, congressos e materiais relacionados ao exercício da profissão autônoma são dedutíveis no livro-caixa — sem limite, desde que relacionados à atividade geradora de renda. Para CLT puro, cursos livres não são dedutíveis por nenhum dos caminhos.`,
       },
       {
-        pergunta: `Qual é a alíquota de IR para ${p.nome} com renda de R$ 10.000/mês em ${anoStr}?`,
+        pergunta: `Qual a alíquota de IR para ${p.nome} com renda de R$ 10.000/mês em ${anoStr}?`,
         resposta: (() => {
           const c = calcularIR(10000, ano)
-          return `Com renda de R$ 10.000/mês sem deduções: alíquota marginal de ${c.aliquota}%, imposto de ${fmtR$(c.imposto)}/mês, alíquota efetiva de ${c.aliquotaEfetiva.toFixed(1)}%. Com deduções (INSS + dependentes), a alíquota efetiva cai significativamente.`
+          return `Sem deduções: alíquota marginal de ${c.aliquota}%, imposto de ${fmtR$(c.imposto)}/mês, alíquota efetiva de ${c.aliquotaEfetiva.toFixed(1)}%. Com INSS de R$ 908,85 (teto 2025), 2 dependentes e plano de saúde de R$ 1.000/mês, a base tributável cai para aproximadamente R$ 7.816, e o imposto mensal pode cair para R$ 1.100–1.300 — alíquota efetiva real abaixo de 15%. As deduções fazem diferença real.`
         })(),
       },
     ],
-    conclusao: `Declarar corretamente o IR sendo ${p.nome} é fundamental para evitar malha fina e pagar apenas o que é devido. ${p.dica_fiscal} Reúna todos os documentos ao longo do ano, escriture o livro-caixa se for autônomo, e compare os modelos completo e simplificado no programa IRPF ${anoStr}.`,
+    conclusao: `Para ${p.nome}, declarar o IR de forma eficiente significa três coisas: registrar todos os rendimentos (sem exceção), usar todas as deduções da profissão (especialmente o livro-caixa, se for autônomo) e comparar os modelos completo e simplificado antes de enviar. ${p.dica_fiscal} Quem organiza os documentos ao longo do ano chega em março sem pressa e sem erros. Quem deixa para a última hora tende a esquecer rendimentos ou perder deduções.`,
   }
 }
 
@@ -606,7 +619,7 @@ function gerarPaginaTabela(slug: string, ano: 2025 | 2026): PaginaIR {
     publishedAt: '2026-04-07',
     tags: ['tabela IRPF', `IRPF ${anoStr}`, 'alíquota IR', 'faixas IR', 'imposto de renda'],
     tempoLeitura: 8,
-    intro: `A <strong>Tabela IRPF ${anoStr}</strong> define as alíquotas progressivas do Imposto de Renda Pessoa Física. O Brasil usa um sistema progressivo: quem ganha mais, paga uma alíquota maior — mas apenas sobre a parte da renda que excede cada faixa.\n\n${ano === 2026 ? '<strong>Novidade 2026:</strong> A isenção foi ampliada para R$ 5.000/mês, beneficiando milhões de brasileiros da classe média.' : '<strong>Tabela 2025:</strong> Isenção até R$ 2.259,20/mês. Em 2026, esse limite sobe para R$ 5.000.'}`,
+    intro: `A <strong>Tabela IRPF ${anoStr}</strong> — publicada pela Receita Federal via Instrução Normativa RFB — define as alíquotas progressivas do Imposto de Renda Pessoa Física. O Brasil usa um sistema de tributação progressivo: cada faixa de renda tem sua própria alíquota, e você só paga a alíquota mais alta sobre a parte que ultrapassa a faixa anterior.\n\n${ano === 2026 ? '<strong>Novidade 2026:</strong> A faixa de isenção foi ampliada de R$ 2.259,20 para R$ 5.000/mês — a maior mudança na tabela IRPF em décadas. Aprovada em 2024, entra em vigor a partir de janeiro/2026.' : '<strong>Tabela 2025:</strong> Isenção até R$ 2.259,20/mês. Quem ganha R$ 2.260/mês paga IR apenas sobre R$ 0,80 — o centavo que excede a faixa isenta. Em 2026, esse limite sobe para R$ 5.000.'}`,
     secoes: [
       {
         h2: `Tabela IRPF ${anoStr} — Valores Oficiais`,
@@ -696,7 +709,7 @@ function gerarPaginaIsencao5000(slug: string): PaginaIR {
     publishedAt: '2026-04-07',
     tags: ['isenção IR 5000', 'IR 2026', 'isenção IR 2026', 'reforma tributária IR', 'IRPF 2026'],
     tempoLeitura: 10,
-    intro: `A <strong>isenção do Imposto de Renda até R$ 5.000</strong> foi aprovada pelo Congresso Nacional em 2025 e entra em vigor a partir de <strong>1º de janeiro de 2026</strong>. É a maior ampliação da faixa de isenção do IR em décadas e beneficia diretamente quem ganha entre R$ 2.259,20 e R$ 5.000 por mês.\n\nAtualmente (2025), a isenção é de apenas R$ 2.259,20/mês. Com a mudança, mais de 10 milhões de brasileiros deixarão de pagar Imposto de Renda completamente.`,
+    intro: `Em dezembro de 2024, a Câmara dos Deputados aprovou a proposta do governo Lula que amplia a isenção do IR para quem ganha até R$ 5.000 por mês. A medida vai ao Senado e, se mantida sem mudanças, entra em vigor em <strong>1º de janeiro de 2026</strong>.\n\nPara entender a dimensão: a faixa de isenção atual é de R$ 2.259,20/mês — menos da metade do novo teto. Quem ganha R$ 4.000 hoje paga cerca de R$ 250–350/mês de IR. A partir de 2026, pagaria zero. Segundo estimativas do Ministério da Fazenda, cerca de 13 milhões de contribuintes serão completamente isentos, e outros 26 milhões terão redução no imposto.`,
     secoes: [
       {
         h2: 'Quem Se Beneficia da Isenção até R$ 5.000?',
@@ -788,80 +801,85 @@ function gerarPaginaMalhaFina(slug: string, ano: 2025 | 2026): PaginaIR {
     publishedAt: '2026-04-07',
     tags: ['malha fina', `IR ${anoStr}`, 'erros declaração IR', 'malha fina como evitar', 'Receita Federal'],
     tempoLeitura: 11,
-    intro: `<strong>Malha fina</strong> é quando a Receita Federal identifica inconsistências na sua declaração e a retém para verificação. Você só descobre na hora de consultar a restituição — ou quando recebe uma notificação.\n\nEm ${anoStr}, os sistemas de cruzamento de dados da Receita Federal são cada vez mais sofisticados. Bancos, empregadores, prestadores de saúde, corretoras e até plataformas de pagamento enviam informações que são cruzadas com sua declaração.`,
+    intro: `A restituição não cai. Você consulta o site da Receita Federal, e aparece: "Em análise". Isso é a <strong>malha fina</strong> — e pode durar meses ou até anos se você não agir.\n\nNão é necessariamente sonegação. Em ${anoStr}, o motivo mais comum de malha fina ainda é omissão de rendimento: alguém que esqueceu de declarar um segundo emprego, um aluguel, uma aplicação financeira. A Receita Federal recebe todas essas informações de bancos, empregadores, corretoras, prestadores de saúde e até de plataformas de pagamento — e cruza automaticamente com o que você declarou. Qualquer divergência trava a restituição até que você explique.`,
     secoes: [
       {
-        h2: `Principais Motivos de Malha Fina em ${anoStr}`,
+        h2: `Os 10 Motivos Que Mais Mandam Brasileiros para a Malha Fina`,
         lista: [
-          'Omissão de rendimentos: não declarar renda de segundo emprego, freelances ou aluguel',
-          'Despesas médicas sem comprovante: declarar valor acima do que consta nos recibos/NF',
-          'Dependentes em duplicidade: dois contribuintes declaram o mesmo filho como dependente',
-          'INSS inconsistente: valor de INSS diferente do informado pelo empregador',
-          'Rendimentos de aplicações financeiras omitidos',
-          'Informes do banco divergentes com o declarado',
-          'Pensão alimentícia: pagador deduz mas beneficiário não declara',
-          'FGTS não declarado em "rendimentos isentos"',
-          'Título de eleitor com dados desatualizados',
-          'Doação declarada mas não registrada pelo beneficiário',
+          'Omissão de rendimentos (o campeão): não declarar renda de segundo emprego, freelance, aluguel ou pensão recebida — a Receita recebe esses dados automaticamente via DIRF',
+          'Despesas médicas infladas: declarar valor maior do que consta nos recibos e NFs — os prestadores informam à Receita via DMED desde 2012',
+          'Dependentes duplicados: dois contribuintes (ex: pais separados) declaram o mesmo filho — a Receita cruza os CPFs e bloqueia os dois',
+          'INSS divergente: valor de INSS diferente do informado pelo empregador no informe de rendimentos',
+          'Rendimentos financeiros esquecidos: aplicações em CDB, fundos, LCI/LCA (mesmo isentas, precisam ser declaradas em "rendimentos isentos")',
+          'Informes bancários ignorados: banco informa pagamentos de rendimentos e o contribuinte não declara',
+          'Pensão alimentícia sem contrapartida: quem paga deduz, mas quem recebe não declara — a Receita espera as duas declarações',
+          'FGTS recebido não declarado: saque do FGTS é isento de IR mas deve ser informado em "rendimentos isentos"',
+          'Herança não declarada em bens e direitos: receber herança não gera IR, mas o bem deve entrar em "bens e direitos" com o valor histórico',
+          'Doação declarada pelo doador mas não pelo receptor: quem recebe doação precisa incluir em "rendimentos isentos"',
         ],
+        destaque: 'O principal alvo da Receita em 2024/2025 foram contribuintes com despesas médicas incompatíveis com a renda declarada. Despesas que somam mais de 50% da renda bruta geram alerta automático nos sistemas.',
       },
       {
-        h2: 'Como a Receita Federal Detecta Inconsistências',
+        h2: 'Como a Receita Federal Detecta Tudo Isso',
         subsecoes: [
           {
-            h3: 'Cruzamento de informações',
-            conteudo: '<p>A Receita cruza sua declaração com: Informe de rendimentos do empregador (DIRF), dados bancários (e-Financeira), notas fiscais de saúde (DMED), operações imobiliárias (DOI), operações financeiras (DIMOF), e muito mais.</p>',
+            h3: 'A rede de cruzamento de dados da Receita',
+            conteudo: '<p>A Receita Federal recebe declarações de: empregadores (DIRF — informa salários e IRRF de todos os funcionários), bancos e corretoras (e-Financeira — movimentações acima de R$ 5.000/mês para PF), prestadores de saúde (DMED — todos os honorários recebidos com CPF do paciente), cartórios e imobiliárias (DOI — transferências de imóveis), e desde 2023, plataformas de marketplace e pagamentos digitais acima de determinado volume. O que você declara é cruzado com tudo isso automaticamente.</p>',
           },
           {
-            h3: 'CPF como rastreador',
-            conteudo: '<p>Toda nota fiscal emitida com seu CPF, todo pagamento de plano de saúde e toda movimentação bancária acima de R$ 5.000/mês é reportada à Receita. Qualquer divergência fica evidente no cruzamento.</p>',
+            h3: 'Por que o CPF é o elo de tudo',
+            conteudo: '<p>Toda nota fiscal emitida com seu CPF, todo pagamento de plano de saúde, toda consulta médica, toda movimentação bancária relevante — está associada ao seu CPF nos sistemas da Receita. Por isso, o que você declara precisa ser consistente com o que cada terceiro declarou sobre você. A divergência de R$ 1.000 entre o que o médico informou e o que você declarou é suficiente para travar a restituição.</p>',
           },
           {
-            h3: 'IA e análise preditiva',
-            conteudo: '<p>A Receita Federal usa inteligência artificial para identificar padrões suspeitos — como despesas médicas fora do padrão para a profissão ou nível de renda declarado.</p>',
+            h3: 'Inteligência artificial e análise de padrão',
+            conteudo: '<p>A Receita Federal usa modelos preditivos para identificar declarações com padrões atípicos: despesas médicas fora do padrão para a profissão declarada, deduções de dependentes incompatíveis com a renda, variações bruscas de patrimônio sem explicação. Não é um auditor humano que revisa cada caso — é um algoritmo que filtra as mais suspeitas para revisão.</p>',
           },
         ],
       },
       {
-        h2: 'O Que Fazer Se Você Foi Para a Malha Fina',
+        h2: 'O Que Fazer Se Você Caiu na Malha Fina — Passo a Passo',
         lista: [
-          'Acesse o e-CAC (eCAC.receita.fazenda.gov.br) para verificar o motivo',
-          'Se o erro foi seu: retifique a declaração antes de ser notificado — a multa é menor',
-          'Se já recebeu notificação: você tem prazo (geralmente 30 dias) para responder com documentos',
-          'Com documentos: envie a comprovação pelo e-CAC ou em agência da Receita',
-          'Sem documentos: retifique a declaração removendo o item questionado',
-          'Contrate contador se o valor for significativo',
+          'Primeiro: acesse o e-CAC (eCAC.receita.fazenda.gov.br) com conta Gov.br e vá em "Pendências" — o motivo da malha fina fica descrito lá',
+          'Se o erro foi seu (omitiu renda, errou um valor): retifique a declaração antes de receber a notificação formal — a multa é de 0,33%/dia (máximo 20% do IR devido)',
+          'Se você tem os documentos que comprovam o que declarou: reúna tudo e envie pelo e-CAC na aba de "Regularização" ou compareça a uma agência da Receita Federal',
+          'Se recebeu notificação formal (Auto de Infração ou Termo de Intimação): você tem prazo (geralmente 30 dias) para apresentar documentos ou retificar',
+          'Sem documentos e com erro real: retifique, remova o item questionado, pague o imposto acrescido de multa e juros',
+          'Para valores acima de R$ 10.000 ou situações complexas: contrate um contador ou advogado tributarista — o custo é muito menor do que pagar a autuação sem defesa',
         ],
-        destaque: '⚠️ Quem se auto-retifica antes da notificação paga multa de 0,33%/dia (máx 20%). Após notificado, a multa pode chegar a 75%.',
+        destaque: 'ATENÇÃO: Quem se auto-retifica espontaneamente paga multa de 0,33%/dia (máximo 20%). Após a notificação, a multa pula para 75% do imposto devido. Em caso de sonegação comprovada, pode chegar a 150% mais representação criminal.',
       },
       {
-        h2: 'Checklist Para Evitar a Malha Fina',
+        h2: 'Checklist Anti-Malha Fina — Revise Antes de Enviar',
         lista: [
-          'Peça o informe de rendimentos de TODOS os empregadores, bancos e corretoras',
-          'Não declare despesas médicas sem comprovante — a Receita tem os dados do DMED',
-          'Combine com o cônjuge quem declara cada dependente',
-          'Declare todos os rendimentos, mesmo os de fontes pequenas',
-          'Inclua rendimentos isentos (FGTS, herança, bolsa de pesquisa) em "isentos"',
-          'Use a declaração pré-preenchida — ela já preenche muitos campos automaticamente',
-          'Confira se os dados bancários para restituição estão corretos',
+          'Peça o informe de rendimentos de TODOS os empregadores, bancos e corretoras — inclusive as contas que você mal usa',
+          'Não declare despesas médicas sem comprovante — o DMED que o prestador enviou à Receita é o valor que ela espera ver',
+          'Se você tem filhos e é separado: combine com o ex-cônjuge quem declara cada criança — a duplicidade é detectada automaticamente',
+          'Declare todo rendimento, por menor que seja: aquele bico de R$ 500 que você recebeu em espécie pode parecer invisível, mas se o pagador tiver declarado, vai aparecer',
+          'FGTS sacado, herança recebida, LCI/LCA rendida: tudo vai em "rendimentos isentos" — não declarar não é opção',
+          'Use a declaração pré-preenchida no e-CAC: ela já carrega os dados que a Receita tem de você — se algo estiver faltando ou diferente, é o primeiro sinal de problema',
+          'Confira os dados bancários para restituição: conta de terceiro ou conta encerrada travam o pagamento',
         ],
       },
     ],
     faq: [
       {
         pergunta: 'Quanto tempo dura a malha fina?',
-        resposta: 'Pode durar de meses a anos. Enquanto está na malha fina, a restituição fica retida. Após resolver, a restituição é liberada com juros Selic do período.',
+        resposta: 'Depende do motivo. Casos simples (divergência de valor num informe de rendimentos) podem ser resolvidos em semanas após a retificação ou envio de documentos. Casos mais complexos (omissão de renda, autuação fiscal) podem levar de 6 meses a anos. Enquanto estiver na malha fina, a restituição fica retida. Quando liberada, sai com correção pela taxa Selic de todo o período — o que ameniza, mas não compensa o transtorno.',
       },
       {
-        pergunta: 'Posso retificar a declaração se fui para a malha fina?',
-        resposta: 'Sim, antes de receber a notificação formal. Após a notificação, a retificação ainda é possível mas pode não reduzir a multa. Consulte um contador.',
+        pergunta: 'Posso retificar a declaração depois de cair na malha fina?',
+        resposta: 'Sim — antes de receber a notificação formal, você pode retificar sem problemas. Isso costuma resolver a maioria dos casos simples. Após receber a notificação, a retificação ainda é aceita mas não necessariamente reduz a multa — depende da fase do processo. Em qualquer caso, agir rápido é melhor do que esperar: quanto mais tempo passa, mais juros Selic acumulam sobre o imposto devido.',
       },
       {
         pergunta: 'A malha fina gera multa automaticamente?',
-        resposta: 'Não. A malha fina é apenas a retenção para análise. Só há multa se a Receita confirmar uma inconsistência. Se for comprovado erro, há multa de 75% do imposto devido + juros Selic. Em caso de sonegação, pode chegar a 150%.',
+        resposta: 'Não. A malha fina é apenas a retenção para análise — não é uma autuação. Só há multa se a Receita confirmar uma inconsistência e emitir o lançamento de ofício. Se você resolver antes (retificando ou comprovando com documentos), não há multa de autuação — apenas eventual multa por atraso de 0,33%/dia. Se a Receita confirmar irregularidade e emitir auto de infração: multa de 75% do imposto + Selic. Sonegação com dolo: até 150% mais representação ao Ministério Público.',
+      },
+      {
+        pergunta: 'Como sei se minha declaração está na malha fina?',
+        resposta: 'Acesse o e-CAC (eCAC.receita.fazenda.gov.br) com conta Gov.br e clique em "Meu Imposto de Renda". O status da declaração aparece como "Em processamento", "Declaração em fila de restituição" ou "Declaração em análise" (esse último indica malha fina). O motivo detalhado fica na aba "Pendências" ou "Extrato do Processamento". Também é possível verificar pelo app "Meu Imposto de Renda".',
       },
     ],
-    conclusao: `Evitar a malha fina em ${anoStr} é simples: declare todos os rendimentos, guarde comprovantes das deduções e use a declaração pré-preenchida. Se for para a malha fina, não entre em pânico — consulte o motivo no e-CAC e corrija rapidamente.`,
+    conclusao: `Malha fina não precisa ser um pesadelo. A Receita Federal retém para análise, você consulta o motivo no e-CAC, e na maioria dos casos ou retifica a declaração ou apresenta os documentos comprobatórios. O segredo para não cair: declare todos os rendimentos (inclusive isentos), use apenas deduções que tem comprovante, e use a declaração pré-preenchida para reduzir erros de digitação. Em ${anoStr}, os sistemas de cruzamento são mais eficientes do que nunca — apostar na invisibilidade não funciona mais.`,
   }
 }
 
@@ -877,70 +895,76 @@ function gerarPaginaRestituicao(slug: string, ano: 2025 | 2026): PaginaIR {
     publishedAt: '2026-04-07',
     tags: ['restituição IR', `IR ${anoStr}`, 'restituição imposto renda', 'lotes restituição', 'quando recebe IR'],
     tempoLeitura: 9,
-    intro: `A <strong>restituição do IR ${anoStr}</strong> é o valor que a Receita Federal devolve quando você pagou mais imposto do que devia ao longo do ano. Acontece quando: o IRRF descontado pelo empregador foi maior que o imposto devido no ajuste anual, você usou deduções (saúde, dependentes) que reduziram a base, ou pagou Carnê-Leão a mais.\n\nA Receita paga em lotes mensais de maio a dezembro. Quem entrega primeiro e tem prioridade recebe nos primeiros lotes.`,
+    intro: `A <strong>restituição do IR ${anoStr}</strong> não é um presente do governo — é dinheiro seu de volta, corrigido pela taxa Selic. Quando o empregador desconta mais IRRF do que você devia, ou quando você usou deduções (saúde, dependentes, PGBL) que reduziram o imposto calculado abaixo do que foi pago, a diferença vem de volta.\n\nEm 2024, a Receita Federal restituiu mais de R$ 40 bilhões a cerca de 30 milhões de contribuintes. A distribuição é feita em lotes mensais de maio a dezembro. A ordem depende de prioridade legal (idade, condição especial) e data de entrega da declaração — quem entrega primeiro recebe antes, tudo mais sendo igual.`,
     secoes: [
       {
-        h2: `Lotes de Restituição ${anoStr} — Calendário`,
+        h2: `Calendário de Restituição ${anoStr} — Quando Você Recebe`,
         tabela: {
-          cabecalho: ['Lote', 'Previsão de Pagamento', 'Quem Recebe'],
+          cabecalho: ['Lote', 'Previsão', 'Quem Recebe Nesse Lote'],
           linhas: [
-            ['1º Lote', 'Maio/2026', 'Prioridades: 80+ anos, deficientes, professores, etc.'],
-            ['2º Lote', 'Junho/2026', 'Idosos 60–79 anos + prioridades restantes'],
-            ['3º Lote', 'Julho/2026', 'Por ordem de envio da declaração'],
-            ['4º Lote', 'Agosto/2026', 'Por ordem de envio da declaração'],
-            ['5º Lote', 'Setembro/2026', 'Por ordem de envio da declaração'],
-            ['6º Lote', 'Outubro/2026', 'Retificadoras e pendências'],
-            ['7º Lote', 'Novembro/2026', 'Restantes'],
+            ['1º Lote', 'Maio/' + anoStr, 'Prioridades máximas: 80+ anos, portadores de doença grave, deficientes, professores'],
+            ['2º Lote', 'Junho/' + anoStr, 'Idosos entre 60 e 79 anos + demais prioridades restantes do 1º lote'],
+            ['3º Lote', 'Julho/' + anoStr, 'Demais contribuintes — por ordem cronológica de entrega'],
+            ['4º Lote', 'Agosto/' + anoStr, 'Continuação da ordem de entrega'],
+            ['5º Lote', 'Setembro/' + anoStr, 'Continuação da ordem de entrega'],
+            ['6º Lote', 'Outubro/' + anoStr, 'Declarações retificadas + pendências resolvidas'],
+            ['7º Lote', 'Novembro/' + anoStr, 'Último lote do exercício — quem ficou de fora ou resolveu pendências tardiamente'],
           ],
         },
-        destaque: '📅 Envie a declaração nos primeiros dias do prazo e informe conta corrente (não poupança) para receber nos primeiros lotes.',
+        destaque: 'Estratégia simples para receber mais cedo: envie a declaração na primeira semana do prazo (geralmente março), use conta corrente (não poupança) no seu CPF, e não retifique depois de enviar sem necessidade — retificação reinicia a posição na fila.',
       },
       {
-        h2: 'Quem Tem Prioridade na Restituição?',
+        h2: 'Quem Tem Prioridade Legal na Restituição?',
         lista: [
-          '1ª prioridade: maiores de 80 anos',
-          '2ª prioridade: deficientes físicos, mentais ou com doença grave',
-          '3ª prioridade: professores (cujo maior rendimento seja do magistério)',
-          '4ª prioridade: maiores de 60 anos',
-          '5ª prioridade: demais contribuintes — por ordem de entrega da declaração',
+          '1ª prioridade: contribuintes com 80 anos ou mais',
+          '2ª prioridade: portadores de deficiência física, mental ou com doença grave (lista de 27 doenças previstas na Lei 7.713/88: câncer, cardiopatia grave, hepatopatia grave, tuberculose ativa, etc.)',
+          '3ª prioridade: professores cuja maior fonte de renda seja o magistério da educação básica',
+          '4ª prioridade: contribuintes com 60 anos ou mais',
+          '5ª prioridade (maioria): todos os demais — ordenados exclusivamente pela data e hora de entrega da declaração',
         ],
+        destaque: 'Portadores de doenças graves têm prioridade mesmo que não estejam na faixa de isenção. A isenção para doenças graves é outra coisa — é sobre o rendimento (se aposentado, isento de IR). A prioridade na restituição vale para qualquer contribuinte com essa condição.',
       },
       {
-        h2: 'Como Verificar Sua Restituição',
+        h2: 'Como Consultar e Acompanhar Sua Restituição',
         lista: [
-          'App "Meu Imposto de Renda" (Android e iOS)',
-          'Site da Receita Federal: receita.economia.gov.br → Consulta Restituição',
-          'e-CAC: acesse com conta Gov.br',
-          'Central de atendimento: 146 (Receita Federal)',
+          'App "Meu Imposto de Renda" (Android e iOS) — mais prático, notifica quando o lote é liberado',
+          'Site da Receita Federal: receita.economia.gov.br → Consulta Restituição → informe CPF e ano',
+          'e-CAC (eCAC.receita.fazenda.gov.br) com conta Gov.br — mostra o status detalhado da declaração',
+          'Central de atendimento da Receita Federal: 146 (dias úteis, horário comercial)',
         ],
-        destaque: 'A Receita Federal nunca entra em contato por WhatsApp ou e-mail pedindo dados bancários. Desconfie de mensagens assim — é golpe.',
+        destaque: 'ALERTA DE GOLPE: A Receita Federal nunca entra em contato por WhatsApp, Telegram, SMS ou e-mail para pedir dados bancários, CPF ou para "liberar" a restituição. Qualquer mensagem assim é golpe — ignore e denuncie.',
       },
       {
-        h2: 'Por que a Restituição Demora?',
+        h2: 'Por que a Restituição Pode Atrasar',
         lista: [
-          'Declaração caiu na malha fina — verificação de inconsistências',
-          'Dados bancários incorretos para depósito',
-          'Declaração enviada muito próximo do prazo final',
-          'Retificação feita após envio — volta para a fila',
-          'Conta bancária informada pertence a outra pessoa',
+          'Declaração em malha fina — a Receita identificou inconsistência e reteve para análise (consulte o motivo no e-CAC)',
+          'Dados bancários incorretos ou conta encerrada — o depósito é devolvido pelo banco',
+          'Conta bancária em nome de outra pessoa — a Receita só deposita na conta do titular do CPF',
+          'Declaração entregue próxima ao prazo final — ficou para os lotes do final do ano',
+          'Retificação após envio — a declaração retificada volta para o fim da fila na data da retificação',
+          'Pendências cadastrais no CPF — CPF irregular bloqueia a restituição',
         ],
       },
     ],
     faq: [
       {
-        pergunta: 'A restituição tem correção? Quanto rende?',
-        resposta: 'Sim. A restituição é corrigida pela taxa Selic desde o mês seguinte ao prazo final de entrega da declaração até a data do pagamento. Em 2025, com Selic entre 12% e 14%, a correção é significativa para quem espera até o final.',
+        pergunta: 'A restituição tem correção monetária? Quanto rende?',
+        resposta: 'Sim. A restituição é corrigida pela taxa Selic, contada do mês seguinte ao prazo final de entrega da declaração até a data do efetivo pagamento. Com a Selic em 14,75% ao ano (abril/2025), quem recebe no 7º lote (novembro) tem um acréscimo de cerca de 7–8% sobre o valor original — não é desprezível. Mas é muito melhor receber no 1º lote sem correção do que esperar pela Selic.',
       },
       {
-        pergunta: 'Posso transferir a restituição para conta de outra pessoa?',
-        resposta: 'Não. A conta bancária deve ser do próprio contribuinte (mesmo CPF). Informar conta de terceiro atrasa ou impossibilita o recebimento.',
+        pergunta: 'Posso receber a restituição em conta de poupança ou somente conta corrente?',
+        resposta: 'A Receita Federal aceita tanto conta corrente quanto poupança — desde que estejam no seu CPF. Mas a recomendação prática é usar conta corrente: a transferência é imediata e o risco de bloqueio é menor. Conta poupança de banco diferente pode ter atraso de alguns dias úteis para compensação.',
       },
       {
-        pergunta: 'Tenho direito à restituição se fiz a declaração fora do prazo?',
-        resposta: 'Sim, mas você pagará multa por atraso (mínimo R$ 165,74, máximo 20% do IR devido). A restituição é creditada normalmente, mas podem ser descontadas pendências.',
+        pergunta: 'Tenho direito à restituição se entreguei a declaração fora do prazo?',
+        resposta: 'Sim. Quem tem IR a restituir pode entregar a declaração a qualquer momento — mesmo anos depois do prazo — e ainda receber o valor. Porém, além da multa por atraso (mínimo R$ 165,74, máximo 20% do IR devido), a restituição pode demorar mais para ser processada e cair nos últimos lotes. A multa é descontada automaticamente do valor a receber.',
+      },
+      {
+        pergunta: 'Como maximizar a restituição legalmente?',
+        resposta: 'Três caminhos principais: (1) use o modelo completo e declare todas as deduções reais — saúde sem limite, dependentes, PGBL até 12% da renda; (2) peça os informes de rendimentos de todos os bancos e corretoras — o IRRF retido neles aparece como crédito na declaração; (3) entregue cedo para receber nos primeiros lotes e já usar o dinheiro. Para quem tem PGBL: contribuir até 31/dezembro antes de fechar o ano é a forma mais eficiente de ampliar a restituição do ano seguinte.',
       },
     ],
-    conclusao: `A restituição do IR ${anoStr} é dinheiro seu de volta — com correção pela Selic. Para receber nos primeiros lotes: entregue a declaração logo no início do prazo, corrija o modelo se necessário e verifique os dados bancários. Acompanhe pelo app "Meu Imposto de Renda".`,
+    conclusao: `A restituição do IR ${anoStr} é dinheiro seu — não é benefício, é correção de imposto pago a mais. Para garantir o maior valor possível: use o modelo completo com todas as deduções cabíveis, entregue a declaração no início do prazo, informe uma conta corrente no seu CPF e acompanhe o processamento pelo app "Meu Imposto de Renda". Se a restituição não cair no prazo do lote previsto, o primeiro passo é verificar o status no e-CAC — na maioria dos casos, há um dado bancário errado ou uma inconsistência simples de corrigir.`,
   }
 }
 
@@ -956,7 +980,7 @@ function gerarPaginaCompletoVsSimplificado(slug: string, ano: 2025 | 2026): Pagi
     publishedAt: '2026-04-07',
     tags: ['declaração completa', 'declaração simplificada', `IR ${anoStr}`, 'modelo IR', 'como declarar'],
     tempoLeitura: 9,
-    intro: `Na hora de declarar o IR ${anoStr}, você tem duas opções: <strong>modelo completo</strong> (usa deduções reais comprovadas) ou <strong>modelo simplificado</strong> (desconto automático de 20%, sem comprovar nada). O próprio programa IRPF calcula os dois e indica qual resulta em menos imposto ou mais restituição.\n\nA escolha certa pode fazer diferença de centenas ou milhares de reais.`,
+    intro: `Tem um botão no programa IRPF que poucos contribuintes usam: "Calcular". Ele processa os dois modelos de declaração ao mesmo tempo e mostra qual resulta em mais restituição (ou menos imposto a pagar). O problema é que a maioria das pessoas escolhe o modelo por hábito ou suposição — e paga imposto a mais sem perceber.\n\nO <strong>modelo completo</strong> usa as deduções reais que você comprova: plano de saúde, dependentes, educação, PGBL. O <strong>modelo simplificado</strong> ignora tudo isso e aplica um desconto fixo de 20% sobre a renda tributável, com teto de R$ 16.754,34/ano. A lógica é simples: se suas deduções reais somam mais de 20% da renda, o completo vence. Se forem menos, o simplificado é melhor. A escolha certa pode representar centenas ou milhares de reais.`,
     secoes: [
       {
         h2: 'Diferença Principal entre os Modelos',
@@ -1008,14 +1032,18 @@ function gerarPaginaCompletoVsSimplificado(slug: string, ano: 2025 | 2026): Pagi
     faq: [
       {
         pergunta: 'Posso mudar de modelo após enviar a declaração?',
-        resposta: 'Sim. Você pode retificar a declaração e mudar o modelo (de simplificado para completo ou vice-versa) até o prazo final. Após isso, pode retificar nos anos seguintes, mas o modelo enviado é o oficial até a retificação.',
+        resposta: 'Sim. Você pode retificar a declaração e trocar o modelo até o prazo final de entrega (geralmente 31 de maio). Após isso, pode retificar a qualquer momento nos anos seguintes — mas observe que retificação pós-prazo reinicia a posição na fila de restituição. Se você enviou o simplificado e percebeu que o completo era melhor, vale retificar o quanto antes.',
       },
       {
-        pergunta: 'O desconto de 20% do simplificado é sobre salário bruto ou líquido?',
-        resposta: 'Sobre a renda tributável — que já exclui o INSS retido em folha (CLT). Portanto, a base do desconto de 20% é o salário menos o INSS.',
+        pergunta: 'O desconto de 20% do simplificado incide sobre o salário bruto?',
+        resposta: 'Não — incide sobre a renda tributável, que já exclui o INSS retido em folha (para CLT). Então a base do desconto de 20% é o salário menos a contribuição previdenciária. Para autônomos, a renda tributável é o total recebido menos o INSS pago. Sobre essa base é que se calcula o desconto de 20% (máximo R$ 16.754,34/ano).',
+      },
+      {
+        pergunta: 'O simplificado é sempre mais fácil de preencher?',
+        resposta: 'Sim — no simplificado, você não precisa inserir comprovantes, médicos, escolas, planos de saúde. Mas "mais fácil" não significa "mais vantajoso". Se você tem dependentes, plano de saúde, PGBL ou filhos em escola, o modelo completo quase sempre resulta em mais restituição. Preencha o completo (com todas as deduções que você tem direito), clique em calcular, compare — e então escolha. Não escolha pelo trabalho, escolha pelo resultado.',
       },
     ],
-    conclusao: `A escolha entre completo e simplificado em ${anoStr} deve ser baseada nos números — não na intuição. Use o programa IRPF, preencha o completo (mesmo que não vá enviar assim) e compare os resultados. O modelo que gerar maior restituição ou menor imposto a pagar é o correto para você.`,
+    conclusao: `A escolha entre completo e simplificado no IR ${anoStr} deve ser feita com números na tela — não por intuição. Regra prática: solteiros sem dependentes e com poucas despesas médicas geralmente vão bem no simplificado. Casados com filhos, plano de saúde e PGBL quase sempre ganham mais no completo. O programa IRPF calcula os dois automaticamente — use esse recurso antes de enviar. A diferença pode ser facilmente R$ 2.000 a R$ 5.000 a favor de quem escolhe certo.`,
   }
 }
 
@@ -1031,26 +1059,26 @@ function gerarPaginaComoEconomizar(slug: string, ano: 2025 | 2026): PaginaIR {
     publishedAt: '2026-04-07',
     tags: ['pagar menos IR', 'planejamento tributário', `IR ${anoStr}`, 'como economizar IR', 'deduções legais'],
     tempoLeitura: 14,
-    intro: `Pagar menos Imposto de Renda é 100% legal — desde que se use os mecanismos previstos na legislação. Não estamos falando de sonegação, mas de planejamento tributário legítimo: usar todas as deduções disponíveis, estruturar sua atividade da forma mais eficiente e aproveitar as isenções do sistema.\n\nEm ${anoStr}, o brasileiro médio paga mais IR do que deveria simplesmente por não conhecer os recursos legais disponíveis. Este guia apresenta 15 estratégias comprovadas.`,
+    intro: `Segundo pesquisas de escritórios de contabilidade, a maioria dos contribuintes brasileiros paga pelo menos R$ 1.000 a mais de IR por ano do que deveria — simplesmente por não usar as deduções a que tem direito ou por escolher o modelo errado de declaração.\n\nIsso não é sonegação ao contrário — é direito ignorado. A diferença entre planejamento tributário (legal) e sonegação (crime) é simples: planejamento usa os mecanismos previstos na lei; sonegação omite rendimentos ou declara despesas falsas. Este guia apresenta 15 estratégias que qualquer contador orientaria sem hesitar em ${anoStr}.`,
     secoes: [
       {
         h2: 'As 15 Estratégias Para Pagar Menos IR Legalmente',
         subsecoes: [
-          { h3: '1. Use todas as deduções de saúde', conteudo: '<p>Despesas médicas são dedutíveis sem limite. Plano de saúde, consultas, exames, dentista, psicólogo, fisioterapeuta — tudo é dedutível com comprovante. Uma família que gasta R$ 1.500/mês em saúde tem R$ 18.000/ano de dedução.</p>' },
-          { h3: '2. Maximize os dependentes', conteudo: '<p>Cada dependente deduz R$ 2.275,08/ano. Filhos menores de 21 anos, filhos universitários até 24 anos, cônjuge sem renda — são dependentes legítimos. Para quem paga 27,5% de IR, cada dependente economiza R$ 625/ano.</p>' },
-          { h3: '3. Contribua ao PGBL até o limite de 12%', conteudo: '<p>Se você declara no modelo completo e contribui ao INSS, o PGBL permite deduzir até 12% da renda bruta anual. Para renda de R$ 10.000/mês, isso representa R$ 14.400/ano de dedução — economia de até R$ 3.960/ano para quem paga 27,5%.</p>' },
-          { h3: '4. Declare educação dos filhos', conteudo: '<p>Escola ou faculdade dos filhos: R$ 3.561,50/ano por dependente. Se tem 2 filhos: R$ 7.123/ano de dedução. Não perca esse limite.</p>' },
-          { h3: '5. Abra PJ se for autônomo com renda acima de R$ 8.000/mês', conteudo: '<p>PF autônomo paga até 27,5% de IR + 20% de INSS = 47,5% de carga. PJ no Simples Nacional paga 6% a 15,5%. A diferença é expressiva para quem fatura mais de R$ 100.000/ano.</p>' },
-          { h3: '6. Use o livro-caixa se for autônomo', conteudo: '<p>Autônomo que não escritura o livro-caixa perde deduções valiosas: aluguel do consultório/escritório, materiais, salários de auxiliares, depreciação de equipamentos, anuidade do conselho profissional.</p>' },
-          { h3: '7. Compare completo vs simplificado', conteudo: '<p>O programa IRPF calcula os dois modelos automaticamente. Não assuma que um é sempre melhor — compare a cada ano, especialmente quando houver mudanças na renda ou nas despesas.</p>' },
-          { h3: '8. Deduza pensão alimentícia', conteudo: '<p>Pensão paga por determinação judicial é 100% dedutível, sem limite. Para quem paga R$ 3.000/mês, são R$ 36.000/ano de dedução — economia de até R$ 9.900/ano para alíquota de 27,5%.</p>' },
-          { h3: '9. Guarde comprovantes o ano todo', conteudo: '<p>A organização ao longo do ano é mais valiosa do que qualquer estratégia em março. Use um app de digitalização para fotos dos recibos — vai no Google Drive por categoria.</p>' },
-          { h3: '10. Faça doações ao ECA/Fundos do Idoso', conteudo: '<p>Doações a fundos da criança (ECA) e do idoso são dedutíveis como crédito do IR — não da base, mas do imposto devido. Limite de 6% do IR. Você direciona seu imposto para causas que escolhe.</p>' },
-          { h3: '11. Compense prejuízos em renda variável', conteudo: '<p>Perdeu dinheiro na bolsa? Esses prejuízos podem ser compensados com ganhos futuros — indefinidamente, enquanto mantiver a declaração. Use o GCAP para controlar.</p>' },
-          { h3: '12. Use isenção de imóvel único até R$ 440.000', conteudo: '<p>Venda de imóvel único por até R$ 440.000 é isenta de IR se você não vendeu outro imóvel nos últimos 5 anos. Planeje a venda levando isso em conta.</p>' },
-          { h3: '13. Declare LCI/LCA como isenta', conteudo: '<p>Rendimentos de LCI, LCA, CRI e CRA são isentos de IR. Declare-os em "rendimentos isentos" — não paga IR mas precisa declarar.</p>' },
-          { h3: '14. Invista em previdência privada antes de dezembro', conteudo: '<p>Para aproveitar a dedução PGBL no ano, a contribuição deve ser feita até 31 de dezembro. Contribuições de dezembro entram na declaração do ano seguinte.</p>' },
-          { h3: '15. Em 2026, aproveite a isenção até R$ 5.000', conteudo: '<p>Se sua renda for até R$ 5.000/mês, você ficará isento de IR a partir de janeiro de 2026. Mas mesmo assim, declare se tiver outros critérios de obrigatoriedade.</p>' },
+          { h3: '1. Use todas as deduções de saúde — sem limite', conteudo: '<p>Despesas médicas são as deduções mais poderosas do IR: não têm teto. Plano de saúde, consultas, exames, dentista, psicólogo, fisioterapeuta, internações, cirurgias, próteses — tudo dedutível com recibo ou NF. Uma família que gasta R$ 1.500/mês em saúde tem R$ 18.000/ano de dedução — que equivale a R$ 4.950 a menos de IR para quem paga 27,5%. Guarde cada recibo durante o ano — o DMED que os prestadores enviam à Receita é o valor que ela espera ver na sua declaração.</p>' },
+          { h3: '2. Maximize os dependentes', conteudo: '<p>Cada dependente vale R$ 2.275,08/ano de dedução da base tributável. Para quem paga 27,5%, cada filho ou cônjuge dependente economiza R$ 625/ano. Quem pode ser dependente: filhos até 21 anos (ou até 24 em faculdade ou escola técnica), cônjuge sem renda, pais com renda até o limite de isenção, irmãos e netos em situações específicas. Regra: cada dependente só pode constar em uma declaração — se separado, combine quem declara cada filho.</p>' },
+          { h3: '3. PGBL: a dedução que menos pessoas usam e mais deveriam', conteudo: '<p>O PGBL (Plano Gerador de Benefício Livre) é a estratégia mais subestimada do IR. Se você contribui ao INSS e usa o modelo completo, pode deduzir até 12% da renda bruta anual em aportes ao PGBL. Para renda de R$ 10.000/mês (R$ 120.000/ano), são R$ 14.400 de dedução — economia de R$ 3.960/ano para quem paga 27,5%. O dinheiro não some — fica investido na previdência privada. Mas atenção: o PGBL só faz sentido no modelo completo. No simplificado, não há dedução.</p>' },
+          { h3: '4. Declare a educação dos filhos — até o limite', conteudo: '<p>Mensalidades escolares (infantil, fundamental, médio, técnico e superior) são dedutíveis até R$ 3.561,50/ano por dependente. Com 2 filhos: R$ 7.123/ano de dedução — R$ 1.959 a menos de IR para quem paga 27,5%. Cursos livres, idiomas e extracurriculares não entram. Mas a escola regular, sim — não deixe esse limite passar.</p>' },
+          { h3: '5. Abra PJ se for autônomo com renda mensal acima de R$ 8.000', conteudo: '<p>PF autônomo que fatura muito pode pagar até 27,5% de IR + 20% de INSS = carga próxima a 47,5% sobre os honorários. Uma empresa no Simples Nacional (dependendo do CNAE e do faturamento) paga de 6% a 19,5% total de tributos. Para quem fatura R$ 150.000/ano, a diferença pode ser R$ 40.000 a menos de imposto. O ponto de equilíbrio varia — consulte um contador para calcular o seu caso. O custo da consulta se paga em meses.</p>' },
+          { h3: '6. Livro-caixa: o escudo fiscal do autônomo', conteudo: '<p>Autônomo que não escritura o livro-caixa joga fora deduções que podem representar 20% a 40% da renda: aluguel do consultório ou escritório, salários de recepcionista ou auxiliar, materiais de consumo profissional, anuidade do conselho, depreciação de equipamentos, assinaturas de plataformas profissionais. Cada real lançado corretamente no livro-caixa reduz a base do Carnê-Leão e do IR anual. Organize mês a mês — reconstituir no final do ano é possível mas trabalhoso.</p>' },
+          { h3: '7. Compare completo vs simplificado — todo ano', conteudo: '<p>Não assuma que o modelo de um ano vale para sempre. Se você teve filho, contraiu plano de saúde caro, fez contribuição ao PGBL ou pagou pensão alimentícia, o modelo completo pode ter se tornado melhor desde a última vez que verificou. O programa IRPF calcula os dois automaticamente — clique em "Calcular" e veja os dois resultados antes de enviar. Essa comparação leva 30 segundos e pode valer centenas de reais.</p>' },
+          { h3: '8. Pensão alimentícia judicial: dedução integral', conteudo: '<p>Pensão alimentícia paga por determinação judicial é 100% dedutível da base de cálculo do IR — sem teto. Quem paga R$ 3.000/mês tem R$ 36.000/ano de dedução — economia de até R$ 9.900/ano para alíquota de 27,5%. Atenção: precisa ser judicial (sentença ou acordo homologado pelo juiz). Pensão combinada informalmente entre as partes não entra.</p>' },
+          { h3: '9. Organize os comprovantes ao longo do ano', conteudo: '<p>A organização mensal vale mais do que qualquer estratégia de última hora. Uma pasta no Google Drive com subpastas por mês (Saúde, Educação, Profissional, Moradia) e fotos dos recibos no celular é suficiente. Quando chegar março, você tem tudo — em vez de tentar reconstituir recibos de um ano atrás. Prazo de guarda: mínimo 5 anos após a entrega da declaração.</p>' },
+          { h3: '10. Doações ao ECA e Fundo do Idoso: reduz o imposto, não a base', conteudo: '<p>Doações a fundos controlados pelo ECA (criança e adolescente) e pelo Estatuto do Idoso reduzem diretamente o IR devido — não a base de cálculo. Limite de 6% do IR calculado. Você efetivamente direciona parte do imposto que já seria pago para causas que você escolhe. O dinheiro não é adicional — é o seu IR redirecionado. Informe na ficha "Doações Efetuadas" do programa IRPF.</p>' },
+          { h3: '11. Compensação de prejuízos em renda variável — indefinidamente', conteudo: '<p>Perdeu dinheiro na bolsa em algum mês? Esse prejuízo pode ser compensado com lucros futuros — sem prazo de expiração, enquanto você mantiver a declaração. Registre os prejuízos no programa GCAP mês a mês. Em meses com lucro, o programa desconta automaticamente o prejuízo acumulado antes de calcular o IR. Sem esse controle, você paga DARF sobre o lucro bruto e "joga fora" a compensação.</p>' },
+          { h3: '12. Isenção no imóvel único até R$ 440.000', conteudo: '<p>Vender o único imóvel que você tem por até R$ 440.000 é isento de IR sobre o ganho de capital — desde que você não tenha vendido outro imóvel residencial nos últimos 5 anos. Para imóveis acima desse valor, há redução proporcional. Planeje a venda levando isso em conta: uma diferença de R$ 10.000 no preço de venda pode fazer cair fora da isenção e gerar IR sobre todo o ganho.</p>' },
+          { h3: '13. LCI, LCA, CRI e CRA: isentos, mas precisam ser declarados', conteudo: '<p>Rendimentos de LCI, LCA, CRI e CRA são isentos de IR — mas não dispensam declaração. Informe-os em "Rendimentos Isentos e Não Tributáveis". Não declarar renda isenta é erro que pode gerar malha fina (a Receita recebe os dados do banco via e-Financeira). Declare e economize sem culpa — a isenção é exatamente para isso.</p>' },
+          { h3: '14. Contribua ao PGBL antes de 31 de dezembro', conteudo: '<p>A dedução PGBL vale para o ano em que a contribuição foi feita. Aportes de dezembro de 2025 entram na declaração de 2026. Se você percebeu em novembro que tem espaço de 12% não utilizado, ainda dá tempo de fazer o aporte e garantir a dedução no próximo ano. Mas planeje: muitos fundos têm carência — não deixe para os últimos dias de dezembro.</p>' },
+          { h3: '15. Em 2026, aproveite a isenção até R$ 5.000', conteudo: '<p>A partir de janeiro de 2026, quem ganha até R$ 5.000/mês ficará totalmente isento de IR. Se você está nessa faixa, a melhor "estratégia" de 2026 é simplesmente verificar se ainda é obrigado a declarar — outros critérios (bens, bolsa, operações em bolsa) podem ainda obrigar. Quem ganha acima de R$ 5.000 também se beneficia: as faixas acima são recalibradas, reduzindo o imposto total.</p>' },
         ],
       },
     ],
@@ -1080,67 +1108,80 @@ function gerarPaginaCarneLeao(slug: string, ano: 2025 | 2026): PaginaIR {
     publishedAt: '2026-04-07',
     tags: ['carnê-leão', `IR ${anoStr}`, 'autônomo IR', 'carnê-leão web', 'IRRF autônomo'],
     tempoLeitura: 10,
-    intro: `O <strong>Carnê-Leão</strong> é o mecanismo pelo qual profissionais autônomos e pessoas físicas que recebem rendimentos de outras pessoas físicas recolhem o Imposto de Renda mensalmente — sem aguardar a declaração anual.\n\nSe você é médico, advogado, psicólogo, professor ou qualquer profissional que recebe pagamentos de clientes pessoa física, provavelmente precisa recolher o Carnê-Leão todo mês.`,
+    intro: `Médico que atende particular, psicólogo que cobra sessão de pessoa física, advogado com clientes PF, proprietário que recebe aluguel de inquilino pessoa física — todos têm uma obrigação em comum que muita gente ignora: o <strong>Carnê-Leão</strong>.\n\nAo contrário do CLT (onde o empregador recolhe o IR mensalmente), quem recebe de pessoa física é responsável por recolher o IR por conta própria — até o último dia útil do mês seguinte ao recebimento. Não é opcional, e não "resolve" na declaração anual. Quem acumula meses sem pagar Carnê-Leão chega na declaração com uma dívida de imposto + multa de 0,33%/dia + Selic — que pode ser expressiva.`,
     secoes: [
       {
-        h2: 'Quem Deve Recolher Carnê-Leão?',
+        h2: 'Quem É Obrigado a Recolher Carnê-Leão?',
         lista: [
-          'Profissionais liberais que recebem honorários de pessoas físicas',
-          'Proprietários de imóveis que recebem aluguel de pessoa física',
-          'Trabalhadores domésticos (para o contratante)',
-          'Quem recebe do exterior (rendimentos em moeda estrangeira)',
-          'Beneficiários de pensão alimentícia paga por pessoa física',
+          'Profissionais liberais (médicos, dentistas, psicólogos, advogados, engenheiros, nutricionistas, fisioterapeutas) que atendem clientes pessoa física',
+          'Proprietários de imóveis que recebem aluguel de pessoa física — mesmo que seja R$ 500/mês',
+          'Quem recebe honorários de trabalho autônomo de pessoas físicas (aulas particulares, consultorias, serviços avulsos)',
+          'Quem recebe rendimentos do exterior — converte pela cotação do dólar PTAX do dia e recolhe como Carnê-Leão',
+          'Beneficiários de pensão alimentícia quando o pagador é pessoa física',
+          'Trabalhador doméstico autônomo (diarista sem vínculo) — quando o tomador é PF',
         ],
-        destaque: 'Se você recebe de empresa (PJ), ela retém o IR na fonte — você não precisa do Carnê-Leão para esses rendimentos.',
+        destaque: 'Recebe de empresa (PJ)? Ela retém o IR na fonte (11% sobre o RPA ou conforme tabela). Esses valores entram na declaração como "IRRF — rendimentos de trabalho". O Carnê-Leão não se aplica a rendimentos de PJ pagadores.',
       },
       {
-        h2: `Tabela do Carnê-Leão ${anoStr} (mesma IRPF)`,
+        h2: `Tabela do Carnê-Leão ${anoStr} — É a Mesma Tabela IRPF`,
         tabela: {
           cabecalho: cabecalhoTabela,
           linhas: ano === 2025 ? linhasTabela2025 : linhasTabela2026,
         },
-        destaque: 'O Carnê-Leão usa a mesma tabela progressiva do IRPF. Você pode deduzir INSS, dependentes e livro-caixa antes do cálculo.',
+        destaque: 'O Carnê-Leão usa a tabela progressiva do IRPF — a mesma da retenção mensal do CLT. Antes de aplicar a tabela, você pode deduzir: INSS pago no mês, dependentes (R$ 189,59/mês cada em 2025), despesas do livro-caixa e pensão alimentícia judicial paga. Quanto mais você deduzir legalmente, menor o imposto mensal.',
       },
       {
-        h2: 'Como Recolher o Carnê-Leão',
+        h2: 'Como Recolher o Carnê-Leão — Passo a Passo',
         lista: [
-          'Acesse o site da Receita Federal: receita.economia.gov.br → Carnê-Leão Web',
-          'Informe os rendimentos do mês recebidos de pessoas físicas',
-          'O sistema calcula o imposto automaticamente',
-          'Gere o DARF e pague até o último dia útil do mês seguinte',
-          'Repita mensalmente para cada mês com rendimentos',
+          '1. Acesse receita.economia.gov.br → "Serviços ao Contribuinte" → "Carnê-Leão Web" (exige conta Gov.br)',
+          '2. Selecione o mês de competência (mês em que recebeu o valor — não o mês em que vai pagar)',
+          '3. Informe os rendimentos recebidos de pessoas físicas no mês, um por um (pode importar do livro-caixa)',
+          '4. Informe as deduções do mês: INSS pago, dependentes, despesas profissionais do livro-caixa',
+          '5. O sistema calcula o imposto automaticamente conforme a tabela progressiva',
+          '6. Gere o DARF e pague até o último dia útil do mês seguinte ao recebimento',
+          '7. Na declaração anual, o Carnê-Leão pago entra como "imposto pago" — crédito no ajuste',
         ],
+        destaque: 'O Carnê-Leão Web salva o histórico e pode ser importado diretamente no programa IRPF anual — economia de tempo e redução de erros na declaração.',
       },
       {
-        h2: 'Deduções Permitidas no Carnê-Leão',
+        h2: 'O Livro-Caixa: Onde Está a Grande Economia do Autônomo',
         lista: [
-          'INSS pago no mês',
-          'Dependentes (R$ 189,59/mês por dependente em 2025)',
-          'Despesas do livro-caixa (para autônomos)',
-          'Pensão alimentícia judicial paga',
+          'Aluguel de consultório, sala ou escritório (exclusivo para atividade profissional)',
+          'Salário e encargos de auxiliar, recepcionista, assistente',
+          'Materiais de consumo diretamente ligados à atividade (materiais clínicos, papelaria profissional)',
+          'Anuidade do conselho profissional (CRM, OAB, CREA, CRC, CRN, etc.)',
+          'Assinaturas de plataformas e publicações profissionais',
+          'Depreciação de equipamentos (conforme tabela da Receita Federal)',
         ],
+        destaque: 'Despesas pessoais (supermercado, combustível para uso pessoal, roupas) não entram no livro-caixa. Se a Receita solicitar documentação, vai querer ver notas fiscais de tudo que foi deduzido — misturar pessoal com profissional é causa de glosa.',
       },
       {
-        h2: 'O Que Acontece Se Não Pagar?',
+        h2: 'O Que Acontece Se Não Recolher o Carnê-Leão?',
         lista: [
-          'Multa de 0,33%/dia de atraso (máx 20%)',
-          'Juros Selic sobre o valor',
-          'Risco de malha fina na declaração anual',
-          'Eventual auto de infração com multa de 75%',
+          'Multa de 0,33% ao dia de atraso sobre o imposto devido (máximo de 20%)',
+          'Juros Selic sobre o valor a partir do vencimento',
+          'Risco de malha fina na declaração anual — a Receita cruza os valores declarados com os informados por terceiros',
+          'Se o valor for expressivo: auto de infração com multa de 75% do imposto + Selic + representação fiscal',
+          'O imposto continua devido independentemente do prazo — não "caduca" com o tempo',
         ],
+        destaque: 'Descobriu que deve Carnê-Leão de meses anteriores? Emita os DARFs em atraso com os acréscimos legais e pague — regularizar espontaneamente é muito melhor do que ser autuado. O sistema Carnê-Leão Web calcula os acréscimos automaticamente.',
       },
     ],
     faq: [
       {
-        pergunta: 'Carnê-Leão é obrigatório mesmo para valores pequenos?',
-        resposta: 'Tecnicamente sim, a obrigação existe para qualquer valor recebido de PF. Na prática, a Receita verifica com maior rigor quem está acima da faixa de isenção. Mas a boa prática é recolher sempre que houver rendimento de PF.',
+        pergunta: 'Carnê-Leão é obrigatório mesmo para valores pequenos, abaixo da isenção?',
+        resposta: 'Tecnicamente, a obrigação existe para qualquer rendimento de pessoa física — mas o IR só é gerado quando o rendimento mensal (após deduções) supera R$ 2.259,20 em 2025. Abaixo da faixa de isenção, o cálculo resulta em R$ 0 de imposto, mas o lançamento no Carnê-Leão Web ainda deve ser feito para controle. Na declaração anual, esses valores precisam aparecer — se não aparecerem e a fonte pagadora tiver informado o pagamento, pode gerar inconsistência.',
       },
       {
-        pergunta: 'Posso deduzir as despesas do consultório/escritório no Carnê-Leão?',
-        resposta: 'Sim — via livro-caixa. Aluguel do espaço, materiais, salário de auxiliar, anuidade do conselho profissional são dedutíveis antes do cálculo do Carnê-Leão.',
+        pergunta: 'Posso deduzir despesas do consultório, clínica ou escritório no Carnê-Leão?',
+        resposta: 'Sim — é exatamente para isso que existe o livro-caixa. Você deduz do rendimento bruto as despesas necessárias para a atividade: aluguel do espaço, materiais, salários de auxiliares, anuidade do conselho profissional. A base do Carnê-Leão cai, e o imposto mensal também. Quanto mais organizado o livro-caixa ao longo do ano, menor o imposto mensal e menor o imposto na declaração anual.',
+      },
+      {
+        pergunta: 'O Carnê-Leão pago entra na declaração anual? Como?',
+        resposta: 'Sim. O Carnê-Leão é um pagamento mensal de IR que funciona como antecipação do imposto anual. Na declaração, ele aparece como "imposto pago" — creditado no ajuste. Se ao longo do ano você pagou Carnê-Leão a mais do que o IR calculado na declaração, a diferença vem como restituição. O Carnê-Leão Web tem exportação direta para o programa IRPF, tornando esse processo automático.',
       },
     ],
-    conclusao: `O Carnê-Leão é uma obrigação mensal para autônomos que atendem pessoas físicas. Não deixe acumular — o juro e a multa de atraso encarecem muito. Use o Carnê-Leão Web da Receita Federal, deduza tudo que puder via livro-caixa e mantenha os registros organizados para a declaração anual de ${anoStr}.`,
+    conclusao: `O Carnê-Leão é a obrigação mensal que mais pega desprevenido os profissionais autônomos brasileiros. Não é burocracia opcional — é imposto que você deve recolher todo mês que receber de pessoa física. A boa notícia: usando o livro-caixa corretamente, você reduz significativamente o imposto a pagar. Use o Carnê-Leão Web da Receita Federal, deduza todas as despesas profissionais legítimas, e exporte os dados direto para a declaração anual de ${anoStr} — sem retrabalho.`,
   }
 }
 
@@ -1156,7 +1197,7 @@ function gerarPaginaGanhoCapital(slug: string, ano: 2025 | 2026): PaginaIR {
     publishedAt: '2026-04-07',
     tags: ['ganho de capital', `IR ${anoStr}`, 'venda de imóvel IR', 'GCAP', 'IR ações bolsa'],
     tempoLeitura: 10,
-    intro: `<strong>Ganho de capital</strong> é a diferença entre o valor de venda e o custo de aquisição de um bem ou direito. Quando você vende um imóvel, ações, criptomoedas ou qualquer bem por valor maior do que pagou, há ganho de capital — e ele é tributável pelo IR.\n\nA regra é clara: o IR deve ser pago até o último dia útil do mês seguinte à venda. Não espere a declaração anual.`,
+    intro: `Vendeu um apartamento e embolsou R$ 200.000 de lucro? Esse dinheiro tem IR. Vendeu ações com lucro acima de R$ 20.000 no mês? Também tem IR — e o prazo de pagamento não é a declaração de março. É o DARF do mês seguinte.\n\nGanho de capital é um dos pontos que mais gera surpresa — e dívida — para o contribuinte brasileiro. A regra é direta: a diferença entre o que você pagou e o que vendeu, quando positiva, é tributável. E o pagamento é mensal, não anual. Quem descobre isso só na hora da declaração já está atrasado — com multa de 0,33%/dia mais Selic acumulada.`,
     secoes: [
       {
         h2: 'Alíquotas do Ganho de Capital',
@@ -1193,15 +1234,23 @@ function gerarPaginaGanhoCapital(slug: string, ano: 2025 | 2026): PaginaIR {
     ],
     faq: [
       {
-        pergunta: 'Preciso pagar IR na hora da venda ou só na declaração?',
-        resposta: 'Você deve pagar o DARF (Documento de Arrecadação de Receitas Federais) até o último dia útil do mês seguinte à venda. Na declaração anual, apenas informa a operação — não há pagamento adicional se o DARF foi pago em dia.',
+        pergunta: 'Preciso pagar IR na hora da venda ou só na declaração anual?',
+        resposta: 'Na hora da venda, não — mas no mês seguinte, sim. O DARF de ganho de capital deve ser pago até o último dia útil do mês seguinte ao da venda. Na declaração anual (entregue em março/abril), você apenas informa a operação — não há pagamento adicional se o DARF já foi pago. Se você vendeu em dezembro de 2024, o DARF venceu no último dia útil de janeiro de 2025.',
       },
       {
-        pergunta: 'Como emito o DARF de ganho de capital?',
-        resposta: 'Use o programa GCAP (Ganho de Capital) disponível no site da Receita Federal. Informe os dados da venda e o programa calcula o imposto e gera o DARF para pagamento.',
+        pergunta: 'Como calculo e emito o DARF de ganho de capital?',
+        resposta: 'Use o programa GCAP (Ganho de Capital) disponível gratuitamente no site da Receita Federal (receita.economia.gov.br → Downloads → GCAP). Informe: data e valor de aquisição, data e valor de venda, custos de corretagem, benfeitorias comprovadas. O programa calcula o ganho, aplica as isenções e fatores de redução cabíveis, calcula o IR e gera o DARF. Para imóveis, guarde escrituras e notas de reforma — elas reduzem o ganho tributável.',
+      },
+      {
+        pergunta: 'Vendi ações com lucro de R$ 15.000 este mês — preciso pagar DARF?',
+        resposta: 'Não. Vendas de ações no mercado à vista abaixo de R$ 20.000 por mês são isentas de IR sobre o ganho de capital. Mas você ainda precisa declarar a operação na declaração anual e informar a isenção. Atenção: o limite de R$ 20.000 é para o total de vendas no mês, não para o lucro. E day trade não tem isenção — alíquota de 20% sobre qualquer ganho, pago via DARF até o último dia útil do mês seguinte.',
+      },
+      {
+        pergunta: 'Posso compensar o prejuízo de uma venda com o lucro de outra?',
+        resposta: 'Sim — e essa é uma das estratégias mais valiosas para investidores. Prejuízos em renda variável (ações, FIIs, ETFs, opções) compensam lucros futuros da mesma categoria — indefinidamente, enquanto você mantiver a declaração. Use o programa GCAP para registrar os prejuízos e compensar automaticamente nos meses com ganho. Essa compensação pode zerar o DARF de meses lucrativos.',
       },
     ],
-    conclusao: `O ganho de capital é um dos pontos que mais gera malha fina e dívida com a Receita — justamente porque muitos não sabem que o pagamento é mensal. Em ${anoStr}, use o programa GCAP, verifique se você se enquadra em isenções e pague o DARF até o prazo. Organize os comprovantes de custo e benfeitorias para reduzir ao máximo o ganho tributável.`,
+    conclusao: `O ganho de capital cobra dois impostos do contribuinte desavisado: o imposto em si e a multa por atraso. Em ${anoStr}, toda vez que você vender um bem com lucro, a primeira pergunta a fazer é: "Tem isenção?" (imóvel único até R$ 440k, ações abaixo de R$ 20k/mês, bens de pequeno valor até R$ 35k). Se não houver isenção, a segunda pergunta é: "Quando vence o DARF?" — último dia útil do mês seguinte. Use o programa GCAP, comprove todas as benfeitorias que aumentam o custo de aquisição, e pague em dia.`,
   }
 }
 
@@ -1217,7 +1266,7 @@ function gerarPaginaPassoAPasso(slug: string, ano: 2025 | 2026): PaginaIR {
     publishedAt: '2026-04-07',
     tags: [`declaração IR ${anoStr}`, 'como declarar IR', 'passo a passo IR', 'IRPF', 'programa IRPF'],
     tempoLeitura: 13,
-    intro: `Declarar o Imposto de Renda ${anoStr} pode parecer complicado, mas com os documentos certos e seguindo o passo a passo, é mais simples do que parece. Este guia cobre todo o processo: desde o download do programa até o recibo de entrega.`,
+    intro: `A declaração do Imposto de Renda ${anoStr} não é simples — mas tem um processo claro. A maioria dos erros acontece por falta de organização prévia: a pessoa abre o programa sem ter todos os documentos, preenche de memória e comete equívocos que travam a restituição por meses.\n\nEste guia cobre o processo completo, do zero até o recibo de entrega. Com os documentos reunidos, a maioria das pessoas conclui em 1 a 3 horas. O prazo é geralmente março a maio — mas os primeiros lotes de restituição saem para quem entregou cedo.`,
     secoes: [
       {
         h2: `Passo 1: Verifique Se Você É Obrigado a Declarar em ${anoStr}`,
@@ -1280,15 +1329,19 @@ function gerarPaginaPassoAPasso(slug: string, ano: 2025 | 2026): PaginaIR {
     ],
     faq: [
       {
-        pergunta: `Qual o prazo para declarar o IR em ${anoStr}?`,
-        resposta: `Geralmente até 30 de abril. A declaração do IR de ${anoStr} (ano-base ${parseInt(anoStr) - 1}) tem prazo até 30 de abril de ${anoStr}. Verifique no site da Receita Federal para confirmar o prazo exato, que pode variar.`,
+        pergunta: `Qual é o prazo para declarar o IR em ${anoStr}?`,
+        resposta: `Em ${anoStr}, o prazo é de março a maio (geralmente com encerramento em 31 de maio ou 30 de abril — a Receita Federal confirma no início de cada ano). Em 2023 e 2024, o prazo foi até 31 de maio. Não deixe para o último dia: o sistema da Receita costuma ter instabilidade nos dias finais, e você não quer arriscar. Quem entrega na primeira semana do prazo vai para os primeiros lotes de restituição.`,
       },
       {
-        pergunta: 'O que é a declaração pré-preenchida?',
-        resposta: 'A declaração pré-preenchida usa dados que a Receita Federal já tem de empregadores, bancos e outras fontes para preencher automaticamente parte da sua declaração. Acesse pelo e-CAC com conta Gov.br nível prata ou ouro.',
+        pergunta: 'O que é a declaração pré-preenchida e vale a pena usar?',
+        resposta: 'Sim, vale muito. A declaração pré-preenchida importa automaticamente: salários informados pelos empregadores (DIRF), rendimentos de bancos e corretoras (e-Financeira), despesas médicas informadas pelos prestadores (DMED). Você não precisa digitar esses valores — só conferir e complementar com o que falta (deduções não automáticas, bens, dívidas). Para usar, acesse o e-CAC com conta Gov.br nível prata ou ouro. O app "Meu Imposto de Renda" também oferece essa opção.',
+      },
+      {
+        pergunta: 'É possível declarar pelo celular ou precisa ser pelo computador?',
+        resposta: 'Para declarações simples (um emprego CLT, poucos dependentes, sem investimentos em bolsa), o app "Meu Imposto de Renda" (Android e iOS) funciona bem e suporta a declaração pré-preenchida. Para situações mais complexas — autônomo com livro-caixa, múltiplas fontes de renda, imóveis, investimentos, herança — use o programa IRPF no computador (Windows e Mac). A versão web (irpf.receita.fazenda.gov.br) também é uma alternativa sem precisar instalar nada.',
       },
     ],
-    conclusao: `Declarar o IR ${anoStr} não precisa ser um bicho de sete cabeças. Com os documentos organizados e seguindo este passo a passo, a maioria das pessoas conclui em menos de 2 horas. Entregue logo no início do prazo para garantir prioridade na restituição.`,
+    conclusao: `Declarar o IR ${anoStr} em ordem é uma questão de preparação: reúna todos os documentos antes de abrir o programa, use a declaração pré-preenchida para economizar tempo e reduzir erros, e compare os modelos completo e simplificado antes de enviar. Quem entrega cedo dorme tranquilo — e recebe a restituição nos primeiros lotes. Quem deixa para o último dia corre risco de problemas técnicos, pressa e declaração incompleta.`,
   }
 }
 
@@ -1306,7 +1359,7 @@ function gerarPaginaGeral(slug: string, ano: 2025 | 2026): PaginaIR {
     publishedAt: '2026-04-07',
     tags: [tema.toLowerCase(), `IR ${anoStr}`, 'imposto de renda', 'IRPF', 'declaração'],
     tempoLeitura: 9,
-    intro: `Este guia aborda <strong>${tema}</strong> no contexto do Imposto de Renda ${anoStr}. A declaração anual do IRPF é obrigatória para milhões de brasileiros, e entender cada aspecto corretamente é fundamental para evitar a malha fina e pagar apenas o que é legalmente devido.`,
+    intro: `Tudo que você precisa saber sobre <strong>${tema}</strong> no Imposto de Renda ${anoStr}. A Receita Federal recebe dados de empregadores, bancos, corretoras, prestadores de saúde e cartórios — qualquer divergência com o que você declarar aparece no cruzamento. Entender as regras evita multa, malha fina e imposto pago a mais.`,
     secoes: [
       {
         h2: `Tabela IRPF ${anoStr} — Referência Rápida`,
@@ -1323,32 +1376,37 @@ function gerarPaginaGeral(slug: string, ano: 2025 | 2026): PaginaIR {
         lista: DEDUCOES.slice(0, 8).map(d => `${d.nome}: ${d.limiteDesc ?? 'consulte as regras vigentes'}`),
       },
       {
-        h2: 'Dicas Essenciais para a Declaração',
+        h2: 'O Que Não Pode Faltar na Declaração',
         lista: [
-          'Peça os informes de rendimentos até 28 de fevereiro',
-          'Compare os modelos completo e simplificado',
-          'Guarde comprovantes por pelo menos 5 anos',
-          'Declare todos os rendimentos, inclusive isentos',
-          'Use a declaração pré-preenchida disponível no e-CAC',
-          'Entregue logo no início do prazo para prioridade na restituição',
+          'Informe de rendimentos de todos os empregadores (disponível até 28/fevereiro — se não recebeu, exija)',
+          'Informes de bancos, corretoras e fundos de investimento — todos os que você movimentou',
+          'Recibos de despesas médicas, dentárias e plano de saúde — sem limite de dedução no modelo completo',
+          'Comprovantes de mensalidades escolares dos filhos — até R$ 3.561,50/ano por dependente',
+          'INSS pago (CLT: consta no informe; autônomo: carnês e DAS)',
+          'Rendimentos isentos: FGTS, LCI/LCA, herança, bolsas — precisam ser declarados mesmo sendo isentos',
+          'Bens e direitos: imóveis, veículos, investimentos pelo valor em 31/dez',
         ],
-        destaque: 'Dúvidas específicas: consulte o site da Receita Federal (receita.economia.gov.br) ou um contador de confiança.',
+        destaque: 'Use a declaração pré-preenchida no e-CAC (conta Gov.br nível prata ou ouro) — ela já importa informes de empregadores e bancos automaticamente, reduzindo risco de erro e tempo de preenchimento.',
       },
     ],
     faq: [
       {
         pergunta: `Quem é obrigado a declarar IR em ${anoStr}?`,
-        resposta: `Em ${anoStr}, são obrigados a declarar: quem recebeu rendimentos tributáveis acima de R$ 33.888,00; tinha bens acima de R$ 300.000; realizou operações em bolsa; atividade rural com receita acima de R$ 169.440; ganho de capital em vendas; ou passou a ter residência fiscal no Brasil.`,
+        resposta: `Em ${anoStr}, devem declarar: quem recebeu rendimentos tributáveis acima de R$ 33.888,00 no ano; quem tinha bens acima de R$ 300.000 em 31/dezembro; quem realizou operações em bolsa de valores (qualquer valor — mesmo que isento); atividade rural com receita bruta acima de R$ 169.440; quem teve ganho de capital na venda de bens ou direitos; quem passou a ter residência fiscal no Brasil. Mesmo quem não se enquadra pode declarar para recuperar IR retido na fonte.`,
       },
       {
         pergunta: 'Como usar a calculadora de IR desta página?',
-        resposta: 'Informe sua renda bruta mensal e o número de dependentes. A calculadora aplica a tabela IRPF vigente, desconta o INSS estimado e calcula o imposto a pagar e a alíquota efetiva.',
+        resposta: 'Digite sua renda bruta mensal no campo indicado. A calculadora aplica a tabela IRPF vigente, desconta o INSS estimado (alíquota progressiva 2025) e mostra o imposto mensal estimado e a alíquota efetiva. Para resultado mais preciso, inclua o número de dependentes — cada um reduz R$ 189,59/mês da base tributável.',
       },
       {
-        pergunta: 'Qual é o prazo para declarar?',
-        resposta: `O prazo geralmente é até 30 de abril de ${anoStr}. Verifique a data exata no site da Receita Federal — eventualmente pode haver prorrogação.`,
+        pergunta: `Qual é o prazo para declarar em ${anoStr}?`,
+        resposta: `O prazo da declaração do IRPF costuma ser até 30 de abril (ou 31 de maio, quando há prorrogação). A Receita Federal divulga o prazo exato no início de cada ano. Quem perde o prazo paga multa mínima de R$ 165,74, podendo chegar a 20% do IR devido — e fica nos últimos lotes de restituição.`,
+      },
+      {
+        pergunta: 'O que é a declaração pré-preenchida e como acessar?',
+        resposta: 'É uma funcionalidade da Receita Federal que importa automaticamente os dados já informados por terceiros: salários do empregador (DIRF), rendimentos bancários (e-Financeira), despesas médicas (DMED). Para acessar, você precisa de conta Gov.br nível prata ou ouro. Disponível no e-CAC, no programa IRPF e no app "Meu Imposto de Renda". Reduz tempo de preenchimento e erros de digitação — mas confira os valores importados antes de enviar.',
       },
     ],
-    conclusao: `Compreender ${tema} no contexto do IR ${anoStr} é um passo importante para declarar corretamente e pagar apenas o que é devido. Use as deduções disponíveis, organize seus documentos e não deixe para a última hora — declarações entregues cedo têm prioridade na restituição.`,
+    conclusao: `Entender ${tema} no contexto do IR ${anoStr} é meio caminho para declarar sem erros e pagar apenas o imposto que você deve. Use a calculadora desta página para simular seu imposto, compare os modelos completo e simplificado no programa IRPF, e entregue a declaração logo no início do prazo para garantir prioridade na restituição. A Receita Federal tem todos os seus dados — declarar corretamente é a melhor proteção contra malha fina.`,
   }
 }

@@ -102,89 +102,100 @@ function gerarCreditoPessoalBanco(slug: string): PaginaEmprestimo {
     tipo: 'credito-pessoal-banco',
     bancoSlug: banco?.slug,
     titulo: `Crédito Pessoal ${banco?.nome ?? 'Banco'} 2026`,
-    metaTitle: `Crédito Pessoal ${banco?.nome ?? ''} 2026 — Taxa, Simulação e Como Contratar`,
-    metaDesc: `Taxa de juros do crédito pessoal ${banco?.nome ?? ''} em 2026: ${fmtPct(taxa)} a.m. (${fmtPct(taxaAnual)} a.a.). Simule parcelas e compare com outros bancos.`,
-    h1: `Crédito Pessoal ${banco?.nome ?? ''} 2026: Taxa, Simulação e Comparativo`,
-    intro: `O crédito pessoal do ${banco?.nome ?? 'banco'} pratica taxa a partir de ${fmtPct(taxa)} ao mês (${fmtPct(taxaAnual)} ao ano) em 2026, com prazo de até ${banco?.prazoMaxMeses ?? 48} meses e valor máximo de ${fmt(banco?.valorMax ?? 50000)}. Veja simulações reais, comparativo com concorrentes e passo a passo para contratar.`,
+    metaTitle: `Crédito Pessoal ${banco?.nome ?? ''} 2026 — Taxa Real, Simulação e CET | Calculadora Virtual`,
+    metaDesc: `Crédito pessoal ${banco?.nome ?? ''} 2026: taxa a partir de ${fmtPct(taxa)} a.m. (${fmtPct(taxaAnual)} a.a.). CET real, IOF embutido e comparativo com consignado. Simule antes de contratar.`,
+    h1: `Crédito Pessoal ${banco?.nome ?? ''} 2026: Taxa Real, CET e Comparativo Honesto`,
+    intro: `A taxa anunciada pelo ${banco?.nome ?? 'banco'} é ${fmtPct(taxa)} ao mês — mas o Custo Efetivo Total (CET), que inclui IOF e tarifas, chega a ${fmtPct(cet24.cetAnual)} ao ano. Em 2026, a média nacional para crédito pessoal é de 5,1% a.m. (dados do Banco Central). Antes de assinar, veja o que os bancos não mostram na propaganda.`,
     taxaRef: taxa,
     valorRef: valorEx,
     prazoRef: 24,
     parcelaRef: price24.parcela,
     secoes: [
       {
-        h2: `Taxa de Juros ${banco?.nome ?? ''} — Crédito Pessoal 2026`,
-        conteudo: `A taxa mínima do ${banco?.nome ?? 'banco'} para crédito pessoal em 2026 é de ${fmtPct(taxa)} ao mês, equivalente a ${fmtPct(taxaAnual)} ao ano (taxa efetiva). A taxa máxima chega a ${fmtPct(taxaMax)} ao mês (${fmtPct(mensal2Anual(taxaMax))} ao ano), dependendo do perfil de crédito, histórico e relacionamento com o banco.`,
-        destaque: `Taxa a partir de ${fmtPct(taxa)} a.m. · Até ${banco?.prazoMaxMeses ?? 48} meses · Valor até ${fmt(banco?.valorMax ?? 50000)}`,
+        h2: `Taxa Real do ${banco?.nome ?? ''} — O Que Vem Escondido nos Contratos`,
+        conteudo: `A taxa mínima divulgada é ${fmtPct(taxa)} a.m. (${fmtPct(taxaAnual)} a.a.) — mas essa é a taxa para o cliente ideal: score acima de 750, renda comprovada e bom relacionamento com o banco. Na prática, a maioria dos clientes paga entre ${fmtPct(taxa * 1.3)} e ${fmtPct(taxaMax)} a.m. O CET em 24 meses é ${fmtPct(cet24.cetAnual)} a.a., incluindo ${fmt(cet24.iofTotal)} de IOF (0,0082% ao dia + 0,38% flat). Exija sempre o CET antes de assinar — é obrigação legal do banco fornecê-lo.`,
+        destaque: `Taxa anunciada: ${fmtPct(taxa)} a.m. | CET real (24 meses): ${fmtPct(cet24.cetAnual)} a.a. | IOF: ${fmt(cet24.iofTotal)} | Prazo: até ${banco?.prazoMaxMeses ?? 48} meses`,
+        alerta: `O CET é sempre maior que a taxa de juros. Bancos que divulgam só a taxa mensal escondem o custo real do crédito.`,
       },
       {
-        h2: `Simulação: Quanto fica a parcela de ${fmt(valorEx)}?`,
+        h2: `Simulação Completa: ${fmt(valorEx)} — O Que Você Realmente Vai Pagar`,
         tabela: {
-          cabecalho: ['Prazo', 'Parcela (PRICE)', 'Total Pago', 'Juros Total'],
+          cabecalho: ['Prazo', 'Parcela Fixa', 'Total Pago', 'Juros Total', 'Quanto o Banco Lucra'],
           linhas: [
-            ['12 meses', fmt(price12.parcela), fmt(price12.totalPago), fmt(price12.totalJuros)],
-            ['24 meses', fmt(price24.parcela), fmt(price24.totalPago), fmt(price24.totalJuros)],
-            ['36 meses', fmt(price36.parcela), fmt(price36.totalPago), fmt(price36.totalJuros)],
+            ['12 meses', fmt(price12.parcela), fmt(price12.totalPago), fmt(price12.totalJuros), `${((price12.totalJuros / valorEx) * 100).toFixed(0)}% do principal`],
+            ['24 meses', fmt(price24.parcela), fmt(price24.totalPago), fmt(price24.totalJuros), `${((price24.totalJuros / valorEx) * 100).toFixed(0)}% do principal`],
+            ['36 meses', fmt(price36.parcela), fmt(price36.totalPago), fmt(price36.totalJuros), `${((price36.totalJuros / valorEx) * 100).toFixed(0)}% do principal`],
           ],
         },
-        conteudo: `Simulações com taxa mínima de ${fmtPct(taxa)} a.m. (Tabela PRICE — parcela fixa). O CET (Custo Efetivo Total) em 24 meses é de aproximadamente ${fmtPct(cet24.cetAnual)} ao ano, incluindo IOF de ${fmt(cet24.iofTotal)}.`,
+        conteudo: `Tabela PRICE (parcela fixa). Em 36 meses, você paga ${fmt(price36.totalJuros)} só de juros — ${((price36.totalJuros / valorEx) * 100).toFixed(0)}% do valor que pegou. O IOF de ${fmt(cet24.iofTotal)} é cobrado uma única vez, no momento da contratação, e já vem descontado do valor liberado na conta.`,
       },
       {
-        h2: 'Comparativo: Taxas de Crédito Pessoal em 2026',
+        h2: 'Antes de Pegar Crédito Pessoal: Veja Se Não Tem Opção Mais Barata',
+        tabela: {
+          cabecalho: ['Modalidade', 'Taxa Mensal', 'Taxa Anual', 'Quem Pode Usar', 'Economia em 24 meses (vs crédito pessoal)'],
+          linhas: [
+            ['Consignado INSS', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.inss_teto)) + ' a.a.', 'Aposentados e pensionistas INSS', fmt(price24.totalPago - calcPrice(valorEx, TAXAS_2026.consignado.inss_teto, 24).totalPago) + ' a menos'],
+            ['Consignado Servidor', fmtPct(TAXAS_2026.consignado.servidor_federal_max) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.servidor_federal_max)) + ' a.a.', 'Servidores públicos', fmt(price24.totalPago - calcPrice(valorEx, TAXAS_2026.consignado.servidor_federal_max, 24).totalPago) + ' a menos'],
+            ['Antecipação FGTS', '1,29% a.m.', fmtPct(mensal2Anual(1.29)) + ' a.a.', 'CLTs com saldo no FGTS', 'Depende do saldo disponível'],
+            [`Crédito Pessoal ${banco?.nome ?? ''}`, fmtPct(taxa) + ' a.m.', fmtPct(taxaAnual) + ' a.a.', 'Qualquer pessoa aprovada', '—'],
+          ],
+        },
+        conteudo: `Se você é aposentado ou pensionista, nunca tome crédito pessoal antes de tentar o consignado INSS: a diferença de taxa é de ${fmtPct(taxa - TAXAS_2026.consignado.inss_teto)} pontos percentuais por mês — isso representa ${fmt(price24.totalPago - calcPrice(valorEx, TAXAS_2026.consignado.inss_teto, 24).totalPago)} a menos pagos em 24 meses para um empréstimo de ${fmt(valorEx)}.`,
+      },
+      {
+        h2: 'Comparativo de Taxas — Todos os Principais Bancos 2026',
         tabela: {
           cabecalho: ['Banco', 'Taxa Mín. Mensal', 'Taxa Mín. Anual', 'Prazo Máx.', 'Valor Máx.'],
           linhas: tabelaBancos,
         },
-        conteudo: 'Taxas referenciais para clientes com bom histórico de crédito. A taxa final depende do seu score, renda e relacionamento com a instituição.',
+        conteudo: `Taxas mínimas para clientes com score acima de 700 e renda comprovada. A taxa que você recebe depende do seu perfil — peça simulação em pelo menos 3 bancos antes de decidir. Bancos digitais (Nubank, Inter, C6) costumam ter aprovação mais rápida, mas nem sempre oferecem os melhores juros para valores maiores.`,
       },
       {
-        h2: 'Requisitos e Documentos Necessários',
+        h2: '5 Armadilhas que o Banco Não Vai Te Contar',
         lista: [
-          'RG ou CNH (documento de identidade)',
-          'CPF (situação regular na Receita Federal)',
-          'Comprovante de renda dos últimos 3 meses (contracheque, extrato bancário ou decore)',
-          'Comprovante de residência (conta de luz, água ou banco — até 90 dias)',
-          'Score de crédito mínimo variável por banco (geralmente 500–650 pontos)',
+          `IOF embutido: em ${fmt(valorEx)}, você paga ~${fmt(cet24.iofTotal)} de IOF logo na contratação — o dinheiro que cai na conta já vem com esse desconto`,
+          'Seguro prestamista "opcional": muitos bancos oferecem o seguro embrulhado na simulação — é legal recusar, economiza de 5% a 15% do custo total',
+          'TAC (Taxa de Abertura de Crédito): proibida pelo BACEN desde 2008, mas ainda aparece com outros nomes — questione qualquer tarifa além da taxa de juros e IOF',
+          'Taxa "a partir de": a taxa mínima é para o cliente perfeito; a maioria paga pelo menos 30-50% a mais do que o anunciado',
+          'Prazo longo = parcela menor, mas muito mais juros: em 36 meses você paga ' + fmt(price36.totalJuros) + ' de juros; em 12 meses, apenas ' + fmt(price12.totalJuros),
         ],
       },
       {
-        h2: 'Vantagens e Desvantagens',
-        lista: [...(banco?.vantagens ?? []).map(v => `✅ ${v}`), ...(banco?.desvantagens ?? []).map(d => `⚠️ ${d}`)],
-      },
-      {
-        h2: 'Como Contratar Crédito Pessoal Online',
+        h2: 'Documentos Necessários e Como Aumentar as Chances de Aprovação',
         lista: [
-          'Acesse o app ou site do banco',
-          'Vá em "Empréstimo" ou "Crédito"',
-          'Simule com o valor e prazo desejados',
-          'Verifique a taxa e o CET antes de confirmar',
-          'Envie a documentação solicitada digitalmente',
-          'Dinheiro cai na conta em até 1 dia útil',
+          'RG ou CNH — qualquer documento oficial com foto',
+          'CPF em situação regular na Receita Federal (consulte em receita.fazenda.gov.br)',
+          'Comprovante de renda dos últimos 3 meses: contracheque, extrato bancário ou declaração de autônomo',
+          'Comprovante de residência em nome próprio, emitido há menos de 90 dias',
+          'Score acima de 600 para aprovação básica; acima de 700 para as melhores taxas',
+          'Dica: pague todas as contas em dia nos 3 meses antes de pedir o empréstimo — o score melhora e a taxa cai',
+          'Nunca aceite a primeira oferta: peça a simulação por escrito com o CET e compare com pelo menos mais 2 bancos',
         ],
       },
     ],
     faq: [
       {
-        pergunta: `Qual é a taxa do crédito pessoal ${banco?.nome ?? ''} em 2026?`,
-        resposta: `A taxa mínima é ${fmtPct(taxa)} ao mês (${fmtPct(taxaAnual)} ao ano). A taxa máxima chega a ${fmtPct(taxaMax)} a.m. para clientes com risco maior.`,
+        pergunta: `Qual é a taxa real do crédito pessoal ${banco?.nome ?? ''} em 2026?`,
+        resposta: `A taxa mínima anunciada é ${fmtPct(taxa)} a.m. (${fmtPct(taxaAnual)} a.a.), mas o CET (Custo Efetivo Total) em 24 meses chega a ${fmtPct(cet24.cetAnual)} a.a. por conta do IOF (${fmt(cet24.iofTotal)}) e possíveis seguros. Exija o CET antes de assinar — é obrigação do banco fornecê-lo por lei.`,
       },
       {
-        pergunta: 'Quanto posso pegar de empréstimo?',
-        resposta: `O limite máximo é de ${fmt(banco?.valorMax ?? 50000)}, mas o valor aprovado depende da sua renda, score e relacionamento com o banco.`,
+        pergunta: 'Quanto posso pegar emprestado?',
+        resposta: `O limite máximo é de ${fmt(banco?.valorMax ?? 50000)}, mas o valor aprovado depende da sua renda (parcela não pode ultrapassar 30% da renda mensal), score e relacionamento. Para ${fmt(valorEx)} em 24 meses, a renda mínima necessária é de ${fmt(price24.parcela / 0.3)}.`,
       },
       {
         pergunta: 'O dinheiro cai na conta em quanto tempo?',
-        resposta: 'Geralmente em até 1 dia útil após aprovação. Para clientes com bom histórico, pode ser liberado em minutos pelo app.',
+        resposta: 'Bancos digitais liberam em minutos após aprovação. Bancos tradicionais levam de 1 a 3 dias úteis. Mas atenção: a pressa é inimiga da boa decisão financeira — compare taxas antes de aceitar qualquer proposta.',
       },
       {
-        pergunta: 'Posso pagar antecipadamente?',
-        resposta: 'Sim. A quitação antecipada é um direito legal e reduz os juros proporcionalmente. Calcule o saldo devedor antes de antecipar.',
+        pergunta: 'Posso quitar antes do prazo e economizar?',
+        resposta: `Sim — e é uma das melhores estratégias. A quitação antecipada é direito garantido por lei (Lei 10.820) com desconto proporcional dos juros futuros. Em 24 meses a ${fmtPct(taxa)} a.m., se você quitar na metade do prazo, pode economizar cerca de 40% dos juros restantes.`,
       },
       {
-        pergunta: 'Crédito pessoal é o mesmo que empréstimo pessoal?',
-        resposta: 'Sim. Os termos são sinônimos. O dinheiro não tem destinação específica — você usa como quiser.',
+        pergunta: 'Crédito pessoal é melhor que o cartão parcelado?',
+        resposta: `Quase sempre sim. O cartão parcelado cobra em média 3,99% a.m. no parcelamento direto — mais caro que o crédito pessoal com bom score. E o rotativo do cartão, se você não pagar a fatura inteira, cobra até 14,99% a.m. (teto legal). Para valores acima de R$ 3.000, o crédito pessoal costuma ser mais vantajoso.`,
       },
     ],
-    conclusao: `O crédito pessoal do ${banco?.nome ?? 'banco'} em 2026 é uma boa opção para necessidades imediatas de crédito, mas compare sempre com o consignado (taxa menor) e o crédito com garantia (Home Equity). Use a simulação acima para calcular a parcela exata e verifique o CET antes de assinar.`,
+    conclusao: `O crédito pessoal do ${banco?.nome ?? 'banco'} em 2026 pode ser útil, mas nunca é a primeira opção. Antes de contratar, verifique se você tem direito ao consignado (que pode economizar ${fmt(price24.totalPago - calcPrice(valorEx, TAXAS_2026.consignado.inss_teto, 24).totalPago)} em 24 meses). Se for contratar, exija o CET por escrito, recuse seguros que não quer, compare ao menos 3 propostas e escolha o prazo mais curto que seu orçamento suportar.`,
     breadcrumbs: breadcrumbs(`Crédito Pessoal ${banco?.nome ?? ''}`, slug),
   }
 }
@@ -195,8 +206,8 @@ function gerarConsignado(slug: string): PaginaEmprestimo {
   let prazo = 84
   let valorEx = 15000
   let titulo = 'Empréstimo Consignado INSS 2026'
-  let h1 = 'Empréstimo Consignado INSS 2026: Taxa, Simulação e Como Contratar'
-  let intro = `O empréstimo consignado INSS tem a menor taxa do mercado de crédito livre: ${fmtPct(TAXAS_2026.consignado.inss_teto)} ao mês (teto legal de 2026). Com desconto automático no benefício, prazo de até 84 meses e sem consulta ao Serasa.`
+  let h1 = 'Empréstimo Consignado INSS 2026: Taxa Real, Simulação e Como Contratar'
+  let intro = `O consignado INSS é o empréstimo mais barato do país para pessoa física: teto legal de ${fmtPct(TAXAS_2026.consignado.inss_teto)} ao mês (26,4% ao ano) fixado pelo Banco Central em 2026. Para comparar: o crédito pessoal médio em banco cobra 5,1% a.m. — quase três vezes mais. Mas há armadilhas que todo aposentado precisa conhecer antes de contratar.`
 
   // Identificar por tipo de slug
   if (slug.includes('servidor-publico') || slug.includes('servidor')) {
@@ -204,15 +215,15 @@ function gerarConsignado(slug: string): PaginaEmprestimo {
     publico = 'Servidores Públicos Federais'
     prazo = 96
     titulo = 'Consignado Servidor Público 2026'
-    h1 = 'Empréstimo Consignado Servidor Público 2026: Taxa e Simulação'
-    intro = `O consignado para servidores públicos federais tem taxa máxima de ${fmtPct(taxa)} ao mês e prazo de até 96 meses. Desconto automático em folha de pagamento. Ideal para quem quer a menor parcela possível.`
+    h1 = 'Empréstimo Consignado Servidor Público 2026: Taxa Teto, Simulação e Portabilidade'
+    intro = `O consignado para servidores públicos federais tem teto de ${fmtPct(taxa)} a.m. em 2026 — menor que o crédito pessoal (5,1% a.m. em média) e com desconto direto em folha. Prazo de até 96 meses e aprovação sem consulta ao Serasa. Veja simulações reais e como fazer portabilidade se já tiver um contrato mais caro.`
   } else if (slug.includes('clt')) {
     taxa = TAXAS_2026.consignado.clt_max
     publico = 'Trabalhadores com carteira assinada (CLT)'
     prazo = 48
     titulo = 'Consignado CLT 2026'
-    h1 = 'Empréstimo Consignado CLT 2026: Como Funciona e Simulação'
-    intro = `O consignado para CLT tem taxa de até ${fmtPct(taxa)} ao mês com desconto em folha. Taxa menor que o crédito pessoal, mas maior que o consignado INSS. Depende de convênio do empregador com o banco.`
+    h1 = 'Empréstimo Consignado CLT 2026: Como Funciona, Taxas e Armadilhas'
+    intro = `O consignado para CLT é mais barato que o crédito pessoal, mas tem um pré-requisito que poucos sabem: seu empregador precisa ter convênio ativo com o banco. Sem o convênio, não tem consignado. A taxa máxima é ${fmtPct(taxa)} a.m. — confira se o banco cobra abaixo disso.`
   }
 
   // Extrair valor do slug (calculo-consignado-VALOR)
@@ -237,8 +248,8 @@ function gerarConsignado(slug: string): PaginaEmprestimo {
     slug,
     tipo: 'consignado',
     titulo,
-    metaTitle: `${titulo} — Simulação e Como Contratar | Calculadora Virtual`,
-    metaDesc: `Consignado 2026: taxa a partir de ${fmtPct(TAXAS_2026.consignado.inss_min)} a.m. Simule parcelas de ${fmt(valorEx)} em ${prazo} meses = ${fmt(price.parcela)}/mês. Sem consulta Serasa.`,
+    metaTitle: `${titulo} — Teto ${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m., Simulação e Fraudes | Calculadora Virtual`,
+    metaDesc: `Consignado INSS 2026: teto legal de ${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m. (26,4% a.a.). ${fmt(valorEx)} em ${prazo} meses = ${fmt(price.parcela)}/mês. Renda mínima: ${fmt(rendaMinEstimada)}. Aprenda a evitar fraudes.`,
     h1,
     intro,
     taxaRef: taxa,
@@ -247,10 +258,10 @@ function gerarConsignado(slug: string): PaginaEmprestimo {
     parcelaRef: price.parcela,
     secoes: [
       {
-        h2: `Simulação: ${fmt(valorEx)} em ${prazo} meses (Taxa ${fmtPct(taxa)} a.m.)`,
-        destaque: `Parcela: ${fmt(price.parcela)}/mês · Total pago: ${fmt(price.totalPago)} · Juros total: ${fmt(price.totalJuros)}`,
+        h2: `Simulação Real: ${fmt(valorEx)} em ${prazo} meses — O Que Você Vai Pagar de Fato`,
+        destaque: `Parcela: ${fmt(price.parcela)}/mês · Total pago: ${fmt(price.totalPago)} · Juros total: ${fmt(price.totalJuros)} · Renda mínima necessária: ${fmt(rendaMinEstimada)}`,
         tabela: {
-          cabecalho: ['Prazo', 'Parcela', 'Total Pago', 'Juros Total', 'Renda Mín. Estimada'],
+          cabecalho: ['Prazo', 'Parcela', 'Total Pago', 'Juros Total', 'Benefício Mín. Necessário'],
           linhas: [
             ['12 meses', fmt(price12.parcela), fmt(price12.totalPago), fmt(price12.totalJuros), fmt(price12.parcela / 0.35)],
             ['24 meses', fmt(price24.parcela), fmt(price24.totalPago), fmt(price24.totalJuros), fmt(price24.parcela / 0.35)],
@@ -259,77 +270,93 @@ function gerarConsignado(slug: string): PaginaEmprestimo {
             ['84 meses', fmt(price84.parcela), fmt(price84.totalPago), fmt(price84.totalJuros), fmt(price84.parcela / 0.35)],
           ],
         },
-        conteudo: `Simulações com taxa de ${fmtPct(taxa)} ao mês (Tabela PRICE). A margem consignável é de 35% do benefício líquido. Para obter ${fmt(valorEx)} em ${prazo} meses, você precisa de renda mínima de ${fmt(rendaMinEstimada)}.`,
+        conteudo: `Taxa de ${fmtPct(taxa)} a.m. (teto legal 2026). O prazo de 84 meses tem a menor parcela, mas você paga ${fmt(price84.totalJuros)} de juros — contra ${fmt(price12.totalJuros)} em 12 meses. Para decidir o prazo, calcule a menor parcela que cabe nos 35% da sua margem, não a menor parcela possível.`,
       },
       {
-        h2: 'Taxa de Juros Consignado 2026 — Comparativo',
+        h2: 'Como o Consignado Compara com Outras Modalidades — Dados do Banco Central',
         tabela: {
-          cabecalho: ['Modalidade', 'Taxa Mínima', 'Taxa Máxima', 'Prazo Máx.'],
+          cabecalho: ['Modalidade', 'Taxa Mensal', 'Taxa Anual', 'Prazo Máx.', `Parcela de ${fmt(valorEx)} em 24 meses`],
           linhas: [
-            ['Consignado INSS', fmtPct(TAXAS_2026.consignado.inss_min) + ' a.m.', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m. (teto legal)', '84 meses'],
-            ['Consignado Servidor Federal', fmtPct(TAXAS_2026.consignado.servidor_federal_min) + ' a.m.', fmtPct(TAXAS_2026.consignado.servidor_federal_max) + ' a.m.', '96 meses'],
-            ['Consignado Servidor Estadual', '1,74% a.m.', fmtPct(TAXAS_2026.consignado.servidor_estadual_max) + ' a.m.', '96 meses'],
-            ['Consignado CLT', '1,80% a.m.', fmtPct(TAXAS_2026.consignado.clt_max) + ' a.m.', '48 meses'],
-            ['Crédito Pessoal (bancão)', fmtPct(TAXAS_2026.pessoal.banco_grande_min) + ' a.m.', fmtPct(TAXAS_2026.pessoal.banco_grande_max) + ' a.m.', '96 meses'],
+            ['Consignado INSS (teto legal)', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', '26,4% a.a.', '84 meses', fmt(calcPrice(valorEx, TAXAS_2026.consignado.inss_teto, 24).parcela)],
+            ['Consignado Servidor Federal', fmtPct(TAXAS_2026.consignado.servidor_federal_max) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.servidor_federal_max)) + ' a.a.', '96 meses', fmt(calcPrice(valorEx, TAXAS_2026.consignado.servidor_federal_max, 24).parcela)],
+            ['Consignado CLT', fmtPct(TAXAS_2026.consignado.clt_max) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.clt_max)) + ' a.a.', '48 meses', fmt(calcPrice(valorEx, TAXAS_2026.consignado.clt_max, 24).parcela)],
+            ['Crédito Pessoal — banco digital', '3,5% a.m.', '51,1% a.a.', '60 meses', fmt(calcPrice(valorEx, 3.5, 24).parcela)],
+            ['Crédito Pessoal — banco grande', fmtPct(TAXAS_2026.pessoal.banco_grande_min) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.pessoal.banco_grande_min)) + ' a.a.', '96 meses', fmt(calcPrice(valorEx, TAXAS_2026.pessoal.banco_grande_min, 24).parcela)],
+            ['Cheque especial (teto)', fmtPct(TAXAS_2026.teto_cheque_especial) + ' a.m.', '151% a.a.', '—', 'EVITAR'],
           ],
         },
+        conteudo: `Fonte: Banco Central do Brasil, nota de crédito março/2026. O consignado INSS custa menos da metade do crédito pessoal em banco digital, e menos de um terço do banco tradicional. A diferença de ${fmt(calcPrice(valorEx, TAXAS_2026.pessoal.banco_grande_min, 24).totalPago - calcPrice(valorEx, TAXAS_2026.consignado.inss_teto, 24).totalPago)} no total pago (24 meses) é dinheiro que fica no seu bolso.`,
       },
       {
-        h2: 'Margem Consignável: Como Calcular',
-        conteudo: `A margem consignável é o valor máximo que pode ser descontado do seu benefício ou salário. Para o INSS, é de até 45% do benefício líquido (35% para empréstimos + 5% para cartão consignado + 5% para uso no cartão de crédito). Para servidores e CLT, é de 30% do salário líquido.`,
+        h2: 'Margem Consignável: Como Calcular Quanto Você Pode Pegar',
+        conteudo: `A margem consignável do INSS é de 35% do benefício líquido para empréstimos + 10% para cartão consignado = 45% no total. Isso significa que se o seu benefício líquido é de R$ 2.000, a parcela máxima de empréstimo é de R$ 700/mês (35%). O banco consulta automaticamente a margem disponível no sistema do INSS — você não precisa calcular manualmente, mas saber a conta evita ser enganado.`,
         lista: [
-          'Benefício INSS líquido: R$ 2.000 → Margem máxima: R$ 900/mês (45%)',
-          'Salário servidor líquido: R$ 5.000 → Margem máxima: R$ 1.500/mês (30%)',
-          'A margem disponível é a margem total menos parcelas em andamento',
-          'Bancos consultam o banco de dados do INSS/órgão para verificar a margem real',
+          'Benefício líquido R$ 1.518 (salário mínimo) → margem máxima empréstimo: R$ 531/mês',
+          'Benefício líquido R$ 2.000 → margem máxima empréstimo: R$ 700/mês',
+          'Benefício líquido R$ 3.000 → margem máxima empréstimo: R$ 1.050/mês',
+          'Margem disponível = margem total menos parcelas de contratos já em andamento',
+          'Consulte sua margem disponível em: meu.inss.gov.br ou no app Meu INSS',
+          'Para servidores: margem é 35% do salário líquido (regulação diferente do INSS)',
         ],
       },
       {
-        h2: 'Documentos Necessários',
+        h2: '6 Fraudes no Consignado INSS que Custam Caro',
+        alerta: 'O consignado INSS é a modalidade com mais fraudes no Brasil — segundo o BACEN, centenas de milhares de aposentados já tiveram contratos fraudulentos em seus benefícios. Nunca forneça senha, número de benefício ou dados bancários por telefone.',
         lista: [
-          'RG ou CNH (documento com foto)',
-          'CPF (regularizado na Receita Federal)',
-          'Extrato do benefício INSS ou contracheque (servidores)',
-          'Comprovante de residência (até 90 dias)',
-          'Cartão do benefício INSS (para aposentados)',
-          'Senha do benefício ou autorização digital via Meu INSS',
+          'Desconto não autorizado: verifique mensalmente o extrato do INSS pelo app Meu INSS — qualquer desconto desconhecido pode ser fraude',
+          'Portabilidade forçada: golpistas simulam portabilidade para bancos desconhecidos, mas aumentam o prazo (e os juros totais) sem avisar',
+          'Seguro prestamista embutido sem consentimento: é ilegal — você tem direito de recusar; exija o contrato sem o seguro antes de assinar',
+          'Taxa acima do teto: qualquer taxa acima de ' + fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m. é ilegal — denuncie pelo 0800 722 0101 (BACEN)',
+          'Aumento do prazo na portabilidade: ao fazer portabilidade, confira se o prazo restante não foi estendido — isso aumenta o custo total',
+          'Ligações prometendo "margem liberada": bancos sérios não ligam oferecendo consignado; se ligar, é quase sempre golpe',
         ],
       },
       {
-        h2: 'Cuidados: Fraudes no Consignado',
-        alerta: 'Atenção! Fraudes no consignado INSS são frequentes. Nunca forneça sua senha do INSS, número de benefício ou dados bancários por telefone. Consulte contratos apenas pelo app Meu INSS ou 135.',
+        h2: 'Documentos Necessários para Contratação',
         lista: [
-          'Nunca forneça senha por telefone',
-          'Consulte margem pelo Meu INSS antes de contratar',
-          'Verifique o banco no cadastro BACEN antes de contratar',
-          'Leia o CET e o contrato antes de assinar',
-          'Denuncie fraudes no 0800 722 0101 (BACEN)',
+          'RG ou CNH — qualquer documento oficial com foto',
+          'CPF regularizado (consulte em receita.fazenda.gov.br)',
+          'Extrato do benefício INSS (pelo app Meu INSS ou agência)',
+          'Comprovante de residência emitido há menos de 90 dias',
+          'Cartão do benefício — número e banco do benefício',
+          'Autorização digital via app Meu INSS (obrigatória desde 2023 para novos contratos)',
+        ],
+      },
+      {
+        h2: 'Portabilidade: Como Reduzir a Taxa de Um Contrato Existente',
+        conteudo: `Se você já tem um consignado com taxa maior que o teto atual (${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m.), pode fazer portabilidade gratuitamente. O novo banco quita o saldo devedor no banco antigo — você não precisa pagar nada. A portabilidade é direita garantida por lei. Atenção: o novo contrato deve manter o prazo restante (não aumentar) e a taxa deve ser menor.`,
+        lista: [
+          'Consulte o saldo devedor atual pelo app Meu INSS ou extrato bancário',
+          'Solicite simulação de portabilidade em pelo menos 3 bancos',
+          'Confirme que o prazo restante não vai aumentar',
+          'Verifique o CET do novo contrato — não só a taxa de juros',
+          'A portabilidade deve ser processada em até 5 dias úteis pelo banco de destino',
         ],
       },
     ],
     faq: [
       {
-        pergunta: 'Qual é o teto de juros do consignado INSS em 2026?',
-        resposta: `O teto legal é de ${fmtPct(TAXAS_2026.consignado.inss_teto)} ao mês para empréstimo pessoal consignado. Qualquer banco que cobre acima disso está praticando taxa ilegal.`,
+        pergunta: 'Qual é o teto legal do consignado INSS em 2026?',
+        resposta: `${fmtPct(TAXAS_2026.consignado.inss_teto)} ao mês (26,4% ao ano), conforme resolução do Conselho Monetário Nacional. Qualquer banco que cobre acima disso está praticando taxa ilegal — denuncie no 0800 722 0101 do Banco Central.`,
       },
       {
-        pergunta: 'Negativado pode fazer consignado?',
-        resposta: 'Sim! O consignado não exige consulta ao Serasa ou SPC. O risco para o banco é baixo porque o desconto é automático no benefício.',
+        pergunta: 'Negativado pode fazer consignado INSS?',
+        resposta: 'Sim. O consignado INSS não consulta Serasa, SPC ou Boa Vista. A aprovação depende apenas da margem consignável disponível no benefício. É por isso que o consignado é a melhor opção para quem está negativado e precisa de crédito.',
       },
       {
         pergunta: 'Qual é o prazo máximo do consignado INSS?',
-        resposta: 'O prazo máximo é de 84 meses (7 anos) para aposentados e pensionistas do INSS.',
+        resposta: `84 meses (7 anos). Em 84 meses, ${fmt(valorEx)} gera parcela de ${fmt(price84.parcela)}/mês e juros total de ${fmt(price84.totalJuros)}. O prazo mais curto paga menos juros — escolha o prazo mais curto que sua margem suportar.`,
       },
       {
         pergunta: 'Posso ter mais de um consignado ao mesmo tempo?',
-        resposta: 'Sim, desde que a soma das parcelas não ultrapasse a margem consignável (45% do benefício para INSS ou 30% para servidores).',
+        resposta: `Sim, desde que a soma das parcelas não ultrapasse 35% do benefício líquido. Se seu benefício é R$ 2.000, a margem total de empréstimos é R$ 700/mês. Com dois contratos, o total das parcelas não pode passar disso.`,
       },
       {
-        pergunta: 'Como portabilidade de consignado funciona?',
-        resposta: 'Você pode migrar o contrato para outro banco com taxa menor, sem pagar nada. O novo banco quita o saldo devedor no banco atual. Compare taxas e solicite a portabilidade pelo app.',
+        pergunta: 'Como funciona a portabilidade do consignado?',
+        resposta: `Você solicita que outro banco quite seu contrato atual por uma taxa menor. O novo banco paga o saldo devedor diretamente ao banco antigo — sem custo para você. O prazo restante deve ser mantido (não aumentado). Simule a portabilidade em pelo menos 3 bancos e compare o CET, não apenas a taxa mensal.`,
       },
     ],
-    conclusao: `O consignado é o empréstimo mais barato do mercado para quem tem renda formal. Com taxa máxima de ${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m. (INSS) e aprovação sem consulta ao Serasa, é a melhor opção para necessidades de crédito. Simule nos bancos credenciados e compare o CET antes de fechar.`,
+    conclusao: `O consignado INSS em 2026 é o melhor empréstimo disponível para aposentados e pensionistas: teto de ${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m., sem consulta ao Serasa e com aprovação rápida. Para ${fmt(valorEx)}, a menor parcela possível é ${fmt(price84.parcela)}/mês em 84 meses. Mas cuidado: quanto menor a parcela, mais juros você paga no total. Compare ao menos 3 bancos, recuse seguros embutidos e monitore seu extrato mensalmente pelo app Meu INSS para detectar qualquer desconto não autorizado.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -341,8 +368,8 @@ function gerarFinanciamentoImovel(slug: string): PaginaEmprestimo {
   let entrada = valorImovel * 0.2
   let valorFinanciado = valorImovel - entrada
   let titulo = 'Financiamento de Imóvel 2026'
-  let h1 = 'Financiamento de Imóvel 2026: Taxas, Simulação e Como Aprovar'
-  let intro = `O financiamento imobiliário em 2026 tem taxa a partir de ${fmtPct(TAXAS_2026.imovel.cef_min_mensal)} ao mês pela Caixa (${fmtPct(TAXAS_2026.imovel.cef_anual)} ao ano + TR). Veja simulação completa, documentos, entrada mínima e como aumentar as chances de aprovação.`
+  let h1 = 'Financiamento de Imóvel 2026: A Conta Real de 30 Anos que o Banco Não Mostra'
+  let intro = `Um imóvel de R$ 300.000 financiado em 30 anos pela Caixa custa cerca de R$ 700.000 no total — mais que o dobro do valor. É matemática pura: ${fmtPct(TAXAS_2026.imovel.cef_anual)} ao ano + TR durante 360 meses. Antes de assinar, veja a simulação completa, o impacto do FGTS e a diferença brutal entre SAC e PRICE.`
 
   const matchValor = slug.match(/simulacao-financiamento-(\d+)/)
   if (matchValor) {
@@ -378,8 +405,8 @@ function gerarFinanciamentoImovel(slug: string): PaginaEmprestimo {
     slug,
     tipo: 'financiamento-imovel',
     titulo,
-    metaTitle: `${titulo} | Calculadora Virtual`,
-    metaDesc: `Financiamento imóvel 2026: taxa ${fmtPct(taxa)} a.m. Para ${fmt(valorFinanciado)} em ${prazo / 12} anos: parcela PRICE = ${fmt(price.parcela)}/mês. Simule agora.`,
+    metaTitle: `${titulo} | Parcela Real, PRICE vs SAC e Impacto do FGTS — Calculadora Virtual`,
+    metaDesc: `Financiamento imóvel 2026: ${fmt(valorFinanciado)} em ${prazo / 12} anos = ${fmt(price.parcela)}/mês (PRICE) ou ${fmt(sac.parcelaInicial)}/mês inicial (SAC). Total pago: ${fmt(price.totalPago)}. Veja o que os bancos não mostram.`,
     h1,
     intro,
     taxaRef: taxa,
@@ -388,91 +415,97 @@ function gerarFinanciamentoImovel(slug: string): PaginaEmprestimo {
     parcelaRef: price.parcela,
     secoes: [
       {
-        h2: `Simulação: ${fmt(valorFinanciado)} financiados (entrada ${fmt(entrada)})`,
-        destaque: `PRICE: ${fmt(price.parcela)}/mês · SAC (1ª parcela): ${fmt(sac.parcelaInicial)}/mês · SAC (última): ${fmt(sac.parcelaFinal)}/mês`,
+        h2: `A Simulação que os Bancos Deveriam Mostrar: ${fmt(valorImovel)} — Custo Real Total`,
+        destaque: `Entrada: ${fmt(entrada)} (20%) | Financiado: ${fmt(valorFinanciado)} | PRICE: ${fmt(price.parcela)}/mês | SAC inicial: ${fmt(sac.parcelaInicial)}/mês | Total pago em ${prazo / 12} anos: ${fmt(price.totalPago)}`,
         tabela: {
-          cabecalho: ['Sistema', 'Parcela Inicial', 'Parcela Final', 'Total Pago', 'Juros Total'],
+          cabecalho: ['Sistema', 'Parcela Inicial', 'Parcela Final', 'Total Pago em ' + (prazo / 12) + ' anos', 'Juros Total', 'Quanto o Banco Recebe Além do Imóvel'],
           linhas: [
-            ['PRICE (fixa)', fmt(price.parcela), fmt(price.parcela), fmt(price.totalPago), fmt(price.totalJuros)],
-            ['SAC (decrescente)', fmt(sac.parcelaInicial), fmt(sac.parcelaFinal), fmt(sac.totalPago), fmt(sac.totalJuros)],
+            ['PRICE (fixa)', fmt(price.parcela), fmt(price.parcela), fmt(price.totalPago), fmt(price.totalJuros), `${((price.totalJuros / valorFinanciado) * 100).toFixed(0)}% do valor financiado`],
+            ['SAC (decrescente)', fmt(sac.parcelaInicial), fmt(sac.parcelaFinal), fmt(sac.totalPago), fmt(sac.totalJuros), `${((sac.totalJuros / valorFinanciado) * 100).toFixed(0)}% do valor financiado`],
           ],
         },
-        conteudo: `Taxa: ${fmtPct(taxa)} a.m. + TR (${fmtPct(TAXAS_2026.tr)} a.m. estimado). O SAC é mais vantajoso no total pago, mas a parcela inicial é maior. O PRICE tem parcela menor no início.`,
+        conteudo: `Taxa: ${fmtPct(taxa)} a.m. + TR (estimada em ${fmtPct(TAXAS_2026.tr)} a.m. em 2026). O SAC economiza ${fmt(price.totalJuros - sac.totalJuros)} em juros no total — mas exige parcela inicial ${fmt(sac.parcelaInicial - price.parcela)} mais alta. Se você tiver capacidade financeira, o SAC compensa muito.`,
+        alerta: `Em ${prazo / 12} anos pelo sistema PRICE, você vai pagar ${fmt(price.totalJuros)} de juros — equivalente a ${((price.totalJuros / valorFinanciado) * 100).toFixed(0)}% do valor que financiou. Isso é o custo real do crédito imobiliário.`,
       },
       {
-        h2: 'Comparativo por Prazo (Tabela PRICE)',
+        h2: 'Prazo Faz Diferença: Veja o Impacto em Décadas',
         tabela: {
-          cabecalho: ['Prazo', 'Parcela Inicial', 'Total Pago', 'Juros Total'],
+          cabecalho: ['Prazo', 'Parcela PRICE', 'Total Pago', 'Juros Total', 'Diferença vs 20 anos'],
           linhas: [
-            ['20 anos (240 meses)', fmt(price20a.parcela), fmt(price20a.totalPago), fmt(price20a.totalJuros)],
-            ['30 anos (360 meses)', fmt(price30a.parcela), fmt(price30a.totalPago), fmt(price30a.totalJuros)],
-            ['35 anos (420 meses)', fmt(price35a.parcela), fmt(price35a.totalPago), fmt(price35a.totalJuros)],
+            ['20 anos (240 meses)', fmt(price20a.parcela), fmt(price20a.totalPago), fmt(price20a.totalJuros), '—'],
+            ['30 anos (360 meses)', fmt(price30a.parcela), fmt(price30a.totalPago), fmt(price30a.totalJuros), fmt(price30a.totalJuros - price20a.totalJuros) + ' a mais de juros'],
+            ['35 anos (420 meses)', fmt(price35a.parcela), fmt(price35a.totalPago), fmt(price35a.totalJuros), fmt(price35a.totalJuros - price20a.totalJuros) + ' a mais de juros'],
           ],
         },
-        conteudo: `Quanto maior o prazo, menor a parcela mensal, mas maior o total de juros pagos. Um financiamento de ${fmt(valorFinanciado)} em 35 anos paga ${fmt(price35a.totalJuros)} de juros — quase ${(price35a.totalJuros / valorFinanciado).toFixed(1)}x o valor financiado.`,
+        conteudo: `Financiar em 35 anos tem parcela ${fmt(price20a.parcela - price35a.parcela)} menor que em 20 anos — mas custa ${fmt(price35a.totalJuros - price20a.totalJuros)} a mais de juros. A dica dos especialistas: tome o prazo mais longo que o banco oferecer, mas faça amortizações extras todo ano com o FGTS ou rendimentos — você reduz o prazo sem comprometer o fluxo de caixa mensal.`,
       },
       {
-        h2: 'Taxas dos Principais Bancos — Financiamento Imóvel 2026',
-        tabela: {
-          cabecalho: ['Banco', 'Taxa Mín. Anual', 'Referência', 'Prazo Máx.'],
-          linhas: [
-            ['Caixa Econômica Federal', `${fmtPct(TAXAS_2026.imovel.cef_anual)} a.a.`, 'TR + 8% a.a.', '35 anos'],
-            ['Banco do Brasil', `${fmtPct(TAXAS_2026.imovel.bb_min_anual)} a.a.`, 'TR + 8,29% a.a.', '30 anos'],
-            ['Bradesco', `${fmtPct(TAXAS_2026.imovel.bradesco_min_anual)} a.a.`, 'TR + 8,5% a.a.', '30 anos'],
-            ['MCMV Faixa 1 (até R$2.640/mês)', `${fmtPct(TAXAS_2026.imovel.mcmv_faixa1)} a.a.`, 'TR + 4,5% a.a.', '30 anos'],
-            ['MCMV Faixa 2 (até R$4.400/mês)', `${fmtPct(TAXAS_2026.imovel.mcmv_faixa2)} a.a.`, 'TR + 7% a.a.', '30 anos'],
-            ['MCMV Faixa 3 (até R$8.000/mês)', `${fmtPct(TAXAS_2026.imovel.mcmv_faixa3)} a.a.`, 'TR + 8,16% a.a.', '35 anos'],
-          ],
-        },
-      },
-      {
-        h2: 'Entrada Mínima e Uso do FGTS',
-        conteudo: `A entrada mínima varia por programa: pelo MCMV pode ser 0% (Faixa 1) a 10-20% (Faixas 2 e 3). Pelo Sistema Financeiro de Habitação (SFH) convencional, a entrada mínima é de 20%. O FGTS pode ser usado para amortizar o saldo devedor, reduzir parcelas ou pagar a entrada, desde que o trabalhador tenha 3 anos de FGTS e não tenha imóvel financiado pelo SFH.`,
+        h2: 'FGTS no Financiamento: Quanto Economiza e Como Usar Corretamente',
+        conteudo: `O FGTS pode ser usado na entrada, na amortização do saldo devedor ou para reduzir o valor das parcelas. A amortização do saldo devedor é quase sempre a estratégia mais vantajosa: cada R$ 1.000 aplicado no saldo reduz os juros futuros calculados sobre aquele valor — com os juros do financiamento em ${fmtPct(taxa)} a.m., você economiza muito mais do que qualquer investimento conservador pagaria.`,
         lista: [
-          'MCMV Faixa 1: entrada pode ser zero (com subsídio)',
-          'SFH convencional: entrada mínima de 20%',
-          'FGTS pode ser usado a cada 2 anos para amortização',
-          'Imóvel deve ser para uso próprio (residencial)',
-          'Comprador não pode ter outro imóvel financiado pelo SFH',
+          'Requisito mínimo: 3 anos de contribuição ao FGTS (consecutivos ou não)',
+          'Não ter imóvel financiado pelo SFH em qualquer cidade do Brasil',
+          'Imóvel para uso residencial próprio (não para investimento)',
+          'Pode usar a cada 2 anos para amortização do saldo devedor',
+          'Na amortização: escolha "reduzir saldo" (menos juros) em vez de "reduzir parcela" (resultado imediato)',
+          'MCMV Faixa 1: pode usar o FGTS como parte do subsídio governamental — consulte a Caixa',
+          'Limite de uso: 80% do saldo do FGTS pode ser utilizado para imóvel residencial',
         ],
       },
       {
-        h2: 'Documentos para Financiamento Imobiliário',
+        h2: 'Taxas Por Programa — Comparativo Oficial 2026',
+        tabela: {
+          cabecalho: ['Programa / Banco', 'Renda Familiar', 'Taxa Anual', 'Subsídio Máx.', 'Prazo Máx.'],
+          linhas: [
+            ['MCMV Faixa 1', 'Até R$ 2.640/mês', fmtPct(TAXAS_2026.imovel.mcmv_faixa1) + ' a.a.', 'Até R$ 55.000', '30 anos'],
+            ['MCMV Faixa 2', 'Até R$ 4.400/mês', fmtPct(TAXAS_2026.imovel.mcmv_faixa2) + ' a.a.', 'Até R$ 29.000', '30 anos'],
+            ['MCMV Faixa 3', 'Até R$ 8.000/mês', fmtPct(TAXAS_2026.imovel.mcmv_faixa3) + ' a.a.', 'Sem subsídio', '35 anos'],
+            ['Caixa — SFH', 'Qualquer renda', fmtPct(TAXAS_2026.imovel.cef_anual) + ' a.a. + TR', 'Sem subsídio', '35 anos'],
+            ['Banco do Brasil', 'Qualquer renda', fmtPct(TAXAS_2026.imovel.bb_min_anual) + ' a.a. + TR', 'Sem subsídio', '30 anos'],
+            ['Bradesco', 'Qualquer renda', fmtPct(TAXAS_2026.imovel.bradesco_min_anual) + ' a.a. + TR', 'Sem subsídio', '30 anos'],
+          ],
+        },
+        conteudo: `Fonte: dados oficiais dos bancos e Caixa Econômica Federal, 2026. Taxas mínimas para clientes com score acima de 700. A TR (Taxa Referencial) é calculada mensalmente pelo Banco Central — em março 2026, estimada em ${fmtPct(TAXAS_2026.tr)} a.m. Uma alta da TR encarece as parcelas no financiamento imobiliário.`,
+      },
+      {
+        h2: 'Documentos Necessários — Lista Completa para Não Atrasar a Aprovação',
         lista: [
-          'RG, CPF e CNH (todos os compradores)',
-          'Certidão de nascimento ou casamento',
-          'Comprovante de renda (3 meses de contracheque ou IR)',
-          'Extrato bancário (últimos 3 meses)',
-          'Comprovante de residência atual',
-          'IPTU e matrícula atualizada do imóvel',
-          'Certidão negativa de ônus reais (cartório)',
-          'Planta e habite-se (imóvel novo)',
+          'RG, CPF e CNH de todos os compradores (e cônjuges, se casados)',
+          'Certidão de nascimento ou casamento atualizada (menos de 90 dias)',
+          'Comprovante de renda: 3 meses de contracheque, ou declaração do IR do último ano para autônomos',
+          'Extrato bancário dos últimos 3 meses (conta corrente principal)',
+          'Comprovante de residência atual em nome próprio, emitido há menos de 90 dias',
+          'IPTU do imóvel a ser comprado (ano corrente)',
+          'Matrícula atualizada do imóvel no Cartório de Registro de Imóveis (menos de 30 dias)',
+          'Certidão negativa de ônus reais (cartório de registro)',
+          'Para imóvel novo: planta aprovada e habite-se emitido pela prefeitura',
+          'Score mínimo recomendado: 700 pontos — abaixo disso, o banco pode exigir entrada maior',
         ],
       },
     ],
     faq: [
       {
-        pergunta: 'Qual é a taxa mínima de financiamento imobiliário em 2026?',
-        resposta: `A Caixa Econômica Federal pratica taxa a partir de ${fmtPct(TAXAS_2026.imovel.cef_anual)} ao ano (+ TR). Para o MCMV Faixa 1, a taxa cai para ${fmtPct(TAXAS_2026.imovel.mcmv_faixa1)} ao ano.`,
+        pergunta: 'Qual é a menor taxa de financiamento imobiliário disponível em 2026?',
+        resposta: `Pelo Minha Casa Minha Vida Faixa 1 (renda familiar até R$ 2.640/mês), a taxa é de ${fmtPct(TAXAS_2026.imovel.mcmv_faixa1)} ao ano + TR — com subsídio de até R$ 55.000. Para quem não se enquadra no MCMV, a Caixa pratica ${fmtPct(TAXAS_2026.imovel.cef_anual)} a.a. + TR para o Sistema Financeiro de Habitação (SFH).`,
       },
       {
-        pergunta: 'Qual é o prazo máximo de financiamento?',
-        resposta: 'Até 420 meses (35 anos) para imóvel residencial pelo SFH. A idade do comprador somada ao prazo não pode ultrapassar 80 anos e 6 meses.',
+        pergunta: 'Qual é o prazo máximo para financiar um imóvel?',
+        resposta: `35 anos (420 meses) para imóvel residencial pelo SFH. Mas há um limite: a soma da sua idade atual com o prazo não pode ultrapassar 80 anos e 6 meses. Se você tem 50 anos, o prazo máximo aprovado é de 30 anos (80,5 - 50).`,
       },
       {
-        pergunta: 'Price ou SAC: qual é melhor?',
-        resposta: 'O SAC paga menos juros no total, mas a primeira parcela é maior. O PRICE tem parcela fixa, facilitando o planejamento. Para quem vai quitar antes do prazo, o SAC é mais vantajoso.',
+        pergunta: 'PRICE ou SAC: qual sistema de amortização é mais vantajoso?',
+        resposta: `O SAC paga ${fmt(price.totalJuros - sac.totalJuros)} a menos de juros no total — uma diferença significativa. Mas a primeira parcela SAC é ${fmt(sac.parcelaInicial - price.parcela)} mais alta. Para quem tem renda estável e pode suportar a parcela inicial maior, o SAC é quase sempre a escolha mais inteligente no longo prazo.`,
       },
       {
-        pergunta: 'Posso usar o FGTS para dar entrada?',
-        resposta: 'Sim, desde que tenha no mínimo 3 anos de contribuição ao FGTS (consecutivos ou não) e não possua outro imóvel financiado pelo SFH na mesma cidade ou no município onde trabalha.',
+        pergunta: 'Posso usar o FGTS para dar entrada no financiamento?',
+        resposta: `Sim, se você tiver ao menos 3 anos de contribuição ao FGTS e não possuir outro imóvel financiado pelo SFH na cidade onde mora ou trabalha. Além da entrada, pode usar o FGTS a cada 2 anos para amortizar o saldo — essa é a estratégia mais vantajosa para reduzir os juros totais.`,
       },
       {
-        pergunta: 'Quanto tempo leva para aprovar o financiamento?',
-        resposta: 'Geralmente de 30 a 90 dias, incluindo análise de crédito, vistoria do imóvel, análise jurídica e assinatura do contrato em cartório.',
+        pergunta: 'Quanto tempo leva para aprovar o financiamento imobiliário?',
+        resposta: `De 30 a 90 dias no total, incluindo: análise de crédito (5-15 dias), vistoria e avaliação do imóvel (10-20 dias), análise jurídica da documentação (10-30 dias) e assinatura do contrato em cartório. Agilize juntando toda a documentação antes de entrar com o pedido.`,
       },
     ],
-    conclusao: `O financiamento imobiliário em 2026 tem taxa mínima de ${fmtPct(taxa)} a.m. (${fmtPct(TAXAS_2026.imovel.cef_anual)} a.a.). Para ${fmt(valorFinanciado)} em ${prazo / 12} anos, a parcela PRICE é de ${fmt(price.parcela)}/mês. Use o FGTS para reduzir o saldo e prefira o SAC se puder pagar a parcela inicial maior — você paga menos juros no total.`,
+    conclusao: `Financiar um imóvel em 2026 é uma das maiores decisões financeiras da vida. Para ${fmt(valorFinanciado)} em ${prazo / 12} anos, você vai pagar ${fmt(price.totalPago)} no total — ${fmt(price.totalJuros)} apenas de juros. Use o SAC se puder, faça amortizações extras com o FGTS a cada 2 anos, e verifique se se enquadra no Minha Casa Minha Vida (pode economizar até R$ 55.000 em subsídio). Score acima de 700 garante melhores taxas.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -482,8 +515,8 @@ function gerarFinanciamentoVeiculo(slug: string): PaginaEmprestimo {
   let prazo = 48
   let taxa = TAXAS_2026.veiculo.medio_mensal
   let titulo = 'Financiamento de Carro 2026'
-  let h1 = 'Financiamento de Carro 2026: Taxa, Simulação e Comparativo'
-  let intro = `O financiamento de veículo em 2026 tem taxa a partir de ${fmtPct(TAXAS_2026.veiculo.min_mensal)} ao mês. Veja simulações reais, comparativo com consórcio e como conseguir a menor parcela.`
+  let h1 = 'Financiamento de Carro 2026: O Que Você Realmente Vai Pagar'
+  let intro = `Um carro de R$ 60.000 financiado em 48 meses a ${fmtPct(TAXAS_2026.veiculo.medio_mensal)} a.m. (média de mercado em 2026) custa R$ ${fmtNum(Math.round(calcPrice(48000, TAXAS_2026.veiculo.medio_mensal, 48).totalPago))} no total — só de juros são R$ ${fmtNum(Math.round(calcPrice(48000, TAXAS_2026.veiculo.medio_mensal, 48).totalJuros))} a mais que o valor financiado. Antes de assinar, veja a simulação completa e o comparativo com o consórcio.`
 
   const matchValorCarro = slug.match(/simulacao-financiamento-carro-(\d+)/)
   if (matchValorCarro) {
@@ -523,8 +556,8 @@ function gerarFinanciamentoVeiculo(slug: string): PaginaEmprestimo {
     slug,
     tipo: 'financiamento-veiculo',
     titulo,
-    metaTitle: `${titulo} | Calculadora Virtual`,
-    metaDesc: `Financiamento carro 2026: taxa ${fmtPct(taxa)} a.m. Para ${fmt(valorFinanciado)} em 48 meses: ${fmt(price48.parcela)}/mês. Compare com consórcio e simule agora.`,
+    metaTitle: `${titulo} | Parcela Real, Juros Totais e Consórcio vs Financiamento — Calculadora Virtual`,
+    metaDesc: `Financiamento carro ${fmt(valorVeiculo)} em 2026: entrada ${fmt(entrada)} + ${fmt(valorFinanciado)} financiados. Em 48 meses: ${fmt(price48.parcela)}/mês, total ${fmt(price48.totalPago)}. Compare antes de assinar.`,
     h1,
     intro,
     taxaRef: taxa,
@@ -533,83 +566,86 @@ function gerarFinanciamentoVeiculo(slug: string): PaginaEmprestimo {
     parcelaRef: calcPrice(valorFinanciado, taxa, prazo).parcela,
     secoes: [
       {
-        h2: `Simulação: ${fmt(valorVeiculo)} (entrada ${fmt(entrada)}, financiado ${fmt(valorFinanciado)})`,
+        h2: `O Custo Real de Financiar ${fmt(valorVeiculo)}: Entrada de ${fmt(entrada)} e ${fmt(valorFinanciado)} Financiados`,
+        alerta: `Em 72 meses (prazo máximo), você paga ${fmt(price72.totalJuros)} só de juros — ${((price72.totalJuros / valorFinanciado) * 100).toFixed(0)}% do valor financiado. Em 24 meses, apenas ${fmt(price24.totalJuros)}.`,
         tabela: {
-          cabecalho: ['Prazo', 'Parcela', 'Total Pago', 'Juros Total'],
+          cabecalho: ['Prazo', 'Parcela', 'Total Pago', 'Juros Total', 'Custo sobre o Valor Financiado'],
           linhas: [
-            ['24 meses', fmt(price24.parcela), fmt(price24.totalPago), fmt(price24.totalJuros)],
-            ['36 meses', fmt(price36.parcela), fmt(price36.totalPago), fmt(price36.totalJuros)],
-            ['48 meses', fmt(price48.parcela), fmt(price48.totalPago), fmt(price48.totalJuros)],
-            ['60 meses', fmt(price60.parcela), fmt(price60.totalPago), fmt(price60.totalJuros)],
-            ['72 meses', fmt(price72.parcela), fmt(price72.totalPago), fmt(price72.totalJuros)],
+            ['24 meses', fmt(price24.parcela), fmt(price24.totalPago), fmt(price24.totalJuros), `+${((price24.totalJuros / valorFinanciado) * 100).toFixed(0)}%`],
+            ['36 meses', fmt(price36.parcela), fmt(price36.totalPago), fmt(price36.totalJuros), `+${((price36.totalJuros / valorFinanciado) * 100).toFixed(0)}%`],
+            ['48 meses', fmt(price48.parcela), fmt(price48.totalPago), fmt(price48.totalJuros), `+${((price48.totalJuros / valorFinanciado) * 100).toFixed(0)}%`],
+            ['60 meses', fmt(price60.parcela), fmt(price60.totalPago), fmt(price60.totalJuros), `+${((price60.totalJuros / valorFinanciado) * 100).toFixed(0)}%`],
+            ['72 meses', fmt(price72.parcela), fmt(price72.totalPago), fmt(price72.totalJuros), `+${((price72.totalJuros / valorFinanciado) * 100).toFixed(0)}%`],
           ],
         },
-        conteudo: `Simulações com taxa de ${fmtPct(taxa)} a.m. (média mercado 2026). Taxa mínima é ${fmtPct(TAXAS_2026.veiculo.min_mensal)} a.m. (carro novo, bom score) e máxima de ${fmtPct(TAXAS_2026.veiculo.max_mensal)} a.m. (usado, score baixo).`,
+        conteudo: `Taxa de ${fmtPct(taxa)} a.m. (média de mercado em 2026 — dados do Banco Central). A taxa mínima é ${fmtPct(TAXAS_2026.veiculo.min_mensal)} a.m. para carro zero km com score acima de 750. Para carro usado ou score abaixo de 600, a taxa pode chegar a ${fmtPct(TAXAS_2026.veiculo.max_mensal)} a.m.`,
       },
       {
-        h2: 'Financiamento vs Consórcio: Qual é Melhor?',
+        h2: 'Financiamento vs Consórcio: A Comparação Honesta',
         tabela: {
           cabecalho: ['Critério', 'Financiamento', 'Consórcio'],
           linhas: [
-            ['Acesso imediato ao veículo', '✅ Sim', '❌ Depende do sorteio/lance'],
-            ['Parcela (estimada)', fmt(price60.parcela) + '/mês', fmt(consorcioParcela) + '/mês'],
+            ['Acesso imediato ao veículo', 'Sim — na assinatura', 'Depende do sorteio ou lance'],
+            ['Parcela estimada (60 meses)', fmt(price60.parcela) + '/mês', fmt(consorcioParcela) + '/mês'],
             ['Total pago (60 meses)', fmt(price60.totalPago), fmt(consorcioParcela * 60)],
-            ['Taxa de juros', fmtPct(taxa) + ' a.m.', '~2% adm. (sem juros)'],
-            ['Risco', 'Baixo (já tem o carro)', 'Médio (pode demorar anos)'],
-            ['Flexibilidade', 'Alta', 'Baixa'],
+            ['Custo extra sobre o veículo', fmt(price60.totalJuros) + ' de juros', '~2% de adm./ano (sem juros)'],
+            ['Risco principal', 'Nenhum — carro garantido', 'Pode demorar 5+ anos para ser contemplado'],
+            ['Melhor para', 'Precisa do carro agora', 'Pode esperar e economizar'],
           ],
         },
-        conteudo: `O consórcio é mais barato no total, mas você pode esperar anos para receber a carta de crédito. O financiamento garante o carro imediatamente. Se precisar do veículo agora, o financiamento é a escolha certa.`,
+        conteudo: `O consórcio economiza ${fmt(price60.totalPago - consorcioParcela * 60)} em relação ao financiamento em 60 meses — mas sem garantia de quando você recebe o veículo. Quem precisa do carro para trabalhar não pode correr esse risco. Quem está planejando a troca do carro com 2-3 anos de antecedência, o consórcio faz muito sentido financeiramente.`,
       },
       {
-        h2: 'Taxa de Juros por Banco — CDC Veículo 2026',
+        h2: 'Taxas por Banco — CDC Veículo 2026 (do Mais Barato ao Mais Caro)',
         tabela: {
-          cabecalho: ['Banco', 'Taxa Mín.', 'Taxa Máx.', 'Obs.'],
+          cabecalho: ['Banco', 'Taxa Mín. (carro novo)', 'Taxa Máx. (usado/baixo score)', 'Obs.'],
           linhas: [
-            ['Banco do Brasil', '1,49% a.m.', '2,20% a.m.', 'Melhores taxas para clientes BB'],
+            ['Banco do Brasil', '1,49% a.m.', '2,20% a.m.', 'Melhores taxas para correntistas BB'],
+            ['Caixa Econômica', '1,50% a.m.', '2,30% a.m.', 'Caixa CDC Veículo'],
+            ['Itaú', '1,55% a.m.', '2,45% a.m.', 'Itaú CDC — negocie com o gerente'],
             ['Santander', '1,55% a.m.', '2,40% a.m.', 'Santander Financiamentos (Aymoré)'],
             ['Bradesco', '1,60% a.m.', '2,50% a.m.', 'Bradesco Financiamentos'],
-            ['Itaú', '1,55% a.m.', '2,45% a.m.', 'Itaú CDC Veículo'],
-            ['Caixa', '1,50% a.m.', '2,30% a.m.', 'Caixa CDC'],
-            ['BV Financeira', '1,65% a.m.', '2,60% a.m.', 'Carro novo e usado'],
+            ['BV Financeira', '1,65% a.m.', '2,60% a.m.', 'Aceita carro usado mais antigo'],
           ],
         },
+        conteudo: `A diferença de 0,5% a.m. entre o banco mais barato e o mais caro representa ${fmt(calcPrice(valorFinanciado, 1.99, 48).totalPago - calcPrice(valorFinanciado, 1.49, 48).totalPago)} a mais em 48 meses. Compare sempre — e negocie.`,
       },
       {
-        h2: 'Como Conseguir a Menor Taxa',
+        h2: '7 Estratégias Para Pagar Menos no Financiamento do Carro',
         lista: [
-          'Mantenha o score acima de 700 pontos',
-          'Dê uma entrada maior (acima de 30% do valor)',
-          'Escolha prazos mais curtos (máximo 48 meses para carro usado)',
-          'Prefira carro zero km (menor risco para o banco)',
-          'Negocie taxas com o gerente, especialmente em datas próximas ao fim do mês',
-          'Compare propostas de pelo menos 3 bancos antes de assinar',
+          'Mantenha score acima de 700: bancos oferecem taxa até 0,5% a.m. menor para bom perfil — isso é milhares de reais em 48 meses',
+          'Dê entrada acima de 30%: reduz o risco para o banco e a taxa de juros; para 50% de entrada, alguns bancos oferecem taxa mínima garantida',
+          'Prefira carro zero km: risco menor para o banco = taxa menor; carro usado tem taxa 30-50% maior',
+          'Escolha prazos curtos: 24 a 36 meses têm taxa menor que 60 a 72 meses na maioria dos bancos',
+          'Compare 3 bancos antes de decidir: leve a proposta mais barata para o banco da concessionária e negocie',
+          'Simule no fim do mês: gerentes têm meta de volume de contratos e são mais flexíveis nos últimos dias do mês',
+          'Verifique o CET (não apenas a taxa): IOF, tarifas e seguros podem encarecer em 15-20% — peça o CET por escrito',
         ],
       },
     ],
     faq: [
       {
         pergunta: 'Qual é a taxa média de financiamento de carro em 2026?',
-        resposta: `A taxa média está em ${fmtPct(TAXAS_2026.veiculo.medio_mensal)} ao mês (${fmtPct(mensal2Anual(TAXAS_2026.veiculo.medio_mensal))} ao ano). A mínima é ${fmtPct(TAXAS_2026.veiculo.min_mensal)} a.m. (carro novo, score alto).`,
+        resposta: `${fmtPct(TAXAS_2026.veiculo.medio_mensal)} ao mês (${fmtPct(mensal2Anual(TAXAS_2026.veiculo.medio_mensal))} ao ano) para a média de mercado. A mínima é ${fmtPct(TAXAS_2026.veiculo.min_mensal)} a.m. para carro zero com score acima de 750. A máxima chega a ${fmtPct(TAXAS_2026.veiculo.max_mensal)} a.m. para carro usado e score baixo.`,
       },
       {
-        pergunta: 'Posso financiar carro sem entrada?',
-        resposta: 'Alguns bancos financiam 100% do valor para clientes com score muito alto (acima de 800) e renda comprovada. Mas a parcela fica mais alta e o total de juros aumenta significativamente.',
+        pergunta: 'Posso financiar carro 100% sem entrada?',
+        resposta: `Sim, mas custa caro. Para ${fmt(valorVeiculo)} sem entrada em 48 meses, a parcela seria ${fmt(calcPrice(valorVeiculo, taxa, 48).parcela)}/mês — versus ${fmt(price48.parcela)}/mês com 20% de entrada. O total de juros também sobe proporcionalmente. Score acima de 800 e renda bem acima do mínimo são necessários.`,
       },
       {
         pergunta: 'Prazo máximo para financiamento de carro?',
-        resposta: 'Para carro novo: até 72 meses. Para carro usado (até 5 anos): até 60 meses. Para usado com mais de 5 anos: até 48 meses, dependendo do banco.',
+        resposta: `Carro zero km: até 72 meses (6 anos). Carro usado até 5 anos de fabricação: até 60 meses. Carro usado entre 5-10 anos: até 48 meses. Carro com mais de 10 anos: varia por banco, muitos não financiam.`,
       },
       {
-        pergunta: 'O carro fica no meu nome?',
-        resposta: 'Sim, o carro fica no seu nome, mas com alienação fiduciária em favor do banco. Enquanto houver saldo devedor, você não pode vender o veículo sem quitar primeiro.',
+        pergunta: 'O carro fica no meu nome durante o financiamento?',
+        resposta: `Sim — o carro é registrado no seu nome, mas com alienação fiduciária em favor do banco. Enquanto houver saldo devedor, você não pode vender o carro sem quitar primeiro (ou sem anuência do banco). O Detran registra isso na documentação do veículo.`,
       },
       {
-        pergunta: 'Posso quitar o financiamento antes do prazo?',
-        resposta: 'Sim, e há desconto proporcional dos juros futuros. Solicite o valor de quitação antecipada pelo app ou na agência.',
+        pergunta: 'Posso quitar antes do prazo e economizar nos juros?',
+        resposta: `Sim, e é muito vantajoso. A quitação antecipada é direito garantido por lei com desconto dos juros futuros. Para ${fmt(valorFinanciado)} em 48 meses, quitar na metade do prazo (mês 24) pode economizar cerca de ${fmt(price48.totalJuros * 0.4)} em juros. Solicite o saldo de quitação pelo app ou agência.`,
       },
     ],
-    conclusao: `O financiamento de veículo em 2026 tem taxa mínima de ${fmtPct(TAXAS_2026.veiculo.min_mensal)} a.m. Para ${fmt(valorFinanciado)} em 48 meses, a parcela fica em ${fmt(price48.parcela)}/mês. Compare taxas, dê a maior entrada possível e escolha o prazo que cabe no seu orçamento sem comprometer mais de 30% da renda.`,
+    conclusao: `Para ${fmt(valorVeiculo)} em 2026, com 20% de entrada e 48 meses, a parcela é ${fmt(price48.parcela)}/mês — mas o total pago é ${fmt(price48.totalPago)}, incluindo ${fmt(price48.totalJuros)} de juros. Dê a maior entrada que puder, escolha o prazo mais curto que seu orçamento aceitar, compare ao menos 3 bancos e nunca assine sem ver o CET por escrito.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -625,22 +661,24 @@ function gerarCartao(slug: string): PaginaEmprestimo {
     : slug === 'melhor-cartao-milhas' ? 'Melhores Cartões de Milhas 2026'
     : 'Cartão de Crédito 2026 — Guia Completo'
 
-  const h1 = `${titulo}: Compare e Escolha o Melhor`
-  const intro = slug.includes('rotativo')
-    ? `A taxa do rotativo do cartão de crédito é limitada a ${fmtPct(taxa)} ao mês (${fmtPct(taxaAnual)} ao ano) desde janeiro de 2024, por lei federal. Entenda como funciona e como evitar essa armadilha financeira.`
-    : `Guia completo sobre ${titulo.toLowerCase()} em 2026. Compare taxas, benefícios e escolha o cartão ideal para o seu perfil.`
-
   const ex = 1000
   const price3 = calcPrice(ex, taxa, 3)
   const price6 = calcPrice(ex, taxa, 6)
   const price12 = calcPrice(ex, taxa, 12)
 
+  const h1 = slug.includes('rotativo')
+    ? `Rotativo do Cartão: A Dívida que Duplica em Menos de 6 Meses`
+    : `${titulo}: Guia Honesto para Não Cair nas Armadilhas`
+  const intro = slug.includes('rotativo')
+    ? `O rotativo do cartão de crédito cobra até ${fmtPct(taxa)} ao mês — teto legal desde janeiro de 2024. Isso equivale a ${fmtPct(taxaAnual)} ao ano e é a maior taxa do crédito regulamentado no Brasil. Uma dívida de R$ 1.000 no rotativo por 12 meses se transforma em ${fmt(price12.totalPago)} — um crescimento de ${((price12.totalJuros / ex) * 100).toFixed(0)}%. E o "pagamento mínimo" faz exatamente isso acontecer.`
+    : `O cartão de crédito é grátis quando pago integralmente no vencimento — e custa ${fmtPct(taxa)} a.m. quando você usa o rotativo. Essa diferença é o que separa quem usa o cartão como ferramenta de quem usa como crédito caro. Veja como funciona, as armadilhas e os melhores cartões de 2026.`
+
   return {
     slug,
     tipo: 'cartao',
     titulo,
-    metaTitle: `${titulo} | Calculadora Virtual`,
-    metaDesc: `${titulo}: taxa rotativo limitada a ${fmtPct(taxa)} a.m. por lei desde 2024. Compare bancos e aprenda a evitar juros do cartão.`,
+    metaTitle: `${titulo} 2026 | Rotativo ${fmtPct(taxa)} a.m., Armadilhas e Melhores Cartões`,
+    metaDesc: `Rotativo do cartão em 2026: teto de ${fmtPct(taxa)} a.m. (${fmtPct(taxaAnual)} a.a.). R$ 1.000 no rotativo por 12 meses = ${fmt(price12.totalPago)} pago. Veja como evitar e os melhores cartões sem anuidade.`,
     h1,
     intro,
     taxaRef: taxa,
@@ -649,83 +687,94 @@ function gerarCartao(slug: string): PaginaEmprestimo {
     parcelaRef: price6.parcela,
     secoes: [
       {
-        h2: 'Taxa de Juros do Rotativo — Limite Legal 2026',
-        destaque: `Teto legal: ${fmtPct(taxa)} ao mês = ${fmtPct(taxaAnual)} ao ano (lei de jan/2024)`,
-        conteudo: `Desde janeiro de 2024, a taxa do rotativo do cartão de crédito é limitada a ${fmtPct(taxa)} ao mês por lei. Antes disso, chegava a 20% ao mês em alguns bancos. Mesmo com o teto, é a maior taxa do crédito regular no Brasil.`,
+        h2: 'O Rotativo do Cartão É a Maior Taxa do Crédito Legal no Brasil',
+        destaque: `Teto legal: ${fmtPct(taxa)} a.m. = ${fmtPct(taxaAnual)} a.a. — por lei desde janeiro de 2024 (Lei 14.905/2024)`,
+        conteudo: `Antes da lei de 2024, alguns bancos cobravam até 20% a.m. no rotativo — o que era legalmente permitido. O teto atual de ${fmtPct(taxa)} a.m. parece "controlado", mas ainda é a maior taxa do crédito regulamentado no país. Para comparar: o consignado INSS cobra 1,97% a.m. O rotativo é 7,5 vezes mais caro.`,
         tabela: {
-          cabecalho: ['Modalidade de Crédito', 'Taxa Mensal', 'Taxa Anual'],
+          cabecalho: ['Modalidade de Crédito', 'Taxa Mensal', 'Taxa Anual', 'Quanto mais caro que o consignado'],
           linhas: [
-            ['Consignado INSS (teto)', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.inss_teto)) + ' a.a.'],
-            ['Financiamento Imóvel (Caixa)', fmtPct(TAXAS_2026.imovel.cef_min_mensal) + ' a.m.', fmtPct(TAXAS_2026.imovel.cef_anual) + ' a.a.'],
-            ['CDC Veículo', fmtPct(TAXAS_2026.veiculo.min_mensal) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.veiculo.min_mensal)) + ' a.a.'],
-            ['Crédito Pessoal (bancão)', fmtPct(TAXAS_2026.pessoal.banco_grande_min) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.pessoal.banco_grande_min)) + ' a.a.'],
-            ['Cheque Especial (teto)', fmtPct(TAXAS_2026.teto_cheque_especial) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.teto_cheque_especial)) + ' a.a.'],
-            ['Rotativo Cartão (teto legal)', fmtPct(taxa) + ' a.m.', fmtPct(taxaAnual) + ' a.a.'],
+            ['Consignado INSS (teto legal)', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', '26,4% a.a.', 'Referência'],
+            ['Financiamento de Imóvel (Caixa)', fmtPct(TAXAS_2026.imovel.cef_min_mensal) + ' a.m.', fmtPct(TAXAS_2026.imovel.cef_anual) + ' a.a.', `${(TAXAS_2026.imovel.cef_min_mensal / TAXAS_2026.consignado.inss_teto).toFixed(1)}× mais caro`],
+            ['CDC Veículo', fmtPct(TAXAS_2026.veiculo.min_mensal) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.veiculo.min_mensal)) + ' a.a.', `${(TAXAS_2026.veiculo.min_mensal / TAXAS_2026.consignado.inss_teto).toFixed(1)}× mais caro`],
+            ['Crédito Pessoal — banco grande', fmtPct(TAXAS_2026.pessoal.banco_grande_min) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.pessoal.banco_grande_min)) + ' a.a.', `${(TAXAS_2026.pessoal.banco_grande_min / TAXAS_2026.consignado.inss_teto).toFixed(1)}× mais caro`],
+            ['Cheque Especial (teto legal)', fmtPct(TAXAS_2026.teto_cheque_especial) + ' a.m.', '151% a.a.', `${(TAXAS_2026.teto_cheque_especial / TAXAS_2026.consignado.inss_teto).toFixed(1)}× mais caro`],
+            ['Rotativo Cartão (teto legal)', fmtPct(taxa) + ' a.m.', fmtPct(taxaAnual) + ' a.a.', `${(taxa / TAXAS_2026.consignado.inss_teto).toFixed(1)}× mais caro`],
           ],
         },
       },
       {
-        h2: `Simulação: Quanto Fica uma Dívida de ${fmt(ex)} no Rotativo?`,
-        alerta: `ATENÇÃO: ${fmt(ex)} no rotativo por 12 meses custam ${fmt(price12.totalJuros)} de juros — ${((price12.totalJuros / ex) * 100).toFixed(0)}% do valor original!`,
+        h2: `A Matemática do Rotativo: O Que Acontece com R$ 1.000 Não Pago`,
+        alerta: `"Pagamento mínimo" significa entrar no rotativo a ${fmtPct(taxa)} a.m. — a R$ 1.000 não pago na fatura, após 12 meses você já pagou ${fmt(price12.totalPago)} e a dívida pode ainda não ter acabado.`,
         tabela: {
-          cabecalho: ['Meses no Rotativo', 'Parcela Mín. (PRICE)', 'Total Pago', 'Juros Total'],
+          cabecalho: ['Meses no Rotativo', 'Parcela Mínima (PRICE)', 'Total Pago', 'Juros Acumulados', 'O Que Isso Representa'],
           linhas: [
-            ['3 meses', fmt(price3.parcela), fmt(price3.totalPago), fmt(price3.totalJuros)],
-            ['6 meses', fmt(price6.parcela), fmt(price6.totalPago), fmt(price6.totalJuros)],
-            ['12 meses', fmt(price12.parcela), fmt(price12.totalPago), fmt(price12.totalJuros)],
+            ['3 meses', fmt(price3.parcela), fmt(price3.totalPago), fmt(price3.totalJuros), `+${((price3.totalJuros / ex) * 100).toFixed(0)}% do valor original`],
+            ['6 meses', fmt(price6.parcela), fmt(price6.totalPago), fmt(price6.totalJuros), `+${((price6.totalJuros / ex) * 100).toFixed(0)}% do valor original`],
+            ['12 meses', fmt(price12.parcela), fmt(price12.totalPago), fmt(price12.totalJuros), `+${((price12.totalJuros / ex) * 100).toFixed(0)}% do valor original`],
           ],
         },
-        conteudo: 'Pague sempre a fatura integral para evitar o rotativo. Se não conseguir, use o parcelamento pelo app (taxa menor que o rotativo automático).',
+        conteudo: `Quando você paga apenas o mínimo da fatura (geralmente 15-20% do total), o restante entra no rotativo automaticamente a ${fmtPct(taxa)} a.m. Se não conseguir pagar a fatura inteira, a alternativa correta é o parcelamento pelo app do banco — costuma ser 3% a.m. a 5% a.m., bem abaixo do rotativo. Nunca escolha o "pagamento mínimo".`,
       },
       {
-        h2: 'Melhores Cartões Sem Anuidade 2026',
-        tabela: {
-          cabecalho: ['Cartão', 'Anuidade', 'Cashback', 'Diferencial'],
-          linhas: [
-            ['Nubank Roxinho', 'Grátis', '—', 'Sem anuidade, sem burocracia'],
-            ['Banco Inter', 'Grátis', '0,5% sempre', 'Cashback + CDB na conta'],
-            ['C6 Bank', 'Grátis', 'Milhas Átomos', 'Programa de pontos próprio'],
-            ['PicPay', 'Grátis', '0,5-1,5%', 'Cashback variável'],
-            ['Mercado Pago', 'Grátis', '1%+', 'Cashback maior em Mercado Livre'],
-            ['Itaú Click', 'Grátis', '—', 'Digital do Itaú'],
-          ],
-        },
-      },
-      {
-        h2: 'Dicas para Usar o Cartão com Inteligência',
+        h2: '4 Armadilhas do Cartão de Crédito que Os Bancos Não Explicam',
         lista: [
-          'Sempre pague a fatura integral todo mês',
-          'Nunca pague o "mínimo" — isso ativa o rotativo',
-          'Use o parcelamento (juros menores que o rotativo)',
-          'Ative notificações de gastos pelo app',
-          'Mantenha o uso abaixo de 30% do limite (melhora o score)',
-          'Negocie cashback ou milhas com o banco ao renegociar anuidade',
+          `"Sem juros" no cartão usa seu limite de crédito e cobra IOF (0,38% flat + 0,0082%/dia sobre o valor) — não é de graça`,
+          `Parcelamento "sem juros" da loja: a loja embutiu os juros no preço — peça desconto à vista e compare`,
+          `Anuidade "zerada por pontuação": se você gastar menos que o mínimo exigido em um mês, a anuidade é cobrada — leia as regras`,
+          `Seguro de proteção de cartão: cobrado automaticamente em muitos contratos, pode custar R$ 30-60/mês por seguro que você nunca vai usar — cancele pelo app`,
+        ],
+      },
+      {
+        h2: 'Melhores Cartões Sem Anuidade em 2026 — Comparativo Honesto',
+        tabela: {
+          cabecalho: ['Cartão', 'Anuidade', 'Cashback / Pontos', 'Diferencial Real', 'Para Quem Serve'],
+          linhas: [
+            ['Nubank Roxinho', 'Grátis', 'Sem cashback padrão', 'App excelente, crédito fácil, sem burocracia', 'Qualquer perfil'],
+            ['Banco Inter', 'Grátis', '0,5% em compras sempre', 'Conta digital + CDB integrado', 'Quem quer cashback simples'],
+            ['C6 Bank', 'Grátis', 'Átomos (pontos próprios)', 'Saques gratuitos em todo Brasil', 'Quem usa muito em viagens'],
+            ['PicPay', 'Grátis', '0,5% a 1,5% variável', 'Cashback maior em lojas parceiras', 'Quem compra muito online'],
+            ['Mercado Pago', 'Grátis', '1% + bônus ML', 'Cashback maior dentro do ecossistema ML', 'Quem compra no Mercado Livre'],
+            ['Itaú Click', 'Grátis', 'Pontos Itaú', 'Integra com conta Itaú existente', 'Clientes Itaú'],
+          ],
+        },
+        conteudo: `Cashback compensa mais que milhas para quem não viaja frequentemente — o dinheiro vai direto na fatura. Para quem viaja ao menos 4 vezes por ano em voos domésticos, milhas fazem mais sentido. Mas nunca pague anuidade para ter cashback de 1% — você precisa gastar R$ 10.000/mês para recuperar uma anuidade de R$ 1.200.`,
+      },
+      {
+        h2: 'Como Usar o Cartão Como Ferramenta Financeira (e Não Como Crédito Caro)',
+        lista: [
+          'Regra 1: pague a fatura SEMPRE integralmente no vencimento — o cartão é gratuito quando usado assim',
+          'Nunca pague o mínimo — isso é uma armadilha projetada para fazer você pagar juros eternamente',
+          'Se não puder pagar tudo, use o parcelamento do app (3-5% a.m.) em vez do rotativo automático (14,99% a.m.)',
+          'Mantenha o uso abaixo de 30% do limite de crédito — isso impacta positivamente o score de crédito',
+          'Ative as notificações de gasto no app — você gasta menos quando vê cada cobrança em tempo real',
+          'Use o cartão em compras com cashback e pague à vista na loja em compras parceladas "sem juros"',
+          'Nunca guarde o cartão com NFC ativo em carteira comum — use protetor RFID ou desative no app',
         ],
       },
     ],
     faq: [
       {
         pergunta: 'Qual é a taxa máxima do rotativo do cartão em 2026?',
-        resposta: `${fmtPct(taxa)} ao mês (${fmtPct(taxaAnual)} ao ano). Esse é o limite legal em vigor desde janeiro de 2024.`,
+        resposta: `${fmtPct(taxa)} ao mês (${fmtPct(taxaAnual)} ao ano), limitado por lei federal desde janeiro de 2024 (Lei 14.905/2024). Qualquer banco que cobrar acima disso está praticando taxa ilegal — denuncie no site do Banco Central.`,
       },
       {
-        pergunta: 'O que é o rotativo do cartão?',
-        resposta: 'É quando você paga menos que o valor total da fatura. O saldo restante vira uma dívida com os juros mais altos do crédito legal no Brasil.',
+        pergunta: 'O que é o rotativo e como ele é ativado?',
+        resposta: `O rotativo é ativado automaticamente quando você paga qualquer valor abaixo do total da fatura — inclusive o "pagamento mínimo". O saldo restante vira uma dívida com ${fmtPct(taxa)} a.m. Se você pagar R$ 800 de uma fatura de R$ 1.000, os R$ 200 restantes entram no rotativo.`,
       },
       {
-        pergunta: 'Como aumentar o limite do cartão?',
-        resposta: 'Melhore o score de crédito, use o cartão regularmente, pague as faturas em dia, atualize seus dados de renda no app e solicite o aumento diretamente pelo banco.',
+        pergunta: 'Como aumentar o limite do cartão sem rotativo?',
+        resposta: `Pague todas as faturas em dia por pelo menos 3 meses, atualize seus dados de renda no app (muitos bancos aprovam aumento automático após isso), mantenha o uso abaixo de 70% do limite e solicite o aumento diretamente pelo app. Nunca entre no rotativo — isso sinaliza risco ao banco e pode diminuir o limite.`,
       },
       {
-        pergunta: 'Cashback compensa mais do que milhas?',
-        resposta: 'Depende do perfil. Quem viaja muito pode acumular milhas mais rápido. Para uso cotidiano, o cashback é mais prático — o dinheiro vai direto na fatura.',
+        pergunta: 'Cashback ou milhas: o que compensa mais?',
+        resposta: `Para o uso cotidiano (mercado, combustível, serviços), o cashback é mais prático e transparente — você sabe exatamente quanto recebe. As milhas fazem mais sentido para quem viaja pelo menos 4 vezes por ano em voos: uma passagem acumulada pode valer mais do que o cashback equivalente. Mas nunca pague anuidade para ter qualquer um dos dois.`,
       },
       {
-        pergunta: 'Qual o melhor cartão para quem tem score baixo?',
-        resposta: 'PicPay, Mercado Pago e Neon costumam ter aprovação mais fácil. Também existe o cartão pré-pago (sem análise de crédito) como alternativa para construir histórico.',
+        pergunta: 'Qual cartão para quem tem score baixo?',
+        resposta: `PicPay, Mercado Pago, Neon e Superdigital costumam ter aprovação mais fácil para score abaixo de 500. Outra opção: cartão pré-pago (sem análise de crédito) para construir histórico — use por 6 meses e solicite upgrade para cartão de crédito.`,
       },
     ],
-    conclusao: `O cartão de crédito é uma ferramenta poderosa quando bem utilizado, mas o rotativo a ${fmtPct(taxa)} a.m. é uma armadilha cara. Pague sempre a fatura integral, use o cartão certo para o seu perfil e aproveite os benefícios (cashback, milhas, seguros) sem incorrer em juros.`,
+    conclusao: `O cartão de crédito é gratuito para quem paga a fatura integral — e o crédito mais caro do Brasil (${fmtPct(taxa)} a.m.) para quem usa o rotativo. Uma dívida de R$ 1.000 no rotativo por 12 meses gera ${fmt(price12.totalJuros)} de juros. A alternativa: parcelamento pelo app do banco (muito mais barato), crédito pessoal ou consignado. Use o cartão pelos benefícios (cashback, milhas, garantia estendida), nunca como fonte de crédito.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -745,16 +794,16 @@ function gerarSimulacaoValor(slug: string): PaginaEmprestimo {
   const price36c = calcPrice(valor, taxaConsig, 36)
   const cet24 = calcCET(valor, taxa, 24)
 
-  const titulo = `Empréstimo de ${fmt(valor)}: Quanto Fica a Parcela? (2026)`
-  const h1 = `Empréstimo de ${fmt(valor)}: Simulação Completa de Parcelas — 2026`
-  const intro = `Veja quanto fica a parcela de um empréstimo de ${fmt(valor)} em 2026 em diferentes prazos e modalidades. Comparamos crédito pessoal (${fmtPct(taxa)} a.m.) e consignado (${fmtPct(taxaConsig)} a.m.) com simulações reais.`
+  const titulo = `Empréstimo de ${fmt(valor)}: Parcelas Reais, IOF e o Que Cada Banco Cobra (2026)`
+  const h1 = `Empréstimo de ${fmt(valor)}: Simulação Completa com IOF, CET e Comparativo 2026`
+  const intro = `${fmt(valor)} de empréstimo pessoal em 2026: no crédito pessoal de banco, você paga ${fmt(price24.parcela)}/mês em 24 meses — e no total, ${fmt(price24.totalPago)} (incluindo ${fmt(cet24.iofTotal)} de IOF). No consignado INSS, a mesma dívida fica em ${fmt(price24c.parcela)}/mês, totalizando ${fmt(price24c.totalPago)}. A diferença de ${fmt(price24.totalPago - price24c.totalPago)} em 24 meses não aparece na publicidade.`
 
   return {
     slug,
     tipo: 'simulacao-valor',
     titulo,
-    metaTitle: `Empréstimo de ${fmt(valor)} em 2026 — Parcelas, Total e IOF | Calculadora Virtual`,
-    metaDesc: `${fmt(valor)} de empréstimo em 2026: em 24 meses = ${fmt(price24.parcela)}/mês (crédito pessoal). Consignado: ${fmt(price24c.parcela)}/mês. CET e IOF incluídos.`,
+    metaTitle: `Empréstimo de ${fmt(valor)} em 2026 — Parcelas, IOF e CET Real | Calculadora Virtual`,
+    metaDesc: `${fmt(valor)} emprestados em 2026: crédito pessoal = ${fmt(price24.parcela)}/mês (24x), total ${fmt(price24.totalPago)}. Consignado = ${fmt(price24c.parcela)}/mês, total ${fmt(price24c.totalPago)}. IOF: ${fmt(cet24.iofTotal)}.`,
     h1,
     intro,
     taxaRef: taxa,
@@ -763,33 +812,34 @@ function gerarSimulacaoValor(slug: string): PaginaEmprestimo {
     parcelaRef: price24.parcela,
     secoes: [
       {
-        h2: `Parcelas: ${fmt(valor)} de Empréstimo Pessoal (${fmtPct(taxa)} a.m.)`,
+        h2: `Simulação Crédito Pessoal: ${fmt(valor)} — O Que Cai na Conta e o Que Você Paga`,
+        alerta: `O IOF de ${fmt(cet24.iofTotal)} é descontado no momento da liberação — o que cai na sua conta é ${fmt(valor - cet24.iofTotal)}, não ${fmt(valor)}. Mas as parcelas são calculadas sobre ${fmt(valor)}.`,
         tabela: {
-          cabecalho: ['Prazo', 'Parcela', 'Total Pago', 'Juros Total', 'CET Aprox.'],
+          cabecalho: ['Prazo', 'Parcela Fixa', 'Total Pago', 'Juros Total', 'CET Real (a.a.)'],
           linhas: [
-            ['12 meses', fmt(price12.parcela), fmt(price12.totalPago), fmt(price12.totalJuros), `${fmtPct(mensal2Anual(taxa))} a.a.`],
-            ['24 meses', fmt(price24.parcela), fmt(price24.totalPago), fmt(price24.totalJuros), `${fmtPct(cet24.cetAnual)} a.a.`],
-            ['36 meses', fmt(price36.parcela), fmt(price36.totalPago), fmt(price36.totalJuros), `${fmtPct(mensal2Anual(taxa) * 1.03)} a.a.`],
-            ['48 meses', fmt(price48.parcela), fmt(price48.totalPago), fmt(price48.totalJuros), `${fmtPct(mensal2Anual(taxa) * 1.01)} a.a.`],
+            ['12 meses', fmt(price12.parcela), fmt(price12.totalPago), fmt(price12.totalJuros), fmtPct(mensal2Anual(taxa)) + ' a.a.'],
+            ['24 meses', fmt(price24.parcela), fmt(price24.totalPago), fmt(price24.totalJuros), fmtPct(cet24.cetAnual) + ' a.a.'],
+            ['36 meses', fmt(price36.parcela), fmt(price36.totalPago), fmt(price36.totalJuros), fmtPct(mensal2Anual(taxa) * 1.03) + ' a.a.'],
+            ['48 meses', fmt(price48.parcela), fmt(price48.totalPago), fmt(price48.totalJuros), fmtPct(mensal2Anual(taxa) * 1.01) + ' a.a.'],
           ],
         },
-        conteudo: `O IOF em 24 meses é de ${fmt(cet24.iofTotal)} (${fmtPct(TAXAS_2026.iof_dia)}% ao dia + ${fmtPct(TAXAS_2026.iof_flat)}% flat para PF). O CET (Custo Efetivo Total) incluindo IOF é de ${fmtPct(cet24.cetAnual)} ao ano.`,
+        conteudo: `Taxa de ${fmtPct(taxa)} a.m. (taxa mínima banco grande — média nacional é 5,1% a.m. pelo BC). O CET em 24 meses chega a ${fmtPct(cet24.cetAnual)} a.a. por conta do IOF (${fmtPct(TAXAS_2026.iof_dia)}% ao dia + ${fmtPct(TAXAS_2026.iof_flat)}% fixo). Atenção: escolher 48 meses em vez de 12 reduz a parcela em ${fmt(price12.parcela - price48.parcela)}/mês, mas você paga ${fmt(price48.totalJuros - price12.totalJuros)} a mais de juros no total.`,
       },
       {
-        h2: `Comparativo: Pessoal vs Consignado — ${fmt(valor)}`,
+        h2: `Consignado vs Crédito Pessoal: ${fmt(valor)} — A Diferença Real`,
         tabela: {
-          cabecalho: ['Modalidade', 'Taxa', '12 meses', '24 meses', '36 meses'],
+          cabecalho: ['Modalidade', 'Taxa Mensal', '12 meses (parcela)', '24 meses (parcela)', '36 meses (parcela)', 'Total em 24 meses'],
           linhas: [
-            ['Consignado INSS', fmtPct(taxaConsig) + ' a.m.', fmt(price12c.parcela), fmt(price24c.parcela), fmt(price36c.parcela)],
-            ['Crédito Pessoal', fmtPct(taxa) + ' a.m.', fmt(price12.parcela), fmt(price24.parcela), fmt(price36.parcela)],
+            ['Consignado INSS (teto)', fmtPct(taxaConsig) + ' a.m.', fmt(price12c.parcela), fmt(price24c.parcela), fmt(price36c.parcela), fmt(price24c.totalPago)],
+            ['Crédito Pessoal (taxa mín.)', fmtPct(taxa) + ' a.m.', fmt(price12.parcela), fmt(price24.parcela), fmt(price36.parcela), fmt(price24.totalPago)],
           ],
         },
-        conteudo: `Economia usando consignado vs crédito pessoal em 24 meses: ${fmt(price24.totalPago - price24c.totalPago)} a menos. O consignado é sempre mais barato quando disponível.`,
+        conteudo: `Usando o consignado em vez do crédito pessoal, você economiza ${fmt(price24.totalPago - price24c.totalPago)} em 24 meses — dinheiro que fica no seu bolso. O consignado só está disponível para aposentados, pensionistas INSS, servidores públicos e CLTs cujo empregador tenha convênio com o banco.`,
       },
       {
-        h2: 'Tabela PRICE: Primeiros 6 Meses (Crédito Pessoal)',
+        h2: `Transparência: Como a Parcela de ${fmt(valor)} Se Divide (Primeiros 6 Meses)`,
         tabela: {
-          cabecalho: ['Mês', 'Parcela', 'Juros', 'Amortização', 'Saldo Devedor'],
+          cabecalho: ['Mês', 'Parcela Total', 'Juros do Mês', 'Amortização Real', 'Saldo Restante'],
           linhas: calcPrice(valor, taxa, 24).tabela.slice(0, 6).map(r => [
             String(r.mes),
             fmt(r.parcela),
@@ -798,42 +848,43 @@ function gerarSimulacaoValor(slug: string): PaginaEmprestimo {
             fmt(r.saldo),
           ]),
         },
+        conteudo: `Na Tabela PRICE, os juros são mais altos no início e vão caindo. No 1º mês, dos ${fmt(price24.parcela)} da parcela, apenas ${fmt(calcPrice(valor, taxa, 24).tabela[0]?.amortizacao ?? 0)} reduzem o saldo devedor — o resto vai para juros. Por isso, quem paga antecipado economiza muito: os juros futuros são cancelados.`,
       },
       {
-        h2: 'Como Conseguir Empréstimo de ' + fmt(valor),
+        h2: `Como Conseguir ${fmt(valor)} de Empréstimo — Requisitos Reais`,
         lista: [
-          `Score mínimo recomendado: 600 pontos (para crédito pessoal)`,
-          `Renda mínima estimada: ${fmt(price24.parcela / 0.3)} (limite de 30% da renda)`,
-          'Documentos: RG/CNH, CPF, comprovante de renda e residência',
-          'Compare propostas de pelo menos 3 bancos',
-          'Evite o crédito consignado não autorizado (fraude frequente)',
-          'Simule com o valor exato e confira o CET antes de assinar',
+          `Score mínimo: 600 pontos para crédito pessoal convencional; acima de 700 para a menor taxa`,
+          `Renda mínima: ${fmt(price24.parcela / 0.3)} para parcelas em 24 meses (regra dos 30% de comprometimento de renda)`,
+          `Em 36 meses, a renda mínima cai para ${fmt(price36.parcela / 0.3)} — mas você paga ${fmt(price36.totalJuros - price24.totalJuros)} a mais de juros`,
+          `Documentos: RG/CNH, CPF, 3 meses de comprovante de renda, comprovante de residência`,
+          `Negativado: crédito pessoal convencional é difícil; consignado INSS não consulta Serasa; antecipação FGTS também aprovada sem análise de crédito`,
+          `Nunca aceite a primeira proposta — simule em 3 bancos e use a menor taxa como argumento de negociação`,
         ],
       },
     ],
     faq: [
       {
-        pergunta: `Qual banco libera ${fmt(valor)} de empréstimo mais rápido?`,
-        resposta: `Nubank, Banco Inter e PicPay costumam liberar em minutos pelo app. Bancos tradicionais levam de 1 a 3 dias úteis. Para valores acima de R$20.000, a análise costuma ser mais criteriosa.`,
+        pergunta: `Qual banco libera ${fmt(valor)} mais rápido em 2026?`,
+        resposta: `Nubank, Banco Inter e PicPay costumam liberar em minutos pelo app para valores até R$ 15.000. Bancos tradicionais levam 1-3 dias úteis. Para valores acima de R$ 20.000, qualquer banco exige análise mais criteriosa — reserve ao menos 3 dias.`,
       },
       {
         pergunta: `Qual a renda mínima para pegar ${fmt(valor)} de empréstimo?`,
-        resposta: `Com a regra de comprometimento de renda de 30%, você precisa de renda mínima de ${fmt(price24.parcela / 0.3)} para pagar em 24 meses. Em 36 meses: ${fmt(price36.parcela / 0.3)}.`,
+        resposta: `Em 24 meses, a parcela de ${fmt(price24.parcela)} exige renda mínima de ${fmt(price24.parcela / 0.3)} (30% de comprometimento). Em 36 meses, a parcela de ${fmt(price36.parcela)} exige ${fmt(price36.parcela / 0.3)}. Bancos calculam sua própria margem — o limite de 30% é o padrão mais comum, mas pode variar.`,
       },
       {
-        pergunta: 'Posso parcelar o empréstimo em mais vezes para pagar menos?',
-        resposta: `Sim, a parcela cai com o prazo maior. Mas o total de juros aumenta. Em 12 meses você paga ${fmt(price12.totalJuros)} de juros; em 48 meses paga ${fmt(price48.totalJuros)}.`,
+        pergunta: `Parcelar em mais meses reduz o custo total?`,
+        resposta: `Não — faz o oposto. Em 12 meses você paga ${fmt(price12.totalJuros)} de juros. Em 48 meses, paga ${fmt(price48.totalJuros)}. O prazo maior reduz a parcela mensal, mas aumenta muito o total. A parcela menor é uma ilusão se você ignorar o custo real.`,
       },
       {
-        pergunta: 'Negativado consegue empréstimo de ' + fmt(valor) + '?',
-        resposta: 'No crédito pessoal convencional é difícil. Mas o consignado INSS aprova negativados. Fintechs de empréstimo com garantia (FGTS ou imóvel) também costumam aprovar.',
+        pergunta: `Negativado consegue empréstimo de ${fmt(valor)}?`,
+        resposta: `No crédito pessoal convencional, é muito difícil. As opções para negativados: (1) Consignado INSS — não consulta Serasa, aprova automaticamente se houver margem; (2) Antecipação de FGTS — garantia é o saldo do FGTS, sem análise de crédito; (3) Empréstimo com garantia de imóvel (Home Equity) — taxas baixas mesmo para negativados.`,
       },
       {
-        pergunta: 'IOF: quanto vou pagar em um empréstimo de ' + fmt(valor) + '?',
-        resposta: `Em um empréstimo de ${fmt(valor)} com prazo de 24 meses, o IOF é de aproximadamente ${fmt(cet24.iofTotal)}. É cobrado uma vez na contratação.`,
+        pergunta: `Quanto de IOF vou pagar em ${fmt(valor)}?`,
+        resposta: `Em 24 meses, o IOF de ${fmt(valor)} é aproximadamente ${fmt(cet24.iofTotal)} (${fmtPct(TAXAS_2026.iof_dia)}% ao dia × 365 dias + ${fmtPct(TAXAS_2026.iof_flat)}% flat). Esse valor é descontado do dinheiro liberado — você recebe ${fmt(valor - cet24.iofTotal)}, mas as parcelas são calculadas sobre ${fmt(valor)}.`,
       },
     ],
-    conclusao: `Para um empréstimo de ${fmt(valor)} em 2026, a melhor opção é o consignado (se disponível) com parcela de ${fmt(price24c.parcela)}/mês em 24 meses. No crédito pessoal, a parcela é de ${fmt(price24.parcela)}/mês. Simule em 3 bancos, compare o CET e escolha o prazo que não comprometa mais de 30% da sua renda.`,
+    conclusao: `Para um empréstimo de ${fmt(valor)} em 2026, sempre comece pelo consignado se você for aposentado, pensionista ou servidor público — economia de ${fmt(price24.totalPago - price24c.totalPago)} em 24 meses. No crédito pessoal, a menor parcela é ${fmt(price24.parcela)}/mês em 24 meses, totalizando ${fmt(price24.totalPago)} — inclua o IOF de ${fmt(cet24.iofTotal)} na sua conta. Compare 3 bancos, exija o CET por escrito e prefira o prazo mais curto que seu orçamento suportar.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -849,38 +900,38 @@ function gerarSimulacaoParcelaMeses(slug: string): PaginaEmprestimo {
   const priceC = calcPrice(valor, taxaConsig, meses)
   const sac = calcSAC(valor, taxa, meses)
 
-  const titulo = `Parcela de ${fmt(valor)} em ${meses} Meses: Quanto Fica? (2026)`
+  const titulo = `Parcela de ${fmt(valor)} em ${meses} Meses: Valor Real com Juros e IOF (2026)`
 
   return {
     slug,
     tipo: 'simulacao-parcela-meses',
     titulo,
     metaTitle: `${titulo} | Calculadora Virtual`,
-    metaDesc: `Empréstimo de ${fmt(valor)} em ${meses} meses: parcela de ${fmt(price.parcela)}/mês (crédito pessoal) ou ${fmt(priceC.parcela)}/mês (consignado). Simule online.`,
-    h1: `Empréstimo de ${fmt(valor)} em ${meses} Meses — Simulação Completa 2026`,
-    intro: `Calculamos a parcela de um empréstimo de ${fmt(valor)} em ${meses} meses para as principais modalidades de crédito em 2026. Compare crédito pessoal, consignado e SAC.`,
+    metaDesc: `${fmt(valor)} em ${meses} meses em 2026: crédito pessoal = ${fmt(price.parcela)}/mês (total ${fmt(price.totalPago)}). Consignado = ${fmt(priceC.parcela)}/mês (total ${fmt(priceC.totalPago)}). Diferença: ${fmt(price.totalPago - priceC.totalPago)}.`,
+    h1: `${fmt(valor)} em ${meses} Meses: Parcelas Reais, Juros e Comparativo 2026`,
+    intro: `A parcela de ${fmt(valor)} em ${meses} meses depende da modalidade de crédito e do seu perfil: no crédito pessoal (banco grande), fica em ${fmt(price.parcela)}/mês — pagando ${fmt(price.totalJuros)} de juros no total. No consignado INSS, a mesma dívida custa ${fmt(priceC.parcela)}/mês, totalizando ${fmt(priceC.totalJuros)} de juros. A diferença de ${fmt(price.totalPago - priceC.totalPago)} não aparece em nenhum anúncio de banco.`,
     taxaRef: taxa,
     valorRef: valor,
     prazoRef: meses,
     parcelaRef: price.parcela,
     secoes: [
       {
-        h2: `Resultado: Parcela de ${fmt(valor)} em ${meses} Meses`,
-        destaque: `Crédito Pessoal: ${fmt(price.parcela)}/mês · Consignado: ${fmt(priceC.parcela)}/mês · SAC inicial: ${fmt(sac.parcelaInicial)}/mês`,
+        h2: `Comparativo Completo: ${fmt(valor)} em ${meses} Meses — Todas as Modalidades`,
+        destaque: `Menor parcela possível: ${fmt(priceC.parcela)}/mês (consignado INSS) · Crédito pessoal: ${fmt(price.parcela)}/mês · Economia do consignado: ${fmt(price.totalPago - priceC.totalPago)} no total`,
         tabela: {
-          cabecalho: ['Modalidade', 'Taxa', 'Parcela', 'Total Pago', 'Juros Total'],
+          cabecalho: ['Modalidade', 'Taxa Mensal', 'Parcela', 'Total Pago', 'Juros Total', 'Quem Pode Usar'],
           linhas: [
-            ['Consignado INSS', fmtPct(taxaConsig) + ' a.m.', fmt(priceC.parcela), fmt(priceC.totalPago), fmt(priceC.totalJuros)],
-            ['Crédito Pessoal (PRICE)', fmtPct(taxa) + ' a.m.', fmt(price.parcela), fmt(price.totalPago), fmt(price.totalJuros)],
-            ['Crédito Pessoal (SAC inicial)', fmtPct(taxa) + ' a.m.', fmt(sac.parcelaInicial), fmt(sac.totalPago), fmt(sac.totalJuros)],
+            ['Consignado INSS (teto)', fmtPct(taxaConsig) + ' a.m.', fmt(priceC.parcela), fmt(priceC.totalPago), fmt(priceC.totalJuros), 'Aposentados/pensionistas INSS'],
+            ['Crédito Pessoal — PRICE (fixa)', fmtPct(taxa) + ' a.m.', fmt(price.parcela), fmt(price.totalPago), fmt(price.totalJuros), 'Qualquer pessoa aprovada'],
+            ['Crédito Pessoal — SAC (inicial)', fmtPct(taxa) + ' a.m.', fmt(sac.parcelaInicial), fmt(sac.totalPago), fmt(sac.totalJuros), 'Qualquer pessoa aprovada'],
           ],
         },
-        conteudo: `Economia do consignado vs crédito pessoal em ${meses} meses: ${fmt(price.totalPago - priceC.totalPago)} a menos no total.`,
+        conteudo: `O SAC tem parcela inicial maior (${fmt(sac.parcelaInicial)} vs ${fmt(price.parcela)} no PRICE), mas economiza ${fmt(price.totalJuros - sac.totalJuros)} de juros no total. Para ${meses} meses, o SAC vale a pena se você conseguir pagar a primeira parcela. Se for usar crédito pessoal, verifique primeiro se você tem direito ao consignado — a economia de ${fmt(price.totalPago - priceC.totalPago)} em ${meses} meses é significativa.`,
       },
       {
-        h2: `Evolução das Parcelas — Primeiros 6 Meses (Crédito Pessoal)`,
+        h2: `Quanto Vai de Juros e Quanto Amortiza de Fato — Primeiros 6 Meses`,
         tabela: {
-          cabecalho: ['Mês', 'Parcela', 'Juros', 'Amortização', 'Saldo'],
+          cabecalho: ['Mês', 'Parcela Total', 'Parte que São Juros', 'Parte que Abate Dívida', 'Saldo Restante'],
           linhas: price.tabela.slice(0, 6).map(r => [
             String(r.mes),
             fmt(r.parcela),
@@ -889,23 +940,24 @@ function gerarSimulacaoParcelaMeses(slug: string): PaginaEmprestimo {
             fmt(r.saldo),
           ]),
         },
+        conteudo: `No início do financiamento PRICE, a maior parte da parcela são juros — apenas ${fmt(price.tabela[0]?.amortizacao ?? 0)} dos ${fmt(price.parcela)} da 1ª parcela reduzem o saldo devedor de fato. Por isso, quitar antecipadamente nos primeiros meses é muito vantajoso: você cancela os juros futuros sobre o saldo restante.`,
       },
     ],
     faq: [
       {
         pergunta: `Quanto é a parcela de ${fmt(valor)} em ${meses} meses?`,
-        resposta: `No crédito pessoal (${fmtPct(taxa)} a.m.), a parcela é de ${fmt(price.parcela)}/mês. No consignado INSS (${fmtPct(taxaConsig)} a.m.), fica ${fmt(priceC.parcela)}/mês.`,
+        resposta: `No crédito pessoal (${fmtPct(taxa)} a.m.), a parcela fixa é de ${fmt(price.parcela)}/mês, totalizando ${fmt(price.totalPago)} (${fmt(price.totalJuros)} de juros). No consignado INSS (${fmtPct(taxaConsig)} a.m.), fica em ${fmt(priceC.parcela)}/mês, total de ${fmt(priceC.totalPago)} — economia de ${fmt(price.totalPago - priceC.totalPago)}.`,
       },
       {
-        pergunta: `Qual o total pago em ${meses} meses?`,
-        resposta: `Crédito pessoal: total de ${fmt(price.totalPago)} (${fmt(price.totalJuros)} de juros). Consignado: total de ${fmt(priceC.totalPago)} (${fmt(priceC.totalJuros)} de juros).`,
+        pergunta: `O total pago inclui o IOF?`,
+        resposta: `O IOF (0,0082% ao dia + 0,38% flat) é cobrado na contratação e reduz o valor que cai na conta — mas as parcelas são calculadas sobre o valor bruto. Em ${fmt(valor)} por ${meses} meses, o IOF é de aproximadamente ${fmt(calcCET(valor, taxa, meses).iofTotal)}. Sempre inclua isso na sua conta.`,
       },
       {
         pergunta: 'Qual sistema de amortização é melhor — PRICE ou SAC?',
-        resposta: `Para ${meses} meses com taxa de ${fmtPct(taxa)} a.m.: o SAC paga ${fmt(price.totalJuros - sac.totalJuros)} a menos de juros, mas a parcela inicial é maior (${fmt(sac.parcelaInicial)} vs ${fmt(price.parcela)} no PRICE).`,
+        resposta: `Em ${meses} meses a ${fmtPct(taxa)} a.m.: o SAC economiza ${fmt(price.totalJuros - sac.totalJuros)} de juros, mas a parcela inicial é ${fmt(sac.parcelaInicial - price.parcela)} maior. Se você conseguir pagar a parcela inicial do SAC, ele é a escolha mais inteligente para ${meses} meses ou mais.`,
       },
     ],
-    conclusao: `Para ${fmt(valor)} em ${meses} meses, a parcela no crédito pessoal é de ${fmt(price.parcela)}/mês. No consignado, ${fmt(priceC.parcela)}/mês. Sempre prefira o consignado quando disponível — a economia é de ${fmt(price.totalJuros - priceC.totalJuros)} no total.`,
+    conclusao: `Para ${fmt(valor)} em ${meses} meses, sempre compare as modalidades disponíveis: o consignado economiza ${fmt(price.totalJuros - priceC.totalJuros)} de juros em relação ao crédito pessoal. No crédito pessoal, prefira o SAC (economiza ${fmt(price.totalJuros - sac.totalJuros)} vs PRICE). E nunca escolha um prazo maior só para reduzir a parcela — o custo total sobe muito.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -1189,44 +1241,70 @@ function gerarChequeEspecial(slug: string): PaginaEmprestimo {
     slug,
     tipo: 'cheque-especial',
     titulo,
-    metaTitle: `${titulo} — Como Evitar e Alternativas | Calculadora Virtual`,
-    metaDesc: `Cheque especial 2026: taxa máxima de ${fmtPct(taxa)} a.m. (${fmtPct(taxaAnual)} a.a.) por lei. Veja alternativas mais baratas e como evitar essa armadilha.`,
-    h1: `${titulo}: Taxa Legal, Simulação e Alternativas`,
-    intro: `O cheque especial tem taxa máxima de ${fmtPct(taxa)} ao mês (${fmtPct(taxaAnual)} ao ano) desde 2020, limitada por regulação do BACEN. Mesmo com o teto, é uma das modalidades mais caras. Veja alternativas mais baratas.`,
+    metaTitle: `${titulo} 2026 — Taxa ${fmtPct(taxa)} a.m., Armadilha e Alternativas Mais Baratas`,
+    metaDesc: `Cheque especial 2026: teto legal de ${fmtPct(taxa)} a.m. (151% a.a.). ${fmt(ex)} em 3 meses = ${fmt(price3.totalJuros)} de juros. Veja alternativas que custam 4× menos.`,
+    h1: `${titulo}: Por Que É Armadilha e as 4 Alternativas Mais Baratas`,
+    intro: `O cheque especial cobra ${fmtPct(taxa)} ao mês — o teto máximo legal desde 2020. Isso equivale a 151% ao ano. Para comparar: o crédito pessoal cobra em média 5,1% a.m. O cheque especial é 1,6 vez mais caro que o crédito pessoal e quase 4 vezes mais caro que o consignado INSS. ${fmt(ex)} no cheque especial por 3 meses já custam ${fmt(price3.totalJuros)} de juros.`,
     taxaRef: taxa,
     valorRef: ex,
     secoes: [
       {
-        h2: `Simulação: ${fmt(ex)} no Cheque Especial`,
-        alerta: `O cheque especial a ${fmtPct(taxa)} a.m. é ${(taxa / TAXAS_2026.pessoal.banco_grande_min).toFixed(1)}× mais caro que o crédito pessoal!`,
+        h2: `Simulação: ${fmt(ex)} no Cheque Especial — O Que Acontece em 3, 6 e 12 Meses`,
+        alerta: `O cheque especial a ${fmtPct(taxa)} a.m. é ${(taxa / TAXAS_2026.pessoal.banco_grande_min).toFixed(1)}× mais caro que o crédito pessoal e ${(taxa / TAXAS_2026.consignado.inss_teto).toFixed(1)}× mais caro que o consignado INSS.`,
         tabela: {
-          cabecalho: ['Período', 'Juros Acumulados', 'Total a Pagar'],
+          cabecalho: ['Período no Cheque Especial', 'Juros Acumulados', 'Total a Pagar', 'No crédito pessoal custaria', 'Diferença'],
           linhas: [
-            ['3 meses', fmt(price3.totalJuros), fmt(price3.totalPago)],
-            ['6 meses', fmt(price6.totalJuros), fmt(price6.totalPago)],
-            ['12 meses', fmt(price12.totalJuros), fmt(price12.totalPago)],
+            ['3 meses', fmt(price3.totalJuros), fmt(price3.totalPago), fmt(calcPrice(ex, TAXAS_2026.pessoal.banco_grande_min, 3).totalJuros), fmt(price3.totalJuros - calcPrice(ex, TAXAS_2026.pessoal.banco_grande_min, 3).totalJuros) + ' a mais'],
+            ['6 meses', fmt(price6.totalJuros), fmt(price6.totalPago), fmt(calcPrice(ex, TAXAS_2026.pessoal.banco_grande_min, 6).totalJuros), fmt(price6.totalJuros - calcPrice(ex, TAXAS_2026.pessoal.banco_grande_min, 6).totalJuros) + ' a mais'],
+            ['12 meses', fmt(price12.totalJuros), fmt(price12.totalPago), fmt(calcPrice(ex, TAXAS_2026.pessoal.banco_grande_min, 12).totalJuros), fmt(price12.totalJuros - calcPrice(ex, TAXAS_2026.pessoal.banco_grande_min, 12).totalJuros) + ' a mais'],
           ],
         },
+        conteudo: `O cheque especial é cobrado automaticamente quando seu saldo vai a negativo. Muitos correntistas nem percebem que estão pagando ${fmtPct(taxa)} a.m. — até chegar o extrato. Configure alertas de saldo no app do banco para receber aviso antes de entrar no cheque especial.`,
       },
       {
-        h2: 'Alternativas Muito Mais Baratas',
+        h2: '4 Alternativas Ao Cheque Especial (Todas Muito Mais Baratas)',
         tabela: {
-          cabecalho: ['Alternativa', 'Taxa Mensal', 'Taxa Anual', 'Observação'],
+          cabecalho: ['Alternativa', 'Taxa Mensal', 'Taxa Anual', 'Quanto Mais Barato', 'Como Acessar'],
           linhas: [
-            ['Crédito Pessoal', fmtPct(TAXAS_2026.pessoal.banco_grande_min) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.pessoal.banco_grande_min)) + ' a.a.', '3× mais barato que cheque especial'],
-            ['Consignado INSS', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.inss_teto)) + ' a.a.', 'Mais barato do mercado'],
-            ['Antecipação FGTS', '1,29% a.m.', fmtPct(mensal2Anual(1.29)) + ' a.a.', 'Sem análise de crédito'],
-            ['Cartão de Crédito', fmtPct(TAXAS_2026.teto_rotativo_cartao) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.teto_rotativo_cartao)) + ' a.a.', 'Rotativo — mais caro; parcelado direto: menor'],
+            ['Antecipação FGTS', '1,29% a.m.', fmtPct(mensal2Anual(1.29)) + ' a.a.', `${(taxa / 1.29).toFixed(1)}× mais barato`, 'App da Caixa ou banco digital'],
+            ['Consignado INSS', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', '26,4% a.a.', `${(taxa / TAXAS_2026.consignado.inss_teto).toFixed(1)}× mais barato`, 'App do banco credenciado (só aposentados/servidores)'],
+            ['Crédito Pessoal', fmtPct(TAXAS_2026.pessoal.banco_grande_min) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.pessoal.banco_grande_min)) + ' a.a.', `${(taxa / TAXAS_2026.pessoal.banco_grande_min).toFixed(1)}× mais barato`, 'App do banco — contratação em minutos'],
+            ['Cartão parcelado (app)', '3% a.m.', fmtPct(mensal2Anual(3)) + ' a.a.', `${(taxa / 3).toFixed(1)}× mais barato`, 'App do cartão — parcelamento manual'],
           ],
         },
+        conteudo: `Se você perceber que vai usar o cheque especial, acesse o app do seu banco e contrate um crédito pessoal antes — a diferença de custo é enorme. Para valores pequenos (até R$ 3.000), o crédito pessoal em banco digital (Nubank, Inter) é aprovado em minutos.`,
+      },
+      {
+        h2: 'Como Nunca Mais Pagar Cheque Especial',
+        lista: [
+          'Configure alerta de saldo mínimo no app do banco — R$ 200-500 de aviso evita entrar no negativo',
+          'Crie uma reserva de emergência de pelo menos 1 mês de gastos em conta de fácil acesso',
+          'Se usar o cheque especial, contrate um crédito pessoal imediatamente para quitar — é muito mais barato',
+          'Solicite ao banco para desativar o limite do cheque especial — você não perde nada, apenas evita a armadilha',
+          'Configure o pagamento de contas fixas (aluguel, energia, internet) para sempre no mínimo 2 dias antes do vencimento',
+          'Antecipe o recebimento do salário via PIX para o dia 25 em vez de esperar o dia 30/31',
+        ],
       },
     ],
     faq: [
-      { pergunta: 'Qual é o teto do cheque especial?', resposta: `${fmtPct(taxa)} ao mês (${fmtPct(taxaAnual)} ao ano). Definido pelo BACEN em 2020 e em vigor em 2026.` },
-      { pergunta: 'Como evitar usar o cheque especial?', resposta: 'Monitore seu saldo diariamente, programe pagamentos para evitar saldo negativo e tenha uma reserva de emergência de pelo menos 1 mês de gastos.' },
-      { pergunta: 'O banco pode cobrar mais que o teto?', resposta: 'Não. A regulação do BACEN limita a 8% a.m. Taxas acima são ilegais. Denuncie no site do BACEN.' },
+      {
+        pergunta: 'Qual é o teto legal do cheque especial em 2026?',
+        resposta: `${fmtPct(taxa)} ao mês (151% ao ano), definido pelo Conselho Monetário Nacional em 2020 e mantido em 2026. Bancos que cobram acima disso estão praticando taxa ilegal — denuncie no 0800 722 0101 do Banco Central.`,
+      },
+      {
+        pergunta: 'Como evitar usar o cheque especial automaticamente?',
+        resposta: `Configure alertas de saldo no app (notifique quando chegar em R$ 200-500). Melhor ainda: peça ao banco para desativar o limite do cheque especial — sem limite, você simplesmente não consegue entrar no negativo, e aí contrata um crédito pessoal quando precisar (4× mais barato).`,
+      },
+      {
+        pergunta: 'O banco pode cobrar mais que o teto de 8% a.m.?',
+        resposta: `Não. A regulação do BACEN fixa o teto máximo em ${fmtPct(taxa)} a.m. Taxas acima são ilegais. Se encontrar, denuncie no site do Banco Central (bcb.gov.br) ou no 0800 722 0101.`,
+      },
+      {
+        pergunta: 'Entrei no cheque especial — o que faço agora?',
+        resposta: `Acesse o app do seu banco agora e contrate um crédito pessoal no valor do saldo negativo. A taxa vai cair de ${fmtPct(taxa)} a.m. para em média ${fmtPct(TAXAS_2026.pessoal.banco_grande_min)} a.m. — você elimina a dívida mais cara e fica com uma mais barata.`,
+      },
     ],
-    conclusao: `O cheque especial a ${fmtPct(taxa)} a.m. deve ser evitado a todo custo. Se precisar de dinheiro rápido, opte pelo crédito pessoal (${fmtPct(TAXAS_2026.pessoal.banco_grande_min)} a.m.) ou pela antecipação do FGTS. A economia pode chegar a ${fmtPct(taxa - TAXAS_2026.pessoal.banco_grande_min)} pontos percentuais por mês.`,
+    conclusao: `O cheque especial a ${fmtPct(taxa)} a.m. (151% a.a.) é a penúltima taxa mais cara do crédito legal no Brasil — só o rotativo do cartão é pior. Se precisar de dinheiro de emergência, contrate crédito pessoal (${fmtPct(TAXAS_2026.pessoal.banco_grande_min)} a.m.) ou antecipação de FGTS (1,29% a.m.) — ambos são muito mais baratos. E configure alertas de saldo no app para nunca mais cair no cheque especial por acidente.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -1243,13 +1321,13 @@ function gerarComparativo(slug: string): PaginaEmprestimo {
     slug,
     tipo: 'comparativo',
     titulo,
-    metaTitle: `${titulo} | Calculadora Virtual`,
-    metaDesc: `Compare taxas de empréstimo de todos os bancos em 2026. Menor taxa: ${fmtPct(bancoOrdenado[0]?.taxaMinMensal ?? 2.35)} a.m. no ${bancoOrdenado[0]?.nome ?? 'Banco do Brasil'}.`,
-    h1: `${titulo}: Tabela Completa de Todos os Bancos`,
-    intro: `Compare as taxas de crédito pessoal de todos os principais bancos e fintechs do Brasil em 2026. A menor taxa mínima é ${fmtPct(bancoOrdenado[0]?.taxaMinMensal ?? 2.35)} a.m. — veja quem oferece as melhores condições.`,
+    metaTitle: `${titulo} | Ranking Honesto com CET Real — Calculadora Virtual`,
+    metaDesc: `Compare taxas reais de crédito pessoal: menor taxa é ${fmtPct(bancoOrdenado[0]?.taxaMinMensal ?? 2.35)} a.m. no ${bancoOrdenado[0]?.nome ?? 'Banco do Brasil'}. R$ 10.000 em 24 meses: parcela de ${fmt(calcPrice(10000, bancoOrdenado[0]?.taxaMinMensal ?? 2.35, 24).parcela)} a ${fmt(calcPrice(10000, bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5, 24).parcela)}.`,
+    h1: `${titulo}: Quem Cobra Mais, Quem Cobra Menos — e o Que os Anúncios Escondem`,
+    intro: `A taxa média de crédito pessoal no Brasil em março/2026 foi de 5,1% ao mês (54,1% ao ano), segundo o Banco Central. Mas a variação entre o banco mais barato e o mais caro chega a ${fmtPct((bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5) - (bancoOrdenado[0]?.taxaMinMensal ?? 2.35))} pontos percentuais por mês — o que representa ${fmt(calcPrice(10000, bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5, 24).totalPago - calcPrice(10000, bancoOrdenado[0]?.taxaMinMensal ?? 2.35, 24).totalPago)} a mais no bolso em 24 meses para R$ 10.000.`,
     secoes: [
       {
-        h2: 'Ranking de Taxas de Empréstimo Pessoal 2026 (da menor para maior)',
+        h2: 'Ranking de Taxas de Crédito Pessoal 2026 — Do Mais Barato ao Mais Caro',
         tabela: {
           cabecalho: ['#', 'Banco/Fintech', 'Taxa Mín. Mensal', 'Taxa Mín. Anual', 'Taxa Máx. Mensal', 'Prazo Máx.', 'Valor Máx.'],
           linhas: bancoOrdenado.map((b, i) => [
@@ -1262,29 +1340,75 @@ function gerarComparativo(slug: string): PaginaEmprestimo {
             fmt(b.valorMax),
           ]),
         },
-        conteudo: 'Taxas mínimas para clientes com bom histórico de crédito (score acima de 700). A taxa final depende do perfil individual.',
+        conteudo: `Taxas mínimas válidas para clientes com score acima de 700, renda comprovada e bom relacionamento com o banco. A taxa que você recebe na prática depende do seu perfil — peça simulação personalizada em pelo menos 3 bancos antes de assinar. As taxas máximas revelam o custo real para clientes com score mais baixo ou sem relacionamento.`,
+        alerta: `A taxa anunciada no anúncio nunca é garantida. Exija a simulação com o seu CPF e o CET por escrito antes de qualquer compromisso.`,
       },
       {
-        h2: 'Comparativo: Quanto Fica a Parcela de R$ 10.000 em 24 Meses?',
+        h2: 'R$ 10.000 em 24 Meses: O Que Cada Banco Vai Te Cobrar',
         tabela: {
-          cabecalho: ['Banco', 'Taxa Mín.', 'Parcela Mínima', 'Total Pago', 'Juros Total'],
-          linhas: bancoOrdenado.map(b => {
+          cabecalho: ['Banco', 'Taxa Mín.', 'Parcela', 'Total Pago', 'Juros Total', 'Vs. Banco Mais Barato'],
+          linhas: bancoOrdenado.map((b, i) => {
             const p = calcPrice(10000, b.taxaMinMensal, 24)
-            return [b.nome, fmtPct(b.taxaMinMensal) + ' a.m.', fmt(p.parcela), fmt(p.totalPago), fmt(p.totalJuros)]
+            const pMin = calcPrice(10000, bancoOrdenado[0]?.taxaMinMensal ?? 2.35, 24)
+            return [
+              b.nome,
+              fmtPct(b.taxaMinMensal) + ' a.m.',
+              fmt(p.parcela),
+              fmt(p.totalPago),
+              fmt(p.totalJuros),
+              i === 0 ? 'Referência' : '+' + fmt(p.totalPago - pMin.totalPago),
+            ]
           }),
         },
-        conteudo: `Diferença entre menor e maior taxa: ${fmt(
-          calcPrice(10000, bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 4, 24).totalPago
+        conteudo: `Diferença entre o banco mais barato e o mais caro: ${fmt(
+          calcPrice(10000, bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5, 24).totalPago
           - calcPrice(10000, bancoOrdenado[0]?.taxaMinMensal ?? 2.35, 24).totalPago
-        )} a mais pagos no banco mais caro.`,
+        )} a mais para o mesmo empréstimo de R$ 10.000 em 24 meses. Comparar antes de contratar é literalmente dinheiro no bolso.`,
+      },
+      {
+        h2: 'Antes de Pegar Crédito Pessoal: Verifique Estas Alternativas Mais Baratas',
+        tabela: {
+          cabecalho: ['Modalidade', 'Taxa Mensal', 'Taxa Anual', 'Quem Pode', 'R$ 10.000 em 24 meses'],
+          linhas: [
+            ['Consignado INSS (teto legal)', fmtPct(TAXAS_2026.consignado.inss_teto) + ' a.m.', '26,4% a.a.', 'Aposentados/pensionistas INSS', fmt(calcPrice(10000, TAXAS_2026.consignado.inss_teto, 24).parcela) + '/mês'],
+            ['Consignado Servidor', fmtPct(TAXAS_2026.consignado.servidor_federal_max) + ' a.m.', fmtPct(mensal2Anual(TAXAS_2026.consignado.servidor_federal_max)) + ' a.a.', 'Servidores públicos', fmt(calcPrice(10000, TAXAS_2026.consignado.servidor_federal_max, 24).parcela) + '/mês'],
+            ['Antecipação FGTS', '1,29% a.m.', fmtPct(mensal2Anual(1.29)) + ' a.a.', 'CLTs com saldo no FGTS', 'Desconto no saldo — sem parcela'],
+            [`Menor taxa crédito pessoal`, fmtPct(bancoOrdenado[0]?.taxaMinMensal ?? 2.35) + ' a.m.', fmtPct(bancoOrdenado[0]?.taxaMinAnual ?? 32) + ' a.a.', 'Qualquer pessoa (aprovação)', fmt(calcPrice(10000, bancoOrdenado[0]?.taxaMinMensal ?? 2.35, 24).parcela) + '/mês'],
+            [`Maior taxa crédito pessoal`, fmtPct(bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5) + ' a.m.', fmtPct(mensal2Anual(bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5)) + ' a.a.', 'Qualquer pessoa (aprovação)', fmt(calcPrice(10000, bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5, 24).parcela) + '/mês'],
+          ],
+        },
+        conteudo: `A média nacional de crédito pessoal (5,1% a.m.) é mais de 2,5 vezes o teto do consignado INSS (${fmtPct(TAXAS_2026.consignado.inss_teto)} a.m.). Se você é aposentado ou pensionista, nunca tome crédito pessoal antes de tentar o consignado.`,
+      },
+      {
+        h2: '5 Estratégias Para Conseguir a Menor Taxa Possível',
+        lista: [
+          'Score acima de 700: cada 50 pontos de score a mais pode reduzir a taxa em 0,3-0,5% a.m. — pague todas as contas em dia por 3-6 meses antes de pedir o empréstimo',
+          'Relacionamento bancário: clientes que recebem salário, têm investimentos ou seguro no banco conseguem taxas 20-30% menores',
+          'Compare pelo menos 3 bancos: use a proposta do banco mais barato como argumento de negociação com os outros',
+          'Prefira prazos mais curtos: bancos cobram mais para riscos maiores — 12 meses tem taxa menor que 48 meses',
+          'Negocie no fim do mês: gerentes têm metas mensais e costumam ser mais flexíveis nos últimos dias do mês',
+        ],
       },
     ],
     faq: [
-      { pergunta: 'Qual banco tem a menor taxa de empréstimo pessoal em 2026?', resposta: `${bancoOrdenado[0]?.nome ?? 'Banco do Brasil'} com taxa mínima de ${fmtPct(bancoOrdenado[0]?.taxaMinMensal ?? 2.35)} ao mês para clientes com bom score.` },
-      { pergunta: 'A taxa anunciada é garantida?', resposta: 'Não. A taxa anunciada é o "a partir de" para clientes com excelente perfil de crédito. A taxa real depende do seu score, renda e relacionamento com o banco.' },
-      { pergunta: 'Vale a pena trocar de banco por taxa menor?', resposta: 'Se a diferença for de 1% a.m. ou mais, a portabilidade pode economizar centenas de reais. Simule o novo CET antes de migrar.' },
+      {
+        pergunta: 'Qual banco tem a menor taxa de crédito pessoal em 2026?',
+        resposta: `${bancoOrdenado[0]?.nome ?? 'Banco do Brasil'} tem a menor taxa mínima: ${fmtPct(bancoOrdenado[0]?.taxaMinMensal ?? 2.35)} a.m. (${fmtPct(bancoOrdenado[0]?.taxaMinAnual ?? 32)} a.a.) para clientes com score acima de 700. Mas a taxa que você recebe depende do seu perfil — peça simulação com o seu CPF.`,
+      },
+      {
+        pergunta: 'A taxa anunciada é garantida?',
+        resposta: 'Não — nunca. A taxa anunciada é o "a partir de" para o cliente ideal. O Banco Central exige que os bancos divulguem as taxas máximas também, mas muitos colocam em letras miúdas. Exija a simulação personalizada com o seu CPF e o CET por escrito.',
+      },
+      {
+        pergunta: 'Vale a pena fazer portabilidade de crédito para um banco mais barato?',
+        resposta: `Sim, quando a diferença é de 1% a.m. ou mais. Para um saldo devedor de R$ 10.000 com 24 meses restantes, 1% a.m. de diferença representa cerca de R$ 1.200 de economia. A portabilidade é gratuita e o banco de destino deve processar em 5 dias úteis.`,
+      },
+      {
+        pergunta: 'Fintechs são mais baratas que os bancões?',
+        resposta: `Depende do perfil. Fintechs (Nubank, Inter, C6) costumam aprovar mais rápido e com menos burocracia, mas não são necessariamente mais baratas para valores grandes. Para empréstimos acima de R$ 20.000 com bom score, bancões às vezes oferecem taxas mais baixas por conta do relacionamento.`,
+      },
     ],
-    conclusao: `Para conseguir a menor taxa, mantenha score acima de 700, comprove renda consistente e negocie com o gerente. Fintechs como Nubank e Inter têm processos 100% digitais e aprovação rápida. Bancos tradicionais podem oferecer taxas menores para clientes com histórico de relacionamento.`,
+    conclusao: `A diferença de taxa entre bancos pode representar ${fmt(calcPrice(10000, bancoOrdenado[bancoOrdenado.length - 1]?.taxaMinMensal ?? 5.5, 24).totalPago - calcPrice(10000, bancoOrdenado[0]?.taxaMinMensal ?? 2.35, 24).totalPago)} a mais pagos para o mesmo R$ 10.000 em 24 meses. Compare sempre, exija o CET por escrito e verifique se há alternativas mais baratas (consignado, FGTS) antes de tomar crédito pessoal.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }
@@ -1300,59 +1424,84 @@ function gerarRenegociacao(slug: string): PaginaEmprestimo {
     slug,
     tipo: 'renegociacao',
     titulo,
-    metaTitle: `${titulo} | Calculadora Virtual`,
-    metaDesc: `${titulo}: passo a passo para limpar o nome, renegociar dívidas e recuperar crédito em 2026.`,
-    h1: `${titulo}: Passo a Passo`,
-    intro: `Estar negativado no Serasa ou SPC fecha as portas do crédito. Veja como ${titulo.toLowerCase()} em 2026 e recuperar seu histórico de crédito.`,
+    metaTitle: `${titulo} 2026 — Descontos de Até 96% e Passo a Passo | Calculadora Virtual`,
+    metaDesc: `${titulo}: descontos de até 96% no Desenrola Brasil e 80% no Serasa Limpa Nome. Veja o passo a passo para negativados recuperarem o crédito em 2026.`,
+    h1: `${titulo}: Descontos Reais, Prazo Legal e Estratégia Para Negativados`,
+    intro: `Estar negativado no Serasa ou SPC fecha as portas do crédito — mas há dois fatos que muita gente não sabe: (1) dívidas com mais de 5 anos são removidas automaticamente do Serasa mesmo sem pagamento; e (2) descontos de 70-96% são possíveis via Serasa Limpa Nome e Desenrola Brasil. Antes de pagar qualquer coisa, leia isto.`,
     secoes: [
       {
-        h2: 'Prazo de Negativação no Serasa e SPC',
+        h2: 'O Que Poucas Pessoas Sabem Sobre Dívidas no Brasil',
         tabela: {
-          cabecalho: ['Tipo de Dívida', 'Prazo Máx. de Negativação', 'Legislação'],
+          cabecalho: ['Tipo de Dívida', 'Prazo Máx. de Negativação', 'O Que Acontece Depois', 'Legislação'],
           linhas: [
-            ['Empréstimo bancário', '5 anos', 'Código de Defesa do Consumidor'],
-            ['Cartão de crédito', '5 anos', 'CDC'],
-            ['Cheque sem fundo', '5 anos', 'CDC'],
-            ['Contas (luz, água, tel.)', '5 anos', 'CDC'],
-            ['Protesto em cartório', '5 anos', 'CDC'],
-            ['Dívida judicial (execução)', 'Até 20 anos', 'Código Civil'],
+            ['Empréstimo bancário', '5 anos do vencimento', 'Serasa remove — dívida continua existindo', 'CDC Art. 43'],
+            ['Cartão de crédito', '5 anos do vencimento', 'Serasa remove — dívida continua existindo', 'CDC Art. 43'],
+            ['Cheque sem fundo', '5 anos do vencimento', 'Serasa remove — dívida continua existindo', 'CDC Art. 43'],
+            ['Contas de consumo (luz, água, tel.)', '5 anos do vencimento', 'Serasa remove — dívida continua existindo', 'CDC Art. 43'],
+            ['Protesto em cartório', '5 anos', 'Serasa remove, protesto permanece no cartório', 'CDC Art. 43'],
+            ['Dívida judicial (execução)', 'Até 20 anos', 'Não remove automaticamente', 'Código Civil Art. 206'],
           ],
         },
-        conteudo: 'Após 5 anos do vencimento da dívida, o Serasa e SPC são obrigados a remover a negativação, mesmo que a dívida não tenha sido paga. Mas a dívida continua existindo.',
+        conteudo: `Após 5 anos do vencimento, o Serasa é obrigado por lei a remover a negativação — mesmo sem pagamento. Mas atenção: a dívida não desaparece. Ela continua existindo e pode ser cobrada judicialmente. Se a dívida ainda não prescreveu (prazo varia por tipo, geralmente 5 anos pelo CDC), o credor pode processar. Verifique sempre a data de vencimento original antes de negociar.`,
+        alerta: `Se a sua dívida tem mais de 5 anos de vencimento, verifique se ainda aparece no Serasa — pode já ter sido removida automaticamente. Não pague uma dívida "antiga" sem checar isso primeiro.`,
       },
       {
-        h2: 'Como Negociar Dívida com Desconto',
+        h2: 'Onde Negociar e Quanto de Desconto Você Pode Conseguir em 2026',
+        tabela: {
+          cabecalho: ['Programa / Canal', 'Desconto Máximo', 'Para Quem', 'Como Acessar', 'Forma de Pagamento'],
+          linhas: [
+            ['Desenrola Brasil — Faixa 1', 'Até 96%', 'Renda até 2 SM ou Bolsa Família', 'gov.br/desenrola', 'Parcelado s/ juros ou à vista'],
+            ['Desenrola Brasil — Faixa 2', 'Até 72%', 'Renda até 5 SM', 'gov.br/desenrola', 'Parcelado com taxas reduzidas'],
+            ['Serasa Limpa Nome', 'Até 80%', 'Qualquer negativado', 'serasa.com.br/limpa-nome', 'À vista ou parcelado (3-12×)'],
+            ['Acordo Certo — Banco do Brasil', 'Até 70%', 'Devedores do BB', 'bb.com.br/acordocerto', 'À vista ou parcelado'],
+            ['App Caixa — Negociação', 'Até 60%', 'Devedores da Caixa', 'App Caixa Tem', 'À vista ou parcelado'],
+            ['Negociação direta com o banco', '30-50%', 'Qualquer devedor', 'Central de atendimento', 'À vista para maior desconto'],
+          ],
+        },
+        conteudo: `Pagar à vista sempre garante o maior desconto. Se não tiver o valor todo, os parcelamentos do Desenrola e do Serasa Limpa Nome não cobram juros adicionais — diferente de parcelar em cartão. Priorize as dívidas com juros correndo (empréstimos ativos) antes das que já foram negativadas.`,
+      },
+      {
+        h2: 'Passo a Passo Para Limpar o Nome em 2026',
         lista: [
-          'Consulte o Serasa Limpa Nome (serasa.com.br) para ver todas as dívidas',
-          'Acesse o portal da instituição credora (banco, financeira)',
-          'Negocie diretamente no app — descontos de até 80% são possíveis',
-          'Prefira pagar à vista — o desconto é maior',
-          'Verifique se a dívida ainda está dentro do prazo de prescrição (5 anos)',
-          'Após pagar, confirme que o nome foi removido em até 5 dias úteis',
-          'Guarde o comprovante do pagamento por pelo menos 5 anos',
+          'Consulte todas as suas dívidas em serasa.com.br (gratuito) e boa-vista.com.br — veja o vencimento original de cada uma',
+          'Verifique se alguma dívida tem mais de 5 anos de vencimento — essas já foram ou serão removidas automaticamente',
+          'Para as dívidas dentro do prazo: acesse o Serasa Limpa Nome ou o Desenrola Brasil e compare os descontos oferecidos',
+          'Priorize pagar à vista — o desconto é sempre maior e a negociação é mais rápida',
+          'Após pagar, o credor tem até 5 dias úteis para retirar a negativação — se não fizer, entre em contato com a instituição e exija confirmação por escrito',
+          'Guarde todos os comprovantes de pagamento por pelo menos 5 anos',
+          'Após 3-6 meses do pagamento, monitore o score pelo Serasa — ele começa a subir gradualmente',
         ],
       },
       {
-        h2: 'Programas de Renegociação 2026',
-        tabela: {
-          cabecalho: ['Programa', 'Desconto Típico', 'Quem Pode', 'Como Acessar'],
-          linhas: [
-            ['Serasa Limpa Nome', 'Até 80%', 'Qualquer negativado', 'serasa.com.br'],
-            ['Desenrola Brasil', 'Até 96% (Faixa 1)', 'Renda até 2 SM ou Bolsa', 'Gov.br'],
-            ['Acordo Certo (BB)', 'Até 70%', 'Devedores do BB', 'App BB'],
-            ['Negociação Caixa', 'Até 60%', 'Devedores da Caixa', 'App Caixa'],
-            ['Consórcio de Dívidas', 'Variável', 'Múltiplas dívidas', 'Fintechs'],
-          ],
-        },
+        h2: 'Crédito Para Negativados: O Que Funciona Mesmo',
+        lista: [
+          'Consignado INSS: não consulta Serasa, aprovado automaticamente se tiver margem disponível — melhor opção para aposentados negativados',
+          'Antecipação de FGTS: garantia é o saldo do FGTS, sem análise de crédito — disponível em qualquer faixa de score',
+          'Cartão pré-pago: não é crédito, mas ajuda a construir histórico de pagamentos para melhorar o score',
+          'Empréstimo com garantia de imóvel (Home Equity): taxas de 1,5-2% a.m. mesmo para negativados — mas o imóvel fica como garantia',
+          'Crédito consignado CLT: se o empregador tem convênio, aprova mesmo negativado',
+        ],
       },
     ],
     faq: [
-      { pergunta: 'Negativado pode fazer empréstimo?', resposta: 'No crédito pessoal convencional é difícil. O consignado INSS aprova negativados (sem consulta Serasa). A antecipação de FGTS também não exige score.' },
-      { pergunta: 'O nome limpa automaticamente?', resposta: 'Sim, após 5 anos do vencimento da dívida mais antiga, o Serasa remove automaticamente. Mas a dívida continua existindo legalmente por 5-10 anos.' },
-      { pergunta: 'Quanto tempo para limpar o nome após pagar?', resposta: 'O credor tem até 5 dias úteis para dar baixa no Serasa e SPC após o pagamento confirmado. Se não fizer, entre em contato direto com a instituição.' },
-      { pergunta: 'Como funciona a portabilidade de crédito?', resposta: 'Você solicita que outro banco quite sua dívida atual por uma taxa menor. O novo banco paga o saldo devedor diretamente ao banco antigo. Não há custo para você.' },
+      {
+        pergunta: 'Negativado pode fazer empréstimo?',
+        resposta: `No crédito pessoal convencional é muito difícil. Mas há opções reais: (1) Consignado INSS — não consulta Serasa, aprovação garantida se tiver margem; (2) Antecipação do FGTS — sem análise de crédito; (3) Empréstimo com garantia de imóvel — aprovado mesmo com score baixo.`,
+      },
+      {
+        pergunta: 'O nome limpa automaticamente sem pagar?',
+        resposta: `Sim — após 5 anos do vencimento da dívida mais antiga, o Serasa e SPC são obrigados por lei (CDC Art. 43) a remover a negativação. Mas atenção: a dívida não deixa de existir. Ela pode ser cobrada judicialmente pelo prazo de prescrição (geralmente mais 5 anos).`,
+      },
+      {
+        pergunta: 'Quanto tempo para limpar o nome após pagar?',
+        resposta: `O credor tem até 5 dias úteis para dar baixa no Serasa e SPC após o pagamento confirmado. Se não fizer, entre em contato direto com a instituição e exija confirmação por escrito. Em último caso, você pode acionar o Procon ou a Ouvidoria do banco.`,
+      },
+      {
+        pergunta: 'Como funciona a portabilidade de crédito para reduzir a taxa?',
+        resposta: `Você solicita que outro banco quite sua dívida atual por uma taxa menor. O novo banco paga o saldo devedor diretamente ao banco antigo — sem custo para você. A portabilidade é gratuita e obrigatória por lei. O banco de destino deve processar em até 5 dias úteis. Exija que o prazo restante não aumente.`,
+      },
     ],
-    conclusao: `Negociar dívidas em 2026 ficou mais fácil com o Serasa Limpa Nome e o Desenrola Brasil. Priorize quitar as dívidas mais antigas, prefira pagar à vista (maior desconto) e monitore o score após a quitação.`,
+    conclusao: `Renegociar dívidas em 2026 é muito mais fácil do que era: o Desenrola Brasil oferece descontos de até 96% para baixa renda, e o Serasa Limpa Nome tem ofertas de até 80%. Antes de pagar qualquer coisa, verifique a data de vencimento original — dívidas com mais de 5 anos saem do Serasa automaticamente. Priorize pagar à vista para máximo desconto e monitore o score após a quitação.`,
     breadcrumbs: breadcrumbs(titulo, slug),
   }
 }

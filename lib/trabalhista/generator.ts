@@ -101,85 +101,85 @@ function gerarINSSSalario(slug: string, salario: number): PaginaTrabalhista {
     publishedAt: PUBLISHED_AT,
     tags: ['INSS 2026', `salário ${fmtR$(salario)}`, 'desconto INSS', 'cálculo INSS', 'CLT 2026'],
     tempoLeitura: 5,
-    intro: `Para um salário de <strong>${fmtR$(salario)}</strong>, o desconto de INSS em 2026 é de <strong>${fmtR$(r.descontoTotal)}</strong>, representando uma alíquota efetiva de <strong>${fmt(r.aliquotaEfetiva)}%</strong>.\n\nO Brasil usa uma tabela progressiva desde 2020: cada faixa de salário tem uma alíquota diferente, e você paga a alíquota de cada faixa apenas sobre a parte do salário que cai nela — não sobre o total.`,
+    intro: `Se você ganha <strong>${fmtR$(salario)}</strong> de salário bruto, o desconto de INSS que sai do seu holerite todo mês é de <strong>${fmtR$(r.descontoTotal)}</strong> — o que corresponde a uma alíquota efetiva de <strong>${fmt(r.aliquotaEfetiva)}%</strong>, bem abaixo da alíquota máxima da sua faixa.\n\nMuita gente não sabe, mas o Brasil usa tabela <em>progressiva</em> desde novembro de 2019: funciona exatamente como o Imposto de Renda. Você não paga a alíquota maior sobre o salário todo — paga cada alíquota apenas sobre a fatia do salário que cai naquela faixa. O resultado é sempre uma alíquota efetiva menor do que a alíquota nominal da faixa.`,
     secoes: [
       {
-        h2: `Cálculo Detalhado do INSS para ${fmtR$(salario)}`,
-        conteudo: `Veja como o desconto é calculado faixa por faixa:`,
+        h2: `Como o INSS é Calculado para ${fmtR$(salario)}: Faixa por Faixa`,
+        conteudo: `O Art. 28 da Lei 8.212/91, combinado com a Portaria MTP nº 1.320/2022, define a tabela progressiva vigente. Para o seu salário de ${fmtR$(salario)}, o cálculo funciona assim — cada linha é uma "fatia" do seu salário:`,
         tabela: {
           cabecalho: ['Faixa de Salário', 'Alíquota', 'Base de Cálculo', 'Desconto'],
           linhas: linhasCalculo,
         },
-        destaque: `Desconto total de INSS: ${fmtR$(r.descontoTotal)} (alíquota efetiva: ${fmt(r.aliquotaEfetiva)}%)`,
+        destaque: `Desconto total: ${fmtR$(r.descontoTotal)} — alíquota efetiva real de ${fmt(r.aliquotaEfetiva)}% (não ${TABELA_INSS_2026[TABELA_INSS_2026.length - 1] ? (TABELA_INSS_2026[TABELA_INSS_2026.length - 1].aliq * 100).toFixed(0) : '14'}% como muitos pensam)`,
       },
       {
-        h2: 'Tabela INSS 2026 Completa',
-        conteudo: 'A tabela progressiva do INSS 2026 é composta por 4 faixas:',
+        h2: 'Tabela INSS 2026 Completa — Todas as Alíquotas',
+        conteudo: 'A tabela progressiva do INSS 2026, vigente desde 1º de janeiro, tem 4 faixas salariais com alíquotas crescentes. Valores definidos pela Portaria MTP 1.320/2022 e atualizados pelo INPC:',
         tabela: {
           cabecalho: ['Faixa Salarial', 'Alíquota', 'Teto da Faixa'],
           linhas: linhasTabelaINSS,
         },
       },
       {
-        h2: 'Resumo do Holerite',
+        h2: 'Holerite Completo: O que Realmente Cai na Sua Conta',
         subsecoes: [
           {
             h3: 'Salário Bruto',
-            conteudo: `<strong>${fmtR$(salario)}</strong> — valor acordado em contrato.`,
+            conteudo: `<strong>${fmtR$(salario)}</strong> — é o valor do seu contrato. Nenhum empregador pode pagar menos que o salário mínimo de R$&nbsp;1.518,00 (Art. 76 da CLT).`,
           },
           {
             h3: 'Desconto INSS',
-            conteudo: `<strong>${fmtR$(r.descontoTotal)}</strong> — alíquota efetiva de ${fmt(r.aliquotaEfetiva)}%.`,
+            conteudo: `<strong>${fmtR$(r.descontoTotal)}</strong> — alíquota efetiva de ${fmt(r.aliquotaEfetiva)}%. Esse valor vai para a Previdência Social e garante aposentadoria, auxílio-doença, salário-maternidade e pensão por morte.`,
           },
           {
             h3: 'Desconto IRRF (estimado)',
-            conteudo: `<strong>${fmtR$(liquido.irrf)}</strong> — calculado sobre a base após INSS.`,
+            conteudo: `<strong>${fmtR$(liquido.irrf)}</strong> — calculado sobre a base após deduzir o INSS. Se você tiver dependentes ou pagar pensão alimentícia, esse valor pode ser menor ou até zero.`,
           },
           {
             h3: 'Salário Líquido Aproximado',
-            conteudo: `<strong>${fmtR$(liquido.salarioLiquido)}</strong> — o valor que cai na conta.`,
+            conteudo: `<strong>${fmtR$(liquido.salarioLiquido)}</strong> — é o que efetivamente cai na sua conta. Podem existir outros descontos: vale-transporte (máx. 6% do bruto), plano de saúde, etc.`,
           },
           {
             h3: 'FGTS Depositado pelo Empregador',
-            conteudo: `<strong>${fmtR$(liquido.fgts)}</strong>/mês — 8% do bruto, não desconta do salário.`,
+            conteudo: `<strong>${fmtR$(liquido.fgts)}</strong>/mês — 8% do seu salário bruto, pago pela empresa sem descontar do seu salário (Art. 15 da Lei 8.036/90). Esse dinheiro é seu e fica guardado na Caixa Econômica Federal.`,
           },
         ],
       },
       {
-        h2: 'Como Reduzir o INSS Legalmente?',
+        h2: 'Como Pagar Menos INSS Legalmente — Situações Reais',
         lista: [
-          'MEI contribui apenas com 5% sobre o salário mínimo (R$ 75,90/mês em 2026)',
-          'Autônomos podem optar por contribuição mínima (11% sobre o salário mínimo)',
-          'Previdência complementar (PGBL) reduz a base de IRRF, mas não de INSS',
-          'Dividendos de PJ não têm desconto de INSS para sócios',
-          'O teto do INSS é R$ 7.786,02 — acima disso, não há desconto adicional',
+          'MEI: contribui apenas 5% sobre o salário mínimo — R$&nbsp;75,90/mês em 2026. Dá direito à aposentadoria por idade, auxílio-doença e salário-maternidade',
+          'Autônomo com contribuição mínima: 11% sobre o salário mínimo (R$&nbsp;166,98/mês) — mantém qualidade de segurado, mas sem aposentadoria por tempo de contribuição',
+          'Sócio de empresa: dividendos não têm INSS — mas pro-labore tem, com a mesma tabela progressiva',
+          'Previdência privada (PGBL): reduz a base do IRRF em até 12% do rendimento bruto, mas não afeta o INSS',
+          'Salário acima de R$&nbsp;7.786,02: você paga o teto e nenhum centavo a mais de INSS, independente do salário real',
         ],
-        destaque: `Dica: Se seu salário supera R$ 7.786,02, você sempre paga o desconto máximo de R$ ${fmt(calcularINSS(TETO_INSS_2026).descontoTotal)}/mês, independentemente do salário.`,
+        destaque: `Atenção: se o seu holerite não mostrar o desconto de INSS discriminado, exija o detalhamento por escrito. É seu direito (Art. 464 da CLT). Empregador que não recolhe o INSS pode responder criminal e administrativamente.`,
       },
     ],
     faq: [
       {
         pergunta: `Quanto desconta de INSS para salário de ${fmtR$(salario)}?`,
-        resposta: `O desconto de INSS é de <strong>${fmtR$(r.descontoTotal)}</strong>, com alíquota efetiva de ${fmt(r.aliquotaEfetiva)}%.`,
+        resposta: `Para um salário de ${fmtR$(salario)}, o desconto de INSS em 2026 é de <strong>${fmtR$(r.descontoTotal)}</strong>, com alíquota efetiva de ${fmt(r.aliquotaEfetiva)}%. O cálculo é progressivo: cada faixa do salário tem sua própria alíquota, similar ao Imposto de Renda.`,
       },
       {
-        pergunta: 'O INSS é calculado sobre o salário bruto?',
-        resposta: 'Sim. O INSS é calculado sobre o salário bruto, antes de qualquer outro desconto. A alíquota é progressiva — cada faixa do salário tem sua própria alíquota.',
+        pergunta: 'O INSS é calculado sobre o salário bruto ou líquido?',
+        resposta: 'Sempre sobre o salário bruto — é a primeira dedução que acontece. Depois que o INSS é calculado e descontado, aí sim calcula-se o IRRF sobre o valor reduzido. Nunca o contrário.',
       },
       {
         pergunta: 'O 13º salário tem desconto de INSS?',
-        resposta: 'Sim. O 13º salário tem desconto de INSS calculado separadamente, com a mesma tabela progressiva.',
+        resposta: `Sim, e muita gente leva susto. O 13º tem desconto de INSS calculado separadamente, com a mesma tabela progressiva. Para um salário de ${fmtR$(salario)}, o desconto no 13º seria de ${fmtR$(r.descontoTotal)} — o mesmo do salário mensal. O IRRF do 13º é calculado com base anual (alíquota única sobre o valor do 13º).`,
       },
       {
         pergunta: 'Férias têm desconto de INSS?',
-        resposta: 'Sim. As férias regulares têm desconto de INSS. O adicional de 1/3 de férias também é tributado pelo INSS.',
+        resposta: 'Sim. O salário das férias tem desconto de INSS normalmente. O adicional de 1/3 constitucional também tem INSS — isso é pacificado pelo STJ e TST. Muitos trabalhadores não sabem e ficam surpresos ao ver o desconto no holerite de férias.',
       },
       {
-        pergunta: 'Qual o teto máximo de desconto de INSS em 2026?',
-        resposta: `O teto do INSS é calculado sobre R$ 7.786,02, resultando em um desconto máximo de ${fmtR$(calcularINSS(TETO_INSS_2026).descontoTotal)}/mês.`,
+        pergunta: 'Qual o desconto máximo de INSS em 2026?',
+        resposta: `O teto do INSS é calculado sobre R$&nbsp;7.786,02 — qualquer salário acima disso paga o mesmo desconto máximo de ${fmtR$(calcularINSS(TETO_INSS_2026).descontoTotal)}/mês. Um executivo ganhando R$&nbsp;30.000 desconta o mesmo de INSS que um que ganha R$&nbsp;7.787.`,
       },
     ],
-    conclusao: `Para um salário de ${fmtR$(salario)}, o trabalhador CLT desconta ${fmtR$(r.descontoTotal)} de INSS por mês (${fmt(r.aliquotaEfetiva)}% de alíquota efetiva). Esse valor garante acesso aos benefícios do INSS: aposentadoria, auxílio-doença, salário-maternidade e outros. O salário líquido, após INSS e IRRF, fica em aproximadamente ${fmtR$(liquido.salarioLiquido)}.`,
+    conclusao: `Para um salário de ${fmtR$(salario)}, o desconto mensal de INSS é de ${fmtR$(r.descontoTotal)} — alíquota efetiva de ${fmt(r.aliquotaEfetiva)}%, não os ${TABELA_INSS_2026[TABELA_INSS_2026.length - 1] ? (TABELA_INSS_2026[TABELA_INSS_2026.length - 1].aliq * 100).toFixed(0) : '14'}% que aparecem na tabela. Esse desconto garante cobertura previdenciária completa: aposentadoria, auxílio-doença, salário-maternidade, pensão por morte. Seu salário líquido fica em aproximadamente ${fmtR$(liquido.salarioLiquido)}, mais ${fmtR$(liquido.fgts)}/mês de FGTS que a empresa deposita sem descontar do seu salário.`,
   }
 }
 
@@ -203,72 +203,73 @@ function gerarFGTSSalario(slug: string, salario: number): PaginaTrabalhista {
     publishedAt: PUBLISHED_AT,
     tags: ['FGTS 2026', `salário ${fmtR$(salario)}`, 'depósito FGTS', 'saldo FGTS', 'multa FGTS'],
     tempoLeitura: 5,
-    intro: `Para um salário de <strong>${fmtR$(salario)}</strong>, o empregador deposita <strong>${fmtR$(r.depositoMensal)}/mês</strong> de FGTS (8% do salário bruto). Em 1 ano, esse saldo acumula <strong>${fmtR$(r.saldoApos12Meses)}</strong>.\n\nO FGTS não é descontado do salário — é uma contribuição adicional paga pelo empregador. Você só pode sacar em situações específicas: demissão sem justa causa, aposentadoria, doenças graves, compra da casa própria e aniversário.`,
+    intro: `Para um salário de <strong>${fmtR$(salario)}</strong>, a empresa deposita <strong>${fmtR$(r.depositoMensal)} todo mês</strong> na sua conta do FGTS na Caixa Econômica Federal — sem descontar nem um centavo do seu salário. Em 1 ano, esse dinheiro acumula <strong>${fmtR$(r.saldoApos12Meses)}</strong>.\n\nO FGTS (Fundo de Garantia do Tempo de Serviço) foi criado pela Lei 8.036/90 exatamente para proteger o trabalhador na demissão sem justa causa: você recebe o saldo todo mais uma multa de 40% paga pela empresa. É um dos poucos direitos que a maioria dos trabalhadores subestima — e que pode fazer muita diferença no momento da rescisão.`,
     secoes: [
       {
-        h2: `Projeção de Saldo FGTS — Salário ${fmtR$(salario)}`,
+        h2: `Quanto Você Vai Ter no FGTS com Salário de ${fmtR$(salario)}`,
         tabela: {
-          cabecalho: ['Período', 'Depósito Acumulado', 'Multa se Demitido (40%)'],
+          cabecalho: ['Período', 'Saldo Acumulado', 'Multa se Demitido (40%)', 'Total que Você Recebe'],
           linhas: [
-            ['1 mês', fmtR$(r.depositoMensal), fmtR$(r.depositoMensal * 0.4)],
-            ['6 meses', fmtR$(r.depositoMensal * 6), fmtR$(r.depositoMensal * 6 * 0.4)],
-            ['1 ano (12 meses)', fmtR$(r.saldoApos12Meses), fmtR$(r.saldoApos12Meses * 0.4)],
-            ['2 anos (24 meses)', fmtR$(r.saldoApos24Meses), fmtR$(r.saldoApos24Meses * 0.4)],
-            ['5 anos (60 meses)', fmtR$(r.saldoApos60Meses), fmtR$(r.saldoApos60Meses * 0.4)],
+            ['1 mês', fmtR$(r.depositoMensal), fmtR$(r.depositoMensal * 0.4), fmtR$(r.depositoMensal * 1.4)],
+            ['6 meses', fmtR$(r.depositoMensal * 6), fmtR$(r.depositoMensal * 6 * 0.4), fmtR$(r.depositoMensal * 6 * 1.4)],
+            ['1 ano (12 meses)', fmtR$(r.saldoApos12Meses), fmtR$(r.saldoApos12Meses * 0.4), fmtR$(r.saldoApos12Meses * 1.4)],
+            ['2 anos (24 meses)', fmtR$(r.saldoApos24Meses), fmtR$(r.saldoApos24Meses * 0.4), fmtR$(r.saldoApos24Meses * 1.4)],
+            ['5 anos (60 meses)', fmtR$(r.saldoApos60Meses), fmtR$(r.saldoApos60Meses * 0.4), fmtR$(r.saldoApos60Meses * 1.4)],
           ],
         },
-        destaque: `Depósito mensal do empregador: ${fmtR$(r.depositoMensal)} (8% de ${fmtR$(salario)})`,
+        destaque: `O depósito mensal é ${fmtR$(r.depositoMensal)} (8% de ${fmtR$(salario)}). Verifique mensalmente pelo app FGTS se a empresa está depositando — muitos empregadores atrasam ou deixam de recolher.`,
       },
       {
-        h2: 'Quando Posso Sacar o FGTS?',
+        h2: 'Em Quais Situações Posso Sacar o FGTS?',
         lista: [
-          'Demissão sem justa causa — saca tudo + multa de 40%',
-          'Aposentadoria — saca todo o saldo',
-          'Compra da casa própria — saca parte ou tudo para entrada/amortização',
-          'Doenças graves (câncer, HIV, hepatite C, etc.) — saca tudo',
-          'Aniversário — saca parte do saldo anualmente (modalidade opcional)',
-          'Conta inativa há mais de 3 anos — saca a qualquer momento',
-          'Desastre natural ou estado de emergência — saca parte',
-          'Rescisão por acordo mútuo — saca tudo + multa de 20%',
+          'Demissão sem justa causa — saca 100% do saldo + multa de 40% (Art. 18, §1º da Lei 8.036/90)',
+          'Rescisão por acordo mútuo (§6º, Art. 484-A da CLT) — saca 80% do saldo + multa de 20%',
+          'Aposentadoria (qualquer modalidade) — saca 100% do saldo, sem multa',
+          'Compra, construção ou amortização de imóvel próprio — condições específicas da Caixa',
+          'Doenças graves: câncer, HIV/AIDS, hepatite C em estágio terminal — saca 100%',
+          'Conta inativa há mais de 3 anos sem vínculo empregatício ativo',
+          'Trabalhador com mais de 70 anos de idade — saca o saldo da conta mais antiga',
+          'Desastre natural em área de estado de emergência ou calamidade pública',
+          'Modalidade Aniversário — saque parcial anual, mas abre mão da multa de 40%',
         ],
       },
       {
-        h2: 'O que é a Multa de 40% do FGTS?',
-        conteudo: `Na demissão sem justa causa, o empregador deve pagar uma multa equivalente a 40% do saldo total do FGTS. Para um saldo de <strong>${fmtR$(r.saldoApos12Meses)}</strong> (após 12 meses), a multa seria de <strong>${fmtR$(r.saldoApos12Meses * 0.4)}</strong>. No caso de acordo mútuo (rescisão por acordo), a multa é de apenas 20%.`,
-        destaque: `Em caso de demissão sem justa causa: saldo FGTS (12 meses) = ${fmtR$(r.saldoApos12Meses)} + multa 40% = ${fmtR$(r.saldoApos12Meses * 0.4)} = Total ${fmtR$(r.saldoApos12Meses * 1.4)}`,
+        h2: 'A Multa de 40% do FGTS: Como Funciona na Prática',
+        conteudo: `A multa rescisória é um direito garantido pelo Art. 18, §1º da Lei 8.036/90. O empregador paga 40% sobre o <em>saldo total acumulado</em> do FGTS — não sobre o último depósito. Exemplo real com salário de ${fmtR$(salario)} e 1 ano de trabalho:\n\nSaldo FGTS de 12 meses = ${fmtR$(r.saldoApos12Meses)}. Multa de 40% = ${fmtR$(r.saldoApos12Meses * 0.4)}. Total que você saca: ${fmtR$(r.saldoApos12Meses * 1.4)}.\n\nAtenção: esse dinheiro é separado das suas verbas rescisórias (aviso prévio, 13º, férias). Você recebe tudo junto no TRCT, mas são dois pagamentos distintos — o saldo sai da Caixa, a multa sai direto do empregador.`,
+        destaque: `Armadilha comum: se você PEDIR demissão, perde a multa de 40% e não pode sacar o FGTS imediatamente. O saldo fica bloqueado e só sai em situações específicas (aposentadoria, casa própria, etc.). Pense bem antes de pedir demissão sem negociar uma rescisão por acordo.`,
       },
       {
-        h2: 'FGTS Modalidade Aniversário',
-        conteudo: 'Na modalidade aniversário, você pode sacar uma parcela do FGTS todo ano no mês do seu aniversário. Em contrapartida, perde o direito à multa de 40% em caso de demissão sem justa causa. A adesão é opcional e pode ser cancelada.',
+        h2: 'FGTS Modalidade Aniversário: Vale a Pena?',
+        conteudo: 'A modalidade aniversário (Lei 13.932/2019) permite sacar parte do saldo todo ano no mês do seu aniversário. Parece ótimo — mas há uma armadilha séria: ao aderir, você abre mão da multa de 40% em caso de demissão sem justa causa. Só mantém o direito de sacar o saldo acumulado.',
         lista: [
-          'Saldo até R$ 500: alíquota 50% + parcela adicional R$ 0',
-          'Saldo R$ 500,01 a R$ 1.000: alíquota 40% + parcela adicional R$ 50',
-          'Saldo R$ 1.000,01 a R$ 5.000: alíquota 30% + parcela adicional R$ 150',
-          'Saldo R$ 5.000,01 a R$ 10.000: alíquota 20% + parcela adicional R$ 650',
-          'Saldo R$ 10.000,01 a R$ 15.000: alíquota 15% + parcela adicional R$ 1.150',
-          'Saldo acima de R$ 15.000: alíquota 10% + parcela adicional R$ 1.900',
+          'Saldo até R$&nbsp;500: saca 50% do saldo (sem parcela adicional)',
+          'Saldo R$&nbsp;500,01 a R$&nbsp;1.000: saca 40% + R$&nbsp;50 de parcela adicional',
+          'Saldo R$&nbsp;1.000,01 a R$&nbsp;5.000: saca 30% + R$&nbsp;150 de parcela adicional',
+          'Saldo R$&nbsp;5.000,01 a R$&nbsp;10.000: saca 20% + R$&nbsp;650 de parcela adicional',
+          'Saldo R$&nbsp;10.000,01 a R$&nbsp;15.000: saca 15% + R$&nbsp;1.150 de parcela adicional',
+          'Saldo acima de R$&nbsp;15.000: saca 10% + R$&nbsp;1.900 de parcela adicional',
         ],
       },
     ],
     faq: [
       {
         pergunta: `Quanto é o FGTS para salário de ${fmtR$(salario)}?`,
-        resposta: `O FGTS é de <strong>${fmtR$(r.depositoMensal)}/mês</strong> (8% de ${fmtR$(salario)}), pago pelo empregador, sem desconto do salário.`,
+        resposta: `O depósito de FGTS é de <strong>${fmtR$(r.depositoMensal)}/mês</strong> — 8% de ${fmtR$(salario)}, pago integralmente pelo empregador, sem nenhum desconto no seu salário. Em 2 anos, esse saldo chega a ${fmtR$(r.saldoApos24Meses)}, mais ${fmtR$(r.saldoApos24Meses * 0.4)} de multa em caso de demissão sem justa causa.`,
       },
       {
-        pergunta: 'O FGTS é descontado do salário?',
-        resposta: 'Não. O FGTS é uma contribuição adicional paga pelo empregador, sem desconto do salário do trabalhador. Seu salário líquido não é afetado pelo FGTS.',
+        pergunta: 'O FGTS é descontado do meu salário?',
+        resposta: 'Não — e essa é uma das dúvidas mais comuns. O FGTS é um encargo do empregador, não uma dedução do seu salário. A empresa paga os 8% por cima do que você já recebe. É um custo adicional para a empresa, não um desconto para você. O Art. 15 da Lei 8.036/90 deixa isso claro.',
       },
       {
         pergunta: 'O FGTS rende alguma coisa?',
-        resposta: `O FGTS tem rendimento anual de TR + 3% ao ano. Em 2025, o FGTS rendeu aproximadamente 6,17% ao ano (TR de 3,17% + 3%). É menos do que a poupança e muito abaixo do CDI.`,
+        resposta: `O FGTS rende TR + 3% ao ano, mais distribuição dos lucros do Fundo (que varia a cada ano). Em 2025, o rendimento total foi de cerca de 6,17% ao ano — abaixo do CDI (em torno de 10,5% a.a.), mas acima da poupança. A grande vantagem não é o rendimento, mas sim a multa de 40% em caso de demissão — que é, efetivamente, um seguro-desemprego adicional.`,
       },
       {
         pergunta: 'Perco o FGTS se pedir demissão?',
-        resposta: 'Se você pedir demissão voluntariamente, não tem direito à multa de 40% do FGTS, mas o saldo acumulado continua em sua conta vinculada. Você pode sacá-lo na aposentadoria, compra de imóvel ou outras situações previstas em lei.',
+        resposta: 'Você não perde o saldo — ele continua em conta vinculada na Caixa. O que você perde é: 1) a multa de 40%; 2) o direito de sacar imediatamente. O saldo só pode ser sacado em situações específicas (aposentadoria, compra de imóvel, doenças graves). Por isso, se quiser sair de um emprego, vale muito mais negociar uma rescisão por acordo (Art. 484-A da CLT) do que simplesmente pedir demissão.',
       },
     ],
-    conclusao: `O FGTS para um salário de ${fmtR$(salario)} representa um depósito mensal de ${fmtR$(r.depositoMensal)} pelo empregador. Em 5 anos, esse fundo acumula ${fmtR$(r.saldoApos60Meses)}, mais a multa de 40% (${fmtR$(r.saldoApos60Meses * 0.4)}) em caso de demissão sem justa causa. Mantenha seu extrato atualizado pelo app FGTS da Caixa Econômica Federal.`,
+    conclusao: `O FGTS com salário de ${fmtR$(salario)} representa ${fmtR$(r.depositoMensal)}/mês que a empresa deposita em seu nome. Em 5 anos, esse fundo acumula ${fmtR$(r.saldoApos60Meses)} — mais ${fmtR$(r.saldoApos60Meses * 0.4)} de multa em caso de demissão sem justa causa. Verifique mensalmente pelo app FGTS se os depósitos estão sendo feitos regularmente. Empregador que não recolhe o FGTS comete infração administrativa e pode ser cobrado retroativamente com correção e multa.`,
   }
 }
 
@@ -296,77 +297,82 @@ function gerarRescisaoAnos(slug: string, anos: number): PaginaTrabalhista {
     publishedAt: PUBLISHED_AT,
     tags: [`rescisão ${anos} anos`, 'cálculo rescisão 2026', 'direitos trabalhistas', 'CLT 2026'],
     tempoLeitura: 6,
-    intro: `Após <strong>${anos} ano${anos > 1 ? 's' : ''}</strong> de trabalho com salário de <strong>${fmtR$(salario)}</strong>, sua rescisão sem justa causa totaliza aproximadamente <strong>${fmtR$(r.totalLiquido)}</strong> líquido.\n\nO valor varia conforme o tipo de rescisão: demissão sem justa causa, pedido de demissão ou rescisão por acordo. Veja abaixo todos os cenários calculados para ${anos} ano${anos > 1 ? 's' : ''} de serviço.`,
+    intro: `Se você foi demitido sem justa causa depois de <strong>${anos} ano${anos > 1 ? 's' : ''}</strong> de trabalho com salário de <strong>${fmtR$(salario)}</strong>, veja exatamente o que tem direito a receber: a rescisão soma aproximadamente <strong>${fmtR$(r.totalLiquido)}</strong> líquido, mais <strong>${fmtR$(r.fgtsSaldo)}</strong> de FGTS acumulado e ${fmtR$(r.multaFGTS)} de multa do FGTS.\n\nMuita gente assina o TRCT (Termo de Rescisão) sem conferir os valores e acaba perdendo dinheiro. O Art. 477 da CLT é claro: o prazo para pagamento é de 10 dias corridos após o encerramento do contrato. Desconto a menos, verba faltando ou aviso prévio calculado errado são mais comuns do que se imagina.`,
     secoes: [
       {
-        h2: `Comparativo de Rescisão — ${anos} Ano${anos > 1 ? 's' : ''} (Salário ${fmtR$(salario)})`,
+        h2: `Comparativo Completo: Quanto Você Recebe com ${anos} Ano${anos > 1 ? 's' : ''} de Trabalho`,
         tabela: {
-          cabecalho: ['Tipo de Saída', 'Aviso Prévio', 'Total Bruto', 'Total Líquido', 'Saca FGTS?'],
+          cabecalho: ['Tipo de Saída', 'Aviso Prévio', 'Total Bruto', 'Total Líquido', 'FGTS + Multa'],
           linhas: [
-            ['Demissão sem justa causa', `${r.avisoPrevio} dias`, fmtR$(r.totalBruto), fmtR$(r.totalLiquido), 'Sim (+ 40% multa)'],
-            ['Pedido de demissão', `${rPedido.avisoPrevio} dias`, fmtR$(rPedido.totalBruto), fmtR$(rPedido.totalLiquido), 'Não (saldo fica)'],
-            ['Rescisão por acordo', `${rAcordo.avisoPrevio} dias`, fmtR$(rAcordo.totalBruto), fmtR$(rAcordo.totalLiquido), 'Sim (+ 20% multa)'],
+            ['Demissão sem justa causa', `${r.avisoPrevio} dias`, fmtR$(r.totalBruto), fmtR$(r.totalLiquido), `${fmtR$(r.fgtsSaldo)} + ${fmtR$(r.multaFGTS)} (40%)`],
+            ['Pedido de demissão', `${rPedido.avisoPrevio} dias`, fmtR$(rPedido.totalBruto), fmtR$(rPedido.totalLiquido), `${fmtR$(rPedido.fgtsSaldo)} (bloqueado)`],
+            ['Rescisão por acordo (Art. 484-A)', `${rAcordo.avisoPrevio} dias`, fmtR$(rAcordo.totalBruto), fmtR$(rAcordo.totalLiquido), `${fmtR$(rAcordo.fgtsSaldo)} + ${fmtR$(rAcordo.multaFGTS)} (20%)`],
           ],
         },
+        destaque: `Armadilha: se você pedir demissão, abre mão de ${fmtR$(r.multaFGTS)} de multa do FGTS e não pode sacar o saldo imediatamente. Antes de assinar qualquer coisa, leia a seção sobre rescisão por acordo abaixo.`,
       },
       {
-        h2: `Detalhamento — Demissão Sem Justa Causa (${anos} Ano${anos > 1 ? 's' : ''})`,
+        h2: `Verba por Verba: Tudo que Você Tem Direito (Demissão sem Justa Causa, ${anos} Ano${anos > 1 ? 's' : ''})`,
         tabela: {
-          cabecalho: ['Verba', 'Valor'],
+          cabecalho: ['Verba Rescisória', 'Base Legal', 'Valor'],
           linhas: [
-            ['Saldo de salário (proporcional)', fmtR$(salario)],
-            [`Aviso prévio indenizado (${r.avisoPrevio} dias)`, fmtR$(r.avisoPrevioValor)],
-            ['13º salário proporcional', fmtR$(r.decimoTerceiro)],
-            ['Férias proporcionais', fmtR$(r.feriasProporcionais)],
-            ['1/3 sobre férias', fmtR$(r.tercoFerias)],
-            ['Multa FGTS (40%)', fmtR$(r.multaFGTS)],
-            ['(-) INSS sobre verbas tributáveis', `- ${fmtR$(r.inss)}`],
-            ['Total Líquido', fmtR$(r.totalLiquido)],
+            ['Saldo de salário (dias trabalhados no mês)', 'Art. 477 CLT', fmtR$(salario)],
+            [`Aviso prévio indenizado (${r.avisoPrevio} dias)`, 'Art. 487 CLT + Lei 12.506/11', fmtR$(r.avisoPrevioValor)],
+            ['13º salário proporcional', 'Art. 3º Lei 4.090/62', fmtR$(r.decimoTerceiro)],
+            ['Férias proporcionais + 1/3 constitucional', 'Art. 146 e 148 CLT', `${fmtR$(r.feriasProporcionais)} + ${fmtR$(r.tercoFerias)}`],
+            ['Multa FGTS (40% sobre saldo)', 'Art. 18 §1º Lei 8.036/90', fmtR$(r.multaFGTS)],
+            ['(-) INSS sobre verbas tributáveis', 'Lei 8.212/91', `- ${fmtR$(r.inss)}`],
+            ['<strong>Total Líquido das Verbas</strong>', '', `<strong>${fmtR$(r.totalLiquido)}</strong>`],
+            ['Saldo FGTS (saque separado na Caixa)', 'Lei 8.036/90', fmtR$(r.fgtsSaldo)],
           ],
         },
-        destaque: `Além disso, você tem direito a sacar o saldo do FGTS: ${fmtR$(r.fgtsSaldo)} acumulado em ${anos} ano${anos > 1 ? 's' : ''}.`,
+        destaque: `Total recebido: ${fmtR$(r.totalLiquido)} em verbas rescisórias + ${fmtR$(r.fgtsSaldo)} de saldo FGTS = ${fmtR$(r.totalLiquido + r.fgtsSaldo)} no total.`,
       },
       {
-        h2: 'Aviso Prévio: Como é Calculado?',
-        conteudo: `O aviso prévio em 2026 é de <strong>30 dias + 3 dias por ano trabalhado</strong>, limitado a 90 dias. Para ${anos} ano${anos > 1 ? 's' : ''} de serviço: 30 + ${anos * 3} = <strong>${r.avisoPrevio} dias</strong>.`,
+        h2: 'Aviso Prévio Proporcional: Cálculo e Armadilhas',
+        conteudo: `A Lei 12.506/2011 regulamentou o aviso prévio proporcional: <strong>30 dias base + 3 dias por ano completo de trabalho</strong>, limitado a 90 dias. Para ${anos} ano${anos > 1 ? 's' : ''}: 30 + (${anos} × 3) = <strong>${r.avisoPrevio} dias</strong>. Se o empregador dispensar o cumprimento, paga o aviso prévio indenizado: ${fmtR$(r.avisoPrevioValor)}.`,
         lista: [
-          `Para ${anos} ano${anos > 1 ? 's' : ''}: 30 + (${anos} × 3) = ${r.avisoPrevio} dias de aviso prévio`,
-          'Se o empregador não exigir que você trabalhe, paga o aviso prévio indenizado',
-          'Se você trabalha o aviso, não recebe o valor — mas o período conta para férias e 13º',
-          'No pedido de demissão, o trabalhador que não cumprir o aviso perde o direito às verbas do período',
+          `Com ${anos} ano${anos > 1 ? 's' : ''}: aviso prévio de ${r.avisoPrevio} dias (30 + ${anos * 3} dias extras)`,
+          'O período de aviso prévio trabalhado conta para férias, 13º e FGTS — isso aumenta um pouco seus valores finais',
+          'Se você trabalha o aviso, não recebe o valor monetário — mas o tempo é computado no contrato',
+          'Atenção: na demissão sem justa causa, é o empregador que decide se você trabalha ou não o aviso',
+          `No pedido de demissão: se você não cumprir o aviso, o empregador pode descontar ${fmtR$(r.avisoPrevioValor)} das suas verbas — verifique sempre o TRCT`,
+          'Gestante: tem estabilidade de 5 meses após o parto e não pode ser demitida sem justa causa (Art. 391-A da CLT)',
         ],
       },
       {
-        h2: 'Seguro Desemprego após Demissão',
-        conteudo: `Após demissão sem justa causa com ${anos} ano${anos > 1 ? 's' : ''} de serviço, você tem direito ao seguro-desemprego.`,
+        h2: 'Seguro-Desemprego: Quantas Parcelas Você Tem Direito?',
+        conteudo: `Após demissão sem justa causa com ${anos} ano${anos > 1 ? 's' : ''} de serviço, você deve solicitar o seguro-desemprego no prazo de 7 a 120 dias após a demissão. O valor é calculado com base na média dos últimos 3 salários.`,
         lista: [
-          anos >= 1 && anos < 2 ? 'Com 1 ano: direito a 3 parcelas do seguro-desemprego' : '',
-          anos >= 2 && anos < 3 ? 'Entre 1 e 2 anos: direito a 4 parcelas do seguro-desemprego' : '',
-          anos >= 3 ? `Com ${anos} anos: direito a 5 parcelas do seguro-desemprego` : '',
-          'Prazo para solicitar: 7 a 120 dias após a demissão',
-          'O valor é calculado com base na média dos últimos 3 salários',
+          anos >= 1 && anos < 2 ? `Com ${anos} ano${anos > 1 ? 's' : ''}: direito a 3 parcelas do seguro-desemprego (1ª solicitação)` : '',
+          anos >= 2 && anos < 3 ? `Com ${anos} anos: direito a 4 parcelas do seguro-desemprego` : '',
+          anos >= 3 ? `Com ${anos} anos: direito a 5 parcelas do seguro-desemprego (máximo)` : '',
+          'Prazo para solicitar: de 7 dias após a demissão até 120 dias — não deixe passar!',
+          'Solicite pelo app Carteira de Trabalho Digital ou nos postos do SINE/MTE',
+          'Atenção: quem pede demissão ou é demitido por justa causa NÃO tem direito ao seguro-desemprego',
+          'Acidente de trabalho: estabilidade de 12 meses após o retorno do afastamento (Súmula 378 TST) — demissão nesse período é ilegal',
         ].filter(Boolean) as string[],
       },
     ],
     faq: [
       {
         pergunta: `Quanto recebo na rescisão após ${anos} ano${anos > 1 ? 's' : ''} de trabalho?`,
-        resposta: `Para um salário de ${fmtR$(salario)}, a rescisão sem justa causa após ${anos} ano${anos > 1 ? 's' : ''} soma aproximadamente <strong>${fmtR$(r.totalLiquido)}</strong> líquido, mais o saldo do FGTS de ${fmtR$(r.fgtsSaldo)}.`,
+        resposta: `Com salário de ${fmtR$(salario)} e ${anos} ano${anos > 1 ? 's' : ''} de trabalho, a demissão sem justa causa gera aproximadamente <strong>${fmtR$(r.totalLiquido)}</strong> em verbas rescisórias líquidas + ${fmtR$(r.fgtsSaldo)} de saldo FGTS + ${fmtR$(r.multaFGTS)} de multa do FGTS. Total aproximado: ${fmtR$(r.totalLiquido + r.fgtsSaldo)}.`,
       },
       {
-        pergunta: 'O 13º salário é pago na rescisão?',
-        resposta: `Sim. Na demissão sem justa causa após ${anos} ano${anos > 1 ? 's' : ''}, você recebe o 13º proporcional aos meses trabalhados no ano atual. Valor estimado: ${fmtR$(r.decimoTerceiro)}.`,
+        pergunta: 'O 13º salário proporcional é obrigatório na rescisão?',
+        resposta: `Sim, é obrigatório em toda rescisão, exceto demissão por justa causa. Para ${anos} ano${anos > 1 ? 's' : ''} e salário de ${fmtR$(salario)}, o 13º proporcional é de ${fmtR$(r.decimoTerceiro)}, calculado sobre os meses trabalhados no ano corrente (Art. 3º da Lei 4.090/62).`,
       },
       {
-        pergunta: 'Posso negociar a rescisão com o empregador?',
-        resposta: 'Sim. A rescisão por acordo mútuo (prevista desde 2017 na Reforma Trabalhista) permite negociar a saída com a empresa, garantindo multa de 20% do FGTS e saque do saldo do FGTS, sem o aviso prévio completo.',
+        pergunta: 'Vale a pena fazer rescisão por acordo mútuo?',
+        resposta: `A rescisão por acordo (§6º do Art. 484-A da CLT, inserido pela Reforma Trabalhista) permite que ambas as partes saiam ganhando: o trabalhador recebe 20% de multa do FGTS (vs. 0% no pedido de demissão) e pode sacar o saldo. A empresa economiza metade do aviso prévio. Para ${anos} ano${anos > 1 ? 's' : ''}, o acordo gera ${fmtR$(rAcordo.totalLiquido)} líquido vs. zero de multa FGTS no pedido de demissão.`,
       },
       {
         pergunta: 'Qual o prazo para receber a rescisão?',
-        resposta: 'O prazo é de 10 dias corridos após o término do contrato (ou do aviso prévio). O pagamento deve ser feito em dinheiro, cheque ou depósito bancário.',
+        resposta: `O Art. 477, §6º da CLT determina que o pagamento deve ser feito em até <strong>10 dias corridos</strong> após o término do contrato (ou do aviso prévio, se trabalhado). O descumprimento gera multa de 1 salário mensal por dia de atraso — denuncie ao MTE se a empresa atrasar.`,
       },
     ],
-    conclusao: `Após ${anos} ano${anos > 1 ? 's' : ''} de CLT, sua rescisão sem justa causa (com salário de ${fmtR$(salario)}) soma ${fmtR$(r.totalLiquido)} líquido, além do saldo do FGTS de ${fmtR$(r.fgtsSaldo)}. Use esses valores como referência — o cálculo exato depende do salário real, dos meses trabalhados no ano e das férias vencidas.`,
+    conclusao: `Após ${anos} ano${anos > 1 ? 's' : ''} de CLT com salário de ${fmtR$(salario)}, a demissão sem justa causa gera ${fmtR$(r.totalLiquido)} em verbas rescisórias líquidas mais ${fmtR$(r.fgtsSaldo)} de saldo FGTS. Antes de assinar o TRCT, confira verba por verba: aviso prévio, 13º proporcional, férias e multa do FGTS. Em caso de divergência, não assine e procure o sindicato da sua categoria ou um advogado trabalhista — você tem 2 anos após a demissão para entrar com reclamação trabalhista (Art. 7º, XXIX da Constituição).`,
   }
 }
 
@@ -392,29 +398,29 @@ function gerarRescisaoSalario(slug: string, salario: number): PaginaTrabalhista 
     publishedAt: PUBLISHED_AT,
     tags: [`rescisão ${fmtR$(salario)}`, 'rescisão 2026', 'verbas rescisórias', 'CLT 2026', 'direitos trabalhistas'],
     tempoLeitura: 6,
-    intro: `Para um salário de <strong>${fmtR$(salario)}</strong>, a rescisão envolve várias verbas: aviso prévio, 13º proporcional, férias proporcionais + 1/3 e multa do FGTS. Os valores variam conforme o tempo de serviço e o tipo de rescisão.\n\nUsamos <strong>2 anos de trabalho</strong> como base de cálculo nos exemplos abaixo.`,
+    intro: `Se você vai ser demitido — ou está pensando em sair — com salário de <strong>${fmtR$(salario)}</strong>, é fundamental saber exatamente quanto tem direito a receber antes de assinar qualquer documento. Usando <strong>2 anos de trabalho</strong> como referência, a rescisão sem justa causa gera <strong>${fmtR$(r.totalLiquido)}</strong> líquido em verbas rescisórias, mais <strong>${fmtR$(r.fgtsSaldo)}</strong> de saldo FGTS.\n\nMuita gente descobre só depois — ao revisar o TRCT com um advogado — que recebeu a menos. O Art. 477 da CLT determina que o empregador tem 10 dias para pagar tudo, e qualquer erro pode ser cobrado na Justiça do Trabalho em até 2 anos após a demissão.`,
     secoes: [
       {
-        h2: `Rescisão Sem Justa Causa — Salário ${fmtR$(salario)} — 2 Anos`,
+        h2: `Rescisão Sem Justa Causa — Salário ${fmtR$(salario)} — 2 Anos de Trabalho`,
         tabela: {
-          cabecalho: ['Verba Rescisória', 'Valor'],
+          cabecalho: ['Verba Rescisória', 'Base Legal', 'Valor'],
           linhas: [
-            ['Saldo de salário (mês atual)', fmtR$(salario)],
-            ['Aviso prévio indenizado (36 dias)', fmtR$(r.avisoPrevioValor)],
-            ['13º salário proporcional', fmtR$(r.decimoTerceiro)],
-            ['Férias proporcionais (meses do ano)', fmtR$(r.feriasProporcionais)],
-            ['1/3 constitucional sobre férias', fmtR$(r.tercoFerias)],
-            ['Multa FGTS — 40% do saldo acumulado', fmtR$(r.multaFGTS)],
-            ['INSS sobre verbas tributáveis', `- ${fmtR$(r.inss)}`],
-            ['Total Líquido', fmtR$(r.totalLiquido)],
+            ['Saldo de salário (dias trabalhados no mês)', 'Art. 477 CLT', fmtR$(salario)],
+            ['Aviso prévio indenizado (36 dias = 30 + 6)', 'Lei 12.506/11', fmtR$(r.avisoPrevioValor)],
+            ['13º salário proporcional (meses do ano)', 'Lei 4.090/62', fmtR$(r.decimoTerceiro)],
+            ['Férias proporcionais (período aquisitivo)', 'Art. 146 CLT', fmtR$(r.feriasProporcionais)],
+            ['1/3 constitucional sobre férias', 'Art. 7º, XVII CF', fmtR$(r.tercoFerias)],
+            ['Multa FGTS — 40% do saldo acumulado', 'Art. 18 §1º Lei 8.036/90', fmtR$(r.multaFGTS)],
+            ['(-) INSS sobre verbas tributáveis', 'Lei 8.212/91', `- ${fmtR$(r.inss)}`],
+            ['<strong>Total Líquido</strong>', '', `<strong>${fmtR$(r.totalLiquido)}</strong>`],
           ],
         },
-        destaque: `Saldo FGTS acumulado em 2 anos: ${fmtR$(r.fgtsSaldo)} (mais ${fmtR$(r.multaFGTS)} de multa)`,
+        destaque: `Além das verbas acima, você saca separadamente o saldo FGTS de ${fmtR$(r.fgtsSaldo)} direto na Caixa Econômica Federal. Total geral: ${fmtR$(r.totalLiquido + r.fgtsSaldo)}.`,
       },
       {
-        h2: 'Tabela por Tempo de Serviço',
+        h2: `Quanto Você Recebe Conforme o Tempo Trabalhado — Salário ${fmtR$(salario)}`,
         tabela: {
-          cabecalho: ['Tempo', 'Aviso Prévio', 'Total Verbas (estimado)', 'FGTS Acumulado'],
+          cabecalho: ['Tempo de Trabalho', 'Aviso Prévio', 'Verbas Líquidas', 'FGTS Acumulado', 'Total Geral'],
           linhas: [1, 2, 3, 5, 10].map(a => {
             const rc = calcularRescisao(salario, a * 12, 'sem-justa-causa')
             return [
@@ -422,50 +428,51 @@ function gerarRescisaoSalario(slug: string, salario: number): PaginaTrabalhista 
               `${rc.avisoPrevio} dias`,
               fmtR$(rc.totalLiquido),
               fmtR$(rc.fgtsSaldo),
+              fmtR$(rc.totalLiquido + rc.fgtsSaldo),
             ]
           }),
         },
       },
       {
-        h2: 'Holerite Completo — Salário Líquido',
+        h2: 'Holerite Mensal — Quanto Cai na Conta Todo Mês',
         subsecoes: [
-          { h3: 'Salário Bruto', conteudo: `${fmtR$(salario)}` },
-          { h3: 'Desconto INSS', conteudo: `${fmtR$(liquido.inss)} (alíquota efetiva ${fmt(liquido.aliquotaEfetivaINSS)}%)` },
-          { h3: 'Desconto IRRF', conteudo: `${fmtR$(liquido.irrf)}` },
-          { h3: 'Salário Líquido', conteudo: `<strong>${fmtR$(liquido.salarioLiquido)}</strong>` },
-          { h3: 'FGTS (pago pelo empregador)', conteudo: `${fmtR$(liquido.fgts)}/mês` },
+          { h3: 'Salário Bruto', conteudo: `<strong>${fmtR$(salario)}</strong> — o que consta no contrato. Abaixo do salário mínimo (R$&nbsp;1.518) é ilegal.` },
+          { h3: 'Desconto INSS', conteudo: `<strong>${fmtR$(liquido.inss)}</strong> (alíquota efetiva ${fmt(liquido.aliquotaEfetivaINSS)}%) — vai para a Previdência Social.` },
+          { h3: 'Desconto IRRF', conteudo: `<strong>${fmtR$(liquido.irrf)}</strong> — calculado sobre a base após o INSS. Pode ser zero ou menor se você tiver dependentes.` },
+          { h3: 'Salário Líquido', conteudo: `<strong>${fmtR$(liquido.salarioLiquido)}</strong> — o que efetivamente cai na conta. Outros descontos podem existir: VT (máx. 6%), plano de saúde.` },
+          { h3: 'FGTS (pago pela empresa, não desconta do salário)', conteudo: `<strong>${fmtR$(liquido.fgts)}/mês</strong> — 8% do bruto. É um custo da empresa, não um desconto seu.` },
         ],
       },
       {
-        h2: 'Diferença entre os Tipos de Rescisão',
+        h2: 'Os 5 Tipos de Rescisão e o que Você Perde ou Ganha em Cada Um',
         lista: [
-          'Demissão sem justa causa: recebe tudo + multa 40% FGTS + pode sacar FGTS',
-          'Pedido de demissão: aviso prévio pode ser cumprido ou descontado, sem multa FGTS',
-          'Rescisão por acordo: aviso prévio reduzido, multa de 20% do FGTS',
-          'Justa causa: perde aviso prévio, 13º, férias proporcionais e multa FGTS',
-          'Rescisão indireta: trabalhador sai mas tem os mesmos direitos da demissão sem justa causa',
+          `Demissão sem justa causa: você recebe tudo — aviso prévio indenizado, 13º, férias + 1/3, multa FGTS de 40% (${fmtR$(r.multaFGTS)}), saque do FGTS e seguro-desemprego`,
+          `Pedido de demissão: você cumpre aviso prévio (ou desconta das verbas), perde a multa do FGTS (${fmtR$(r.multaFGTS)}) e não saca o FGTS imediatamente — pense bem antes de pedir`,
+          `Rescisão por acordo (Art. 484-A CLT): meio-a-meio — metade do aviso prévio, 20% de multa FGTS, saque do saldo, sem seguro-desemprego`,
+          `Justa causa (Art. 482 CLT): perde aviso prévio, 13º proporcional, férias proporcionais E multa FGTS — fica só com saldo de salário e férias vencidas`,
+          `Rescisão indireta (Art. 483 CLT): você encerra o contrato por culpa do empregador (não pagamento, assédio, rebaixamento) e recebe os mesmos direitos da demissão sem justa causa — inclusive seguro-desemprego`,
         ],
       },
     ],
     faq: [
       {
         pergunta: `Quanto recebo de rescisão com salário de ${fmtR$(salario)}?`,
-        resposta: `Com 2 anos de trabalho e salário de ${fmtR$(salario)}, a rescisão sem justa causa soma aproximadamente ${fmtR$(r.totalLiquido)} líquido. O valor varia conforme o tempo de serviço.`,
+        resposta: `Com 2 anos de trabalho e salário de ${fmtR$(salario)}, a rescisão sem justa causa gera ${fmtR$(r.totalLiquido)} líquido em verbas rescisórias + ${fmtR$(r.fgtsSaldo)} de saldo FGTS = total de ${fmtR$(r.totalLiquido + r.fgtsSaldo)}. O valor aumenta com o tempo de serviço e com férias vencidas não gozadas (pagas em dobro).`,
       },
       {
-        pergunta: 'A multa de 40% do FGTS é paga pelo empregador?',
-        resposta: 'Sim. A multa de 40% é paga pela empresa sobre o saldo do FGTS acumulado. Você recebe o saldo do fundo mais essa multa como indenização.',
+        pergunta: 'A multa de 40% do FGTS é paga pela empresa ou sai do meu saldo?',
+        resposta: `A multa de 40% (${fmtR$(r.multaFGTS)} no exemplo de 2 anos) é paga <em>pela empresa</em> como indenização — não sai do seu saldo do FGTS. Você recebe os dois: o saldo acumulado (${fmtR$(r.fgtsSaldo)}) mais a multa paga pela empresa (${fmtR$(r.multaFGTS)}). Total do FGTS: ${fmtR$(r.fgtsSaldo + r.multaFGTS)}.`,
       },
       {
-        pergunta: 'Preciso assinar o termo de rescisão?',
-        resposta: 'Sim. O TRCT (Termo de Rescisão do Contrato de Trabalho) precisa ser assinado. Leia com atenção antes de assinar — certifique-se de que todos os valores estão corretos.',
+        pergunta: 'Preciso assinar o TRCT? E se tiver errado?',
+        resposta: 'Você precisa assinar para receber, mas não é obrigado a concordar com valores errados. Leia verba por verba antes de assinar. Se encontrar erro: anote na frente da testemunha, assine com ressalva ("assino com ressalva no item X") e entre com reclamação trabalhista em até 2 anos. Nunca assine em branco.',
       },
       {
-        pergunta: 'Férias vencidas são pagas na rescisão?',
-        resposta: 'Sim. Férias vencidas (período aquisitivo completo não gozado) são pagas em dobro. Férias proporcionais (período incompleto) são pagas normalmente com o terço constitucional.',
+        pergunta: 'Férias vencidas são pagas em dobro na rescisão?',
+        resposta: 'Sim — e essa é uma das verbas mais esquecidas. Férias vencidas (quando o período aquisitivo de 12 meses se completou e você não gozou as férias) são pagas em dobro na rescisão (Art. 146, parágrafo único da CLT). Férias proporcionais (período incompleto) são pagas normalmente com o 1/3 constitucional.',
       },
     ],
-    conclusao: `Para um salário de ${fmtR$(salario)}, a rescisão sem justa causa após 2 anos soma ${fmtR$(r.totalLiquido)} líquido, além do FGTS acumulado. Sempre verifique o cálculo completo — cada mês trabalhado, cada faixa de salário e cada verba rescisória pode fazer diferença no total final.`,
+    conclusao: `Para um salário de ${fmtR$(salario)}, a rescisão sem justa causa após 2 anos soma ${fmtR$(r.totalLiquido)} em verbas rescisórias líquidas + ${fmtR$(r.fgtsSaldo)} de FGTS. Antes de qualquer assinatura, confira todos os valores no TRCT. Erros nos cálculos de aviso prévio, férias vencidas e 13º são os mais comuns — e podem custar centenas ou milhares de reais ao trabalhador que não confere.`,
   }
 }
 
@@ -490,26 +497,28 @@ function gerarSalarioLiquidoCLT(slug: string, salario: number): PaginaTrabalhist
     publishedAt: PUBLISHED_AT,
     tags: [`salário líquido ${fmtR$(salario)}`, 'holerite 2026', 'INSS IRRF 2026', 'CLT 2026', 'desconto salário'],
     tempoLeitura: 5,
-    intro: `Para um salário bruto de <strong>${fmtR$(salario)}</strong>, o trabalhador CLT recebe <strong>${fmtR$(r.salarioLiquido)}</strong> líquido, após os descontos de INSS e IRRF.\n\nEm 2026, o INSS usa tabela progressiva (7,5% a 14%) e o IRRF é calculado sobre a base após INSS.`,
+    intro: `Seu salário bruto é <strong>${fmtR$(salario)}</strong>, mas quanto efetivamente entra na sua conta? Em 2026, após os descontos de INSS e IRRF, o valor líquido é de <strong>${fmtR$(r.salarioLiquido)}</strong> — ou seja, você fica com <strong>${fmt((r.salarioLiquido / salario) * 100)}% do bruto</strong>.\n\nAlém disso, a empresa deposita mais ${fmtR$(r.fgts)} todo mês na sua conta do FGTS — dinheiro que é seu, mas que você só saca em situações específicas. Muita gente não conta o FGTS no "pacote total", mas ele faz parte da sua remuneração real.`,
     secoes: [
       {
-        h2: `Holerite Completo — ${fmtR$(salario)} em 2026`,
+        h2: `Holerite Completo — Salário de ${fmtR$(salario)} em 2026`,
         tabela: {
           cabecalho: ['Item', 'Valor', 'Alíquota Efetiva'],
           linhas: [
-            ['Salário Bruto', fmtR$(salario), '—'],
-            ['(-) INSS', fmtR$(r.inss), `${fmt(r.aliquotaEfetivaINSS)}%`],
-            ['(-) IRRF', fmtR$(r.irrf), `${fmt(r.aliquotaEfetivaIRRF)}%`],
-            ['= Salário Líquido', fmtR$(r.salarioLiquido), `${fmt(((salario - r.salarioLiquido) / salario) * 100)}% de descontos`],
-            ['FGTS (pago pelo empregador)', fmtR$(r.fgts), '8%'],
+            ['Salário Bruto (contrato)', fmtR$(salario), '100%'],
+            ['(-) INSS (tabela progressiva)', fmtR$(r.inss), `${fmt(r.aliquotaEfetivaINSS)}% efetivo`],
+            ['(-) IRRF (sobre base após INSS)', fmtR$(r.irrf), `${fmt(r.aliquotaEfetivaIRRF)}% efetivo`],
+            ['= Salário Líquido', fmtR$(r.salarioLiquido), `${fmt((r.salarioLiquido / salario) * 100)}% do bruto`],
+            ['+ FGTS (custo da empresa, não desconto)', fmtR$(r.fgts), '8% do bruto'],
+            ['Remuneração real total (líquido + FGTS)', fmtR$(r.salarioLiquido + r.fgts), '—'],
           ],
         },
-        destaque: `Você recebe ${fmtR$(r.salarioLiquido)} (${fmt((r.salarioLiquido / salario) * 100)}% do bruto).`,
+        destaque: `Você recebe ${fmtR$(r.salarioLiquido)} líquido na conta + ${fmtR$(r.fgts)}/mês de FGTS acumulado para você. Total: ${fmtR$(r.salarioLiquido + r.fgts)}/mês em remuneração real.`,
       },
       {
-        h2: 'Detalhamento do INSS Progressivo',
+        h2: 'Detalhamento do INSS Progressivo — Faixa por Faixa',
+        conteudo: 'O INSS não é calculado com uma alíquota única sobre todo o salário — é progressivo como o IR. Cada pedaço do seu salário tem sua própria alíquota:',
         tabela: {
-          cabecalho: ['Faixa', 'Alíquota', 'Base', 'Desconto'],
+          cabecalho: ['Faixa do Salário', 'Alíquota', 'Base Tributada', 'Desconto da Faixa'],
           linhas: inss.detalhamento.map(d => [
             d.faixa,
             `${(d.aliq * 100).toFixed(1)}%`,
@@ -519,36 +528,36 @@ function gerarSalarioLiquidoCLT(slug: string, salario: number): PaginaTrabalhist
         },
       },
       {
-        h2: 'Comparativo: CLT vs PJ',
-        conteudo: `Um PJ com faturamento equivalente a ${fmtR$(salario)} tem custos diferentes: IRPJ/CSLL sobre lucro, pro-labore com INSS, contabilidade (~R$ 200/mês) e sem benefícios como FGTS e seguro-desemprego.`,
+        h2: 'CLT vs PJ: Qual Vale Mais para Salário de ${fmtR$(salario)}?',
+        conteudo: `A conta não é simples. Um PJ recebendo o equivalente a ${fmtR$(salario)} bruto tem um custo tributário menor de INSS (pro-labore pode ser menor), mas perde FGTS, 13º, férias e seguro-desemprego. Veja na prática:`,
         lista: [
-          `CLT líquido: ${fmtR$(r.salarioLiquido)}/mês + FGTS de ${fmtR$(r.fgts)}/mês`,
-          `PJ estimado (Simples Nacional): líquido maior, mas sem FGTS nem multa na demissão`,
-          'CLT tem estabilidade, seguro-desemprego e benefícios legais garantidos',
-          'PJ tem mais flexibilidade, mas risco empresarial e custos de contador',
-          'A escolha depende do perfil: segurança (CLT) vs autonomia (PJ)',
+          `CLT: ${fmtR$(r.salarioLiquido)} líquido/mês + ${fmtR$(r.fgts)} de FGTS + 13º de ${fmtR$(salario)}/ano + 30 dias de férias com 1/3`,
+          `PJ Simples Nacional: alíquota pode ser 6% a 17,42% dependendo do faturamento — líquido geralmente maior, mas sem FGTS nem multa na demissão`,
+          `PJ tem custo de contador (R$&nbsp;150 a R$&nbsp;400/mês) e você paga a própria saúde — sem plano corporativo`,
+          `Na demissão CLT: você recebe aviso prévio, 13º, férias + multa FGTS de 40%. PJ não tem nada disso`,
+          `Regra geral: PJ só compensa com salário acima de 30% a 40% do CLT equivalente — abaixo disso, o CLT é melhor no total`,
         ],
       },
     ],
     faq: [
       {
         pergunta: `Quanto fica o salário líquido de ${fmtR$(salario)}?`,
-        resposta: `O salário líquido de ${fmtR$(salario)} é <strong>${fmtR$(r.salarioLiquido)}</strong> em 2026, após descontos de INSS (${fmtR$(r.inss)}) e IRRF (${fmtR$(r.irrf)}).`,
+        resposta: `O salário líquido de ${fmtR$(salario)} em 2026 é de <strong>${fmtR$(r.salarioLiquido)}</strong>, após INSS de ${fmtR$(r.inss)} (alíquota efetiva ${fmt(r.aliquotaEfetivaINSS)}%) e IRRF de ${fmtR$(r.irrf)}. Isso representa ${fmt((r.salarioLiquido / salario) * 100)}% do salário bruto.`,
       },
       {
-        pergunta: 'O FGTS é descontado do salário?',
-        resposta: `Não. O FGTS é pago pelo empregador em separado (${fmtR$(r.fgts)}/mês = 8% do bruto). Não é descontado do salário líquido.`,
+        pergunta: 'O FGTS é descontado do salário líquido?',
+        resposta: `Não — e isso é fundamental entender. O FGTS de ${fmtR$(r.fgts)}/mês é pago pela empresa por cima do que você já recebe. Não é descontado do seu salário. É um custo adicional do empregador, garantido pelo Art. 15 da Lei 8.036/90.`,
       },
       {
         pergunta: 'O INSS é calculado sobre o bruto ou líquido?',
-        resposta: 'O INSS é calculado sobre o salário bruto, antes de qualquer outro desconto. Depois do INSS, calcula-se o IRRF sobre a base reduzida.',
+        resposta: 'Sempre sobre o bruto — é a primeira dedução que acontece. O INSS é calculado e descontado, e só então calcula-se o IRRF sobre o valor reduzido. Se fosse o contrário, você pagaria mais imposto. Exija que seu holerite mostre essa sequência claramente.',
       },
       {
-        pergunta: 'Há outros descontos no salário?',
-        resposta: 'Podem existir: vale-transporte (desconto máximo de 6% do salário), plano de saúde coparticipação, previdência complementar e outros benefícios opcionais. Esses valores variam por empresa.',
+        pergunta: 'Quais outros descontos podem aparecer no holerite?',
+        resposta: `Além de INSS e IRRF, podem existir: vale-transporte (desconto máximo de 6% do salário bruto — Art. 9º da Lei 7.418/85), plano de saúde coparticipação (valor variável), previdência complementar e contribuição sindical (opcional desde 2017). Nenhum desses pode ser descontado sem sua autorização ou previsão legal.`,
       },
     ],
-    conclusao: `Um salário bruto de ${fmtR$(salario)} resulta em ${fmtR$(r.salarioLiquido)} líquido (${fmt((r.salarioLiquido / salario) * 100)}% do bruto), com descontos de INSS (${fmtR$(r.inss)}) e IRRF (${fmtR$(r.irrf)}). Além disso, o empregador deposita ${fmtR$(r.fgts)}/mês de FGTS, que fica disponível para saque em situações específicas.`,
+    conclusao: `Um salário bruto de ${fmtR$(salario)} resulta em ${fmtR$(r.salarioLiquido)} líquido na conta — ${fmt((r.salarioLiquido / salario) * 100)}% do bruto, com descontos de INSS (${fmtR$(r.inss)}) e IRRF (${fmtR$(r.irrf)}). Some o FGTS de ${fmtR$(r.fgts)}/mês que a empresa deposita em seu nome: a remuneração real mensal é de ${fmtR$(r.salarioLiquido + r.fgts)}. Esse dinheiro do FGTS está disponível na demissão sem justa causa — com multa de 40% — e na aposentadoria.`,
   }
 }
 
@@ -573,86 +582,91 @@ function gerarAposentadoriaAnos(slug: string, anos: number): PaginaTrabalhista {
     publishedAt: PUBLISHED_AT,
     tags: [`aposentadoria ${anos} anos`, 'INSS aposentadoria 2026', 'tempo contribuição', 'benefício INSS'],
     tempoLeitura: 7,
-    intro: `Com <strong>${anos} anos de contribuição</strong> ao INSS e salário médio de <strong>${fmtR$(salarioMedio)}</strong>, a estimativa de aposentadoria em 2026 é de <strong>${fmtR$(r.beneficioEstimado)}</strong>/mês.\n\nEm 2026, a reforma previdenciária (EC 103/2019) ainda está em vigor. Para se aposentar, você precisa cumprir os requisitos de idade e tempo de contribuição ou atingir a pontuação mínima.`,
+    intro: `Com <strong>${anos} anos de contribuição</strong> ao INSS e salário médio de <strong>${fmtR$(salarioMedio)}</strong>, a estimativa de aposentadoria em 2026 é de <strong>${fmtR$(r.beneficioEstimado)}</strong>/mês. Mas atenção: esse é um cálculo aproximado — o INSS usa a média de todos os salários desde julho de 1994 (não só os ${anos} anos), o que pode resultar em valor diferente.\n\nEm 2026, a Reforma Previdenciária (EC 103/2019) segue em vigor. Há três formas principais de se aposentar: por idade, por pontos e por tempo de contribuição (esta última em extinção). Cada uma tem requisitos diferentes — e escolher a certa pode representar centenas de reais a mais por mês pelo resto da vida.`,
     secoes: [
       {
-        h2: `Estimativa de Benefício — ${anos} Anos de Contribuição`,
+        h2: `Estimativa de Benefício — ${anos} Anos de Contribuição (Salário Médio ${fmtR$(salarioMedio)})`,
         tabela: {
-          cabecalho: ['Indicador', 'Valor'],
+          cabecalho: ['Indicador', 'Valor', 'Observação'],
           linhas: [
-            ['Salário Médio de Contribuição', fmtR$(salarioMedio)],
-            ['Anos de Contribuição', `${anos} anos`],
-            [`Coeficiente Aplicado`, `${fmt(r.coeficiente * 100)}%`],
-            ['Benefício Estimado', fmtR$(r.beneficioEstimado)],
-            ['Benefício Mínimo (salário mínimo)', fmtR$(SALARIO_MINIMO_2026)],
-            ['Teto do INSS 2026', fmtR$(TETO_INSS_2026)],
+            ['Salário Médio de Contribuição', fmtR$(salarioMedio), 'Média dos salários desde jul/1994'],
+            ['Anos de Contribuição', `${anos} anos`, 'Conta tempo na CLT, como autônomo, MEI'],
+            ['Coeficiente Aplicado', `${fmt(r.coeficiente * 100)}%`, '60% aos 15 anos + 2% por ano adicional'],
+            ['Benefício Estimado', fmtR$(r.beneficioEstimado), 'Estimativa — INSS calcula com dados reais'],
+            ['Benefício Mínimo (piso)', fmtR$(SALARIO_MINIMO_2026), 'Nenhum benefício é menor que o salário mínimo'],
+            ['Teto do INSS 2026', fmtR$(TETO_INSS_2026), 'Nenhum benefício ultrapassa esse valor'],
           ],
         },
-        destaque: `Importante: este é apenas um cálculo estimado. O INSS usa o Fator Previdenciário ou a fórmula de pontos, que pode resultar em valores diferentes.`,
+        destaque: `Importante: este cálculo é uma estimativa. O INSS calcula com 100% dos seus salários reais desde julho de 1994. Para saber o valor exato, acesse Meu INSS (meu.inss.gov.br) com seu CPF e simule gratuitamente.`,
       },
       {
-        h2: 'Regras para Aposentadoria em 2026',
+        h2: 'As 3 Formas de se Aposentar em 2026 — Requisitos e Diferenças',
         subsecoes: [
           {
-            h3: 'Aposentadoria por Idade',
-            conteudo: `Homens: 65 anos de idade + 20 anos de contribuição. Mulheres: 62 anos de idade + 15 anos de contribuição. É a forma mais simples, mas o benefício pode ser menor.`,
+            h3: 'Aposentadoria por Idade (a mais simples)',
+            conteudo: `Homens: 65 anos + mínimo 20 anos de contribuição. Mulheres: 62 anos + mínimo 15 anos de contribuição. É a modalidade mais acessível — mas o benefício pode ser menor, pois usa o coeficiente de 60% + 2% por ano acima do mínimo. Para ${anos} anos, o coeficiente é de ${fmt(r.coeficiente * 100)}%.`,
           },
           {
-            h3: 'Aposentadoria por Pontos',
-            conteudo: `Em 2026: homens precisam de 107 pontos (idade + tempo de contribuição) com pelo menos 35 anos de contribuição. Mulheres: 97 pontos com pelo menos 30 anos.`,
+            h3: 'Aposentadoria por Pontos (mais vantajosa para quem tem tempo)',
+            conteudo: `Em 2026: homens precisam de 107 pontos (soma de idade + anos de contribuição) com pelo menos 35 anos de contribuição. Mulheres: 97 pontos com pelo menos 30 anos. Exemplo: homem com 60 anos de idade + 47 anos de contribuição = 107 pontos. Tende a dar benefício maior pois quem atinge os pontos normalmente contribuiu sobre salários mais altos por mais tempo.`,
           },
           {
-            h3: 'Aposentadoria Progressiva',
-            conteudo: `Permite se aposentar parcialmente enquanto continua contribuindo, recebendo parte do benefício e depois complementando.`,
+            h3: 'Aposentadoria Parcial Progressiva (para quem não quer parar de vez)',
+            conteudo: `Permite receber 60% do benefício enquanto continua trabalhando, chegando a 100% ao se aposentar totalmente. Cada ano de contribuição adicional acima do mínimo soma 2% ao coeficiente — o que incentiva a continuar contribuindo mais alguns anos para garantir um benefício consideravelmente maior.`,
           },
         ],
       },
       {
-        h2: 'Tabela de Benefício por Salário e Tempo de Contribuição',
+        h2: `Como o Benefício Cresce com o Tempo — Simulação com Salário Médio de ${fmtR$(salarioMedio)}`,
         tabela: {
-          cabecalho: ['Salário Médio', `${anos} anos`, '30 anos', '35 anos', '40 anos'],
-          linhas: [2000, 3000, 4000, 5000, 7000].map(s => {
-            const a1 = calcularAposentadoria(s, anos)
-            const a2 = calcularAposentadoria(s, 30)
-            const a3 = calcularAposentadoria(s, 35)
-            const a4 = calcularAposentadoria(s, 40)
-            return [fmtR$(s), fmtR$(a1.beneficioEstimado), fmtR$(a2.beneficioEstimado), fmtR$(a3.beneficioEstimado), fmtR$(a4.beneficioEstimado)]
+          cabecalho: ['Tempo de Contribuição', 'Coeficiente', `Benefício Estimado (salário ${fmtR$(salarioMedio)})`, 'Diferença vs Aposentar Agora'],
+          linhas: [anos, anos + 5, anos + 10, 35, 40].filter(a => a <= 40 && a >= anos).slice(0, 5).map(a => {
+            const calc = calcularAposentadoria(salarioMedio, a)
+            const base = calcularAposentadoria(salarioMedio, anos)
+            const diff = calc.beneficioEstimado - base.beneficioEstimado
+            return [
+              `${a} anos`,
+              `${fmt(calc.coeficiente * 100)}%`,
+              fmtR$(calc.beneficioEstimado),
+              a === anos ? '(referência)' : `+${fmtR$(diff)}/mês`,
+            ]
           }),
         },
+        destaque: `Cada ano a mais de contribuição aumenta o coeficiente em 2%. Para um salário médio de ${fmtR$(salarioMedio)}, cada ano extra vale aproximadamente ${fmtR$(salarioMedio * 0.02)}/mês a mais de benefício — pelo resto da vida.`,
       },
       {
-        h2: 'Como Aumentar o Benefício?',
+        h2: 'Como Aumentar o Benefício da Aposentadoria — Estratégias Legais',
         lista: [
-          'Contribuir sobre salários mais altos (dentro do teto INSS)',
-          'Atrasar a aposentadoria — cada ano adicional aumenta o benefício',
-          'Eliminar períodos de contribuição baixa (períodos de salário mínimo)',
-          'Verificar se há períodos de contribuição não registrados para incluir',
-          'Fazer contribuições retroativas como contribuinte individual (dentro dos limites legais)',
+          'Contribuir sobre salários mais altos (dentro do teto de R$&nbsp;7.786,02) — cada aumento de R$&nbsp;1.000 no salário médio pode aumentar o benefício em centenas de reais',
+          'Aguardar mais alguns anos antes de solicitar — cada ano adicional acima do mínimo soma 2% ao coeficiente (Art. 26 da EC 103/2019)',
+          'Verificar no CNIS se todos os vínculos estão registrados — emprego informal que foi regularizado, períodos como autônomo, serviço militar',
+          'Eliminar do cálculo períodos de contribuição muito baixa (estratégia de descarte de salários baixos — antes era os 20% menores, agora é 100% dos salários)',
+          'Contribuições retroativas como contribuinte individual: é possível recolher em atraso com acréscimo de juros — avalie com um contador previdenciário',
         ],
-        destaque: `Dica: use o Meu INSS (meu.inss.gov.br) para ver seu CNIS (Cadastro Nacional de Informações Sociais) e simular sua aposentadoria com os dados reais.`,
+        destaque: `Use o Meu INSS (meu.inss.gov.br) para ver seu CNIS — Cadastro Nacional de Informações Sociais — e conferir se todos os seus períodos de trabalho estão registrados. Vínculos faltando são mais comuns do que se imagina.`,
       },
     ],
     faq: [
       {
-        pergunta: `Com ${anos} anos de contribuição, posso me aposentar?`,
+        pergunta: `Com ${anos} anos de contribuição, já posso me aposentar?`,
         resposta: anos >= 15
-          ? `Sim, com ${anos} anos você pode solicitar aposentadoria por idade (homens: 65 anos; mulheres: 62 anos). Para aposentadoria por pontos, homens precisam de pelo menos 35 anos e mulheres 30 anos.`
-          : `Com apenas ${anos} anos, ainda não é possível se aposentar pela maioria das regras. O mínimo é 15 anos de contribuição para aposentadoria por idade.`,
+          ? `Com ${anos} anos, você já pode pleitear aposentadoria por idade quando atingir a idade mínima (65 anos para homens, 62 para mulheres). Para a aposentadoria por pontos (geralmente mais vantajosa), homens precisam de pelo menos 35 anos de contribuição e 107 pontos; mulheres, 30 anos e 97 pontos. Simule no Meu INSS para saber o valor em cada modalidade.`
+          : `Com apenas ${anos} anos, ainda não é possível se aposentar pela maioria das regras. O mínimo para aposentadoria por idade é de 15 anos de contribuição (mulheres) ou 20 anos (homens). Continue contribuindo — cada ano conta 2% a mais no coeficiente do benefício.`,
       },
       {
-        pergunta: 'O benefício respeita o teto do INSS?',
-        resposta: `Sim. O benefício máximo em 2026 é ${fmtR$(TETO_INSS_2026)}, independentemente do salário médio de contribuição.`,
+        pergunta: 'O benefício de aposentadoria tem teto?',
+        resposta: `Sim. O teto do benefício INSS em 2026 é de ${fmtR$(TETO_INSS_2026)} — o mesmo que o teto de contribuição. Nenhuma aposentadoria paga pelo INSS ultrapassa esse valor, independentemente de quanto você contribuiu acima do teto. Para renda superior, é necessário previdência privada (PGBL/VGBL).`,
       },
       {
-        pergunta: 'Posso continuar trabalhando após me aposentar?',
-        resposta: 'Sim. Após a aposentadoria por idade, você pode continuar trabalhando normalmente. Você continuará contribuindo ao INSS, mas não terá direito a um segundo benefício.',
+        pergunta: 'Posso continuar trabalhando após me aposentar pelo INSS?',
+        resposta: 'Sim — a aposentadoria pelo INSS não impede de continuar trabalhando. Você continuará contribuindo ao INSS como empregado (o desconto continua no holerite), mas não terá direito a um segundo benefício. A contribuição pós-aposentadoria serve para acesso ao salário-família e reabilitação profissional, se necessário.',
       },
       {
-        pergunta: 'Como calcular o benefício real?',
-        resposta: 'O cálculo real usa a média dos 100% dos salários de contribuição desde julho de 1994, aplicando o Fator Previdenciário ou a fórmula de pontos. O INSS oferece simulação gratuita no portal Meu INSS.',
+        pergunta: 'Como o INSS calcula o benefício real?',
+        resposta: 'O INSS usa a média de 100% dos salários de contribuição desde julho de 1994 (antes era os 80% maiores — isso mudou com a EC 103/2019 e desfavorece quem teve períodos com salário baixo). Sobre essa média, aplica o coeficiente: 60% com 15 anos (mulheres) ou 20 anos (homens), mais 2% por ano adicional. Simule gratuitamente em meu.inss.gov.br.',
       },
     ],
-    conclusao: `Com ${anos} anos de contribuição e salário médio de ${fmtR$(salarioMedio)}, a estimativa de aposentadoria é de ${fmtR$(r.beneficioEstimado)}/mês. Para uma simulação precisa, acesse o Meu INSS (meu.inss.gov.br) com seu CPF — o sistema usa todos os seus salários reais desde 1994 para o cálculo definitivo.`,
+    conclusao: `Com ${anos} anos de contribuição e salário médio de ${fmtR$(salarioMedio)}, a estimativa de aposentadoria é de ${fmtR$(r.beneficioEstimado)}/mês — mas o valor real depende do histórico completo dos seus salários desde 1994. Acesse o Meu INSS com seu CPF para simular com os dados reais. A escolha do momento certo para se aposentar e da modalidade correta pode representar centenas de reais a mais por mês pelo resto da vida — vale consultar um especialista em direito previdenciário antes de decidir.`,
   }
 }
 
@@ -700,26 +714,26 @@ function gerarINSSGeral(slug: string): PaginaTrabalhista {
   const isFaixa = slug.includes('faixa')
 
   let titulo = `${nome}: Guia Completo INSS 2026`
-  let intro = `O INSS 2026 tem tabela progressiva com alíquotas de 7,5% a 14% para trabalhadores CLT, teto de ${fmtR$(TETO_INSS_2026)} e salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)}.`
+  let intro = `O INSS 2026 tem tabela progressiva com alíquotas de 7,5% a 14% para trabalhadores CLT, teto de ${fmtR$(TETO_INSS_2026)} e salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)}. Muita gente acha que paga a alíquota mais alta sobre o salário todo — mas não é assim. O cálculo é progressivo: cada fatia do salário tem sua própria alíquota, e a efetiva é sempre menor que a nominal da faixa.`
 
   if (isTeto) {
-    titulo = `Teto do INSS 2026: ${fmtR$(TETO_INSS_2026)} — O que Muda?`
-    intro = `O teto do INSS em 2026 é de <strong>${fmtR$(TETO_INSS_2026)}</strong>. Acima desse valor, o desconto de INSS não aumenta. O desconto máximo mensal é de <strong>${fmtR$(calcularINSS(TETO_INSS_2026).descontoTotal)}</strong>.`
+    titulo = `Teto do INSS 2026: ${fmtR$(TETO_INSS_2026)} — Desconto Máximo e o que Isso Significa`
+    intro = `O teto do INSS em 2026 é de <strong>${fmtR$(TETO_INSS_2026)}</strong>. Acima desse salário, o desconto de INSS não aumenta — você paga sempre o máximo de <strong>${fmtR$(calcularINSS(TETO_INSS_2026).descontoTotal)}/mês</strong>, independentemente se ganha R$&nbsp;8.000 ou R$&nbsp;50.000. Isso também significa que o benefício da aposentadoria fica limitado a esse teto.`
   } else if (isAliquota) {
-    titulo = `Alíquota INSS 2026: Tabela Progressiva Completa`
-    intro = `A alíquota do INSS em 2026 é progressiva: vai de 7,5% para a faixa até ${fmtR$(1518)} a 14% para a faixa acima de ${fmtR$(4190.84)}. Cada faixa do salário tem sua própria alíquota.`
+    titulo = `Alíquota INSS 2026: Tabela Progressiva Completa com Exemplos`
+    intro = `A alíquota do INSS em 2026 é progressiva — funciona como o Imposto de Renda: cada faixa do salário tem uma alíquota própria. A menor é 7,5% (sobre os primeiros R$&nbsp;1.518) e a maior é 14% (sobre a parcela acima de R$&nbsp;4.190,83). A alíquota efetiva que você realmente paga é sempre menor que os 14% máximos.`
   } else if (isAutonomo) {
-    titulo = `INSS Autônomo 2026: Como Calcular e Pagar`
-    intro = `Trabalhadores autônomos (contribuintes individuais) contribuem com 20% do salário de contribuição sobre o teto, ou 11% sobre o salário mínimo para manter qualidade de segurado sem direito a aposentadoria por tempo de contribuição.`
+    titulo = `INSS Autônomo 2026: Quanto Pagar, Como Calcular e Não Perder Benefícios`
+    intro = `Trabalhadores autônomos (contribuintes individuais) precisam recolher o próprio INSS — a empresa não faz isso por eles. A alíquota padrão é <strong>20%</strong> sobre o salário de contribuição (até o teto de R$&nbsp;7.786,02). Existe o plano simplificado com 11%, mas ele não dá direito à aposentadoria por tempo de contribuição — é uma armadilha que pega muita gente no fim da carreira.`
   } else if (isMEI) {
-    titulo = `INSS MEI 2026: Quanto Pagar e Como Funciona`
-    intro = `O MEI contribui com 5% sobre o salário mínimo ao INSS, o que em 2026 representa <strong>${fmtR$(SALARIO_MINIMO_2026 * 0.05)}/mês</strong>. Essa contribuição dá direito a aposentadoria por idade, auxílio-doença e salário-maternidade.`
+    titulo = `INSS MEI 2026: R$&nbsp;${fmt(SALARIO_MINIMO_2026 * 0.05)}/mês — O que Está Incluso e o que Não Está`
+    intro = `O MEI contribui com apenas 5% sobre o salário mínimo ao INSS — em 2026, isso representa <strong>${fmtR$(SALARIO_MINIMO_2026 * 0.05)}/mês</strong>. É a contribuição previdenciária mais barata do país, mas vem com limitações importantes: não dá direito à aposentadoria por tempo de contribuição. Para isso, o MEI precisa complementar a diferença (mais 15% = 20% total).`
   } else if (isDomestica) {
-    titulo = `INSS Empregada Doméstica 2026: Tabela e Cálculo`
-    intro = `O empregado doméstico tem desconto de INSS calculado pela mesma tabela progressiva do CLT. O empregador também paga 8% de INSS patronal e 8% de FGTS.`
+    titulo = `INSS Empregada Doméstica 2026: Tabela, Cálculo e Obrigações do Patrão`
+    intro = `O empregado doméstico tem desconto de INSS calculado pela mesma tabela progressiva do CLT (7,5% a 14%). Mas o empregador doméstico tem obrigações adicionais: pagar mais 8% de INSS patronal e 8% de FGTS — obrigações que muitos empregadores desconhecem ou ignoram, o que gera passivo trabalhista.`
   } else if (isFaixa) {
-    titulo = `INSS por Faixa Salarial 2026: Tabela Completa`
-    intro = `Veja o desconto de INSS para cada faixa salarial em 2026, com a alíquota progressiva.`
+    titulo = `INSS por Faixa Salarial 2026: Tabela Completa com Desconto Real`
+    intro = `Confira o desconto de INSS para cada faixa salarial em 2026. A alíquota é progressiva — a efetiva que você paga é sempre menor que a da faixa nominal. Veja exemplos reais com salários do mínimo ao teto.`
   }
 
   const exemplos = [1518, 2500, 3500, 5000, 7786.02].map(s => {
@@ -738,63 +752,63 @@ function gerarINSSGeral(slug: string): PaginaTrabalhista {
     intro,
     secoes: [
       {
-        h2: 'Tabela INSS 2026 — Alíquotas por Faixa',
+        h2: 'Tabela INSS 2026 — Alíquotas por Faixa Salarial',
         tabela: {
           cabecalho: ['Faixa Salarial', 'Alíquota', 'Teto da Faixa'],
           linhas: linhasTabelaINSS,
         },
-        destaque: `O INSS 2026 é progressivo: você paga a alíquota de cada faixa apenas sobre a parte do salário que cai nela, não sobre o total.`,
+        destaque: `O INSS 2026 é progressivo como o IR: você paga a alíquota de cada faixa apenas sobre a parcela do salário que cai nela — não sobre o salário todo. Quem ganha R$&nbsp;2.000 não paga 9% sobre os R$&nbsp;2.000 inteiros, mas 7,5% sobre os primeiros R$&nbsp;1.518 e 9% apenas sobre os R$&nbsp;482 restantes.`,
       },
       {
-        h2: 'Exemplos de Desconto por Salário',
+        h2: 'Exemplos Reais de Desconto INSS em 2026',
         tabela: {
           cabecalho: ['Salário Bruto', 'Alíquota Efetiva', 'Desconto INSS', 'Após INSS'],
           linhas: exemplos,
         },
       },
       {
-        h2: 'Quem Deve Contribuir com o INSS?',
+        h2: 'Quem é Obrigado a Contribuir com o INSS?',
         lista: [
-          'Empregado CLT — desconto automático em folha (7,5% a 14%)',
-          'Empregado doméstico — mesma tabela do CLT',
-          'Trabalhador avulso — mesmo percentual do CLT',
-          'Contribuinte individual (autônomo, médico, advogado) — 20% (pode ser 11% sem aposentadoria por tempo)',
-          'MEI — 5% sobre o salário mínimo (contribuição simplificada)',
-          'Segurado facultativo — 20% ou 11% dependendo do plano escolhido',
+          'Empregado CLT — desconto automático em folha, de 7,5% a 14% progressivo (o empregador retém)',
+          'Empregado doméstico — mesma tabela progressiva do CLT; empregador também paga 8% patronal',
+          'Trabalhador avulso (portuários, estivadores, etc.) — mesmo percentual do CLT',
+          'Contribuinte individual (autônomo, freelancer, médico, advogado PJ) — 20% ou 11% (plano simplificado)',
+          'MEI — 5% sobre o salário mínimo = R$&nbsp;75,90/mês em 2026. Não dá direito à aposentadoria por tempo de contribuição',
+          'Segurado facultativo (dona de casa, estudante) — 20% ou 11% dependendo do plano escolhido',
         ],
       },
       {
-        h2: 'Benefícios Garantidos pela Contribuição INSS',
+        h2: 'O que Você Garante Pagando INSS — Benefícios em 2026',
         lista: [
-          'Aposentadoria por idade ou por tempo de contribuição',
-          'Auxílio-doença (a partir do 16º dia de afastamento)',
-          'Aposentadoria por incapacidade permanente (invalidez)',
-          'Salário-maternidade (para seguradas com carência)',
-          'Pensão por morte para dependentes',
-          'Auxílio-acidente em caso de sequela permanente',
-          'BPC-LOAS para pessoas com deficiência ou idosos sem contribuição suficiente',
+          'Aposentadoria por idade (65 anos/H ou 62 anos/M) ou por pontos (107H/97M em 2026)',
+          'Auxílio por incapacidade temporária (antigo auxílio-doença): a partir do 16º dia de afastamento',
+          'Aposentadoria por incapacidade permanente (antigo invalidez): laudada por perícia INSS',
+          'Salário-maternidade: 120 dias (até 180 dias para empresas aderentes ao Programa Empresa Cidadã)',
+          'Pensão por morte para dependentes (cônjuge, filhos menores de 21 anos ou inválidos)',
+          'Auxílio-acidente: em caso de sequela permanente que reduza a capacidade de trabalho',
+          'Atenção: auxílio-doença começa a partir do 16º dia. Os 15 primeiros dias são pagos pelo empregador (Art. 60 da Lei 8.213/91)',
         ],
       },
     ],
     faq: [
       {
         pergunta: 'O INSS é calculado sobre o salário bruto ou líquido?',
-        resposta: 'O INSS é calculado sobre o salário bruto. Primeiro desconta o INSS, depois calcula o IRRF sobre a base reduzida.',
+        resposta: 'Sempre sobre o bruto — é a primeira dedução que acontece, antes de qualquer outro desconto. Depois do INSS, calcula-se o IRRF sobre a base já reduzida. Se o holerite mostrar a ordem inversa, há um erro que favorece a empresa e prejudica você.',
       },
       {
         pergunta: 'Qual o desconto máximo de INSS em 2026?',
-        resposta: `O desconto máximo é ${fmtR$(calcularINSS(TETO_INSS_2026).descontoTotal)}/mês, calculado sobre o teto de ${fmtR$(TETO_INSS_2026)}.`,
+        resposta: `O teto é calculado sobre R$&nbsp;7.786,02. O desconto máximo mensal é de ${fmtR$(calcularINSS(TETO_INSS_2026).descontoTotal)}. Um gerente ganhando R$&nbsp;20.000 paga exatamente o mesmo INSS que um que ganha R$&nbsp;7.787 — o excedente não tem incidência de INSS.`,
       },
       {
         pergunta: 'INSS pago pelo MEI dá direito a todos os benefícios?',
-        resposta: 'O MEI que contribui com 5% tem direito à aposentadoria por idade, auxílio-doença, salário-maternidade e pensão por morte. Não tem direito à aposentadoria por tempo de contribuição.',
+        resposta: 'Não — e essa é uma armadilha comum. O MEI com contribuição de 5% tem direito à aposentadoria por idade, auxílio-doença e salário-maternidade. Mas NÃO tem direito à aposentadoria por tempo de contribuição. Para ter esse direito, precisa complementar a contribuição para 20% (diferença de 15%), o que é opcional.',
       },
       {
-        pergunta: 'Posso contribuir além do teto do INSS?',
-        resposta: `Não. O teto de contribuição é ${fmtR$(TETO_INSS_2026)}. Acima disso, o INSS não é cobrado, mas o benefício também fica limitado ao teto.`,
+        pergunta: 'Posso contribuir além do teto do INSS para ter benefício maior?',
+        resposta: `Não — o teto é ${fmtR$(TETO_INSS_2026)} tanto para contribuição quanto para benefício. Se você quiser renda complementar na aposentadoria acima do teto, precisa de previdência privada (PGBL ou VGBL), que não tem relação com o INSS.`,
       },
     ],
-    conclusao: `O INSS 2026 tem tabela progressiva com alíquotas de 7,5% a 14%, teto de ${fmtR$(TETO_INSS_2026)} e desconto máximo de ${fmtR$(calcularINSS(TETO_INSS_2026).descontoTotal)}/mês. Cada real contribuído garante acesso aos benefícios previdenciários — um seguro social fundamental para trabalhadores brasileiros.`,
+    conclusao: `O INSS 2026 usa tabela progressiva de 7,5% a 14%, com teto de ${fmtR$(TETO_INSS_2026)} e desconto máximo de ${fmtR$(calcularINSS(TETO_INSS_2026).descontoTotal)}/mês. Cada real contribuído garante acesso ao sistema previdenciário: aposentadoria, auxílio-doença, salário-maternidade e pensão por morte. Se você é autônomo ou MEI, verifique se a sua contribuição está dando direito a todos os benefícios que você espera — nem todo plano cobre tudo.`,
   }
 }
 
@@ -807,23 +821,23 @@ function gerarFGTSGeral(slug: string): PaginaTrabalhista {
   const isMulta = slug.includes('multa') || slug.includes('40')
 
   let titulo = `${nome}: Guia Completo FGTS 2026`
-  let intro = `O FGTS (Fundo de Garantia do Tempo de Serviço) é uma poupança compulsória de 8% do salário bruto, paga pelo empregador. Em 2026, o FGTS continua sendo um dos principais direitos trabalhistas do CLT.`
+  let intro = `O FGTS (Fundo de Garantia do Tempo de Serviço) é uma das maiores proteções financeiras do trabalhador CLT: 8% do salário bruto depositado pela empresa todo mês, sem descontar do seu salário. Em 2026, um trabalhador com salário de R$&nbsp;3.000 acumula R$&nbsp;240/mês no FGTS — e em caso de demissão sem justa causa, recebe todo esse saldo mais 40% de multa paga pela empresa.`
 
   if (isMulta) {
-    titulo = 'Multa FGTS 40%: Como Funciona na Demissão Sem Justa Causa'
-    intro = `Na demissão sem justa causa, o empregador deve pagar uma multa de <strong>40% sobre o saldo total do FGTS</strong> acumulado. É um direito garantido por lei para indenizar o trabalhador pelo encerramento do contrato.`
+    titulo = 'Multa de 40% do FGTS: Como Funciona, Quando Você Recebe e o que a Empresa Deve Pagar'
+    intro = `Na demissão sem justa causa, além de sacar o seu saldo do FGTS, você recebe uma <strong>multa de 40% sobre o saldo total acumulado</strong> — paga pela empresa, não descontada do seu fundo. É um direito garantido pelo Art. 18, §1º da Lei 8.036/90. Um trabalhador com R$&nbsp;14.400 de saldo FGTS (R$&nbsp;3.000 de salário × 5 anos) recebe mais R$&nbsp;5.760 de multa — automaticamente, sem precisar pedir.`
   } else if (isAniversario) {
-    titulo = 'FGTS Aniversário 2026: Vale a Pena Aderir?'
-    intro = `A modalidade aniversário do FGTS permite sacar parte do saldo todo ano, no mês do seu aniversário. Em troca, você abre mão da multa de 40% em demissão sem justa causa. A opção é válida para quem tem saldo alto e não planeja ser demitido em breve.`
+    titulo = 'FGTS Aniversário 2026: Vale a Pena Aderir? A Conta Que Ninguém Faz'
+    intro = `A modalidade aniversário do FGTS (Lei 13.932/2019) permite sacar parte do saldo todo ano no mês do seu aniversário. Parece vantajoso — mas há uma contrapartida séria: ao aderir, você abre mão da multa de 40% em caso de demissão sem justa causa. Para a maioria dos trabalhadores, a multa de 40% vale muito mais do que os saques anuais parciais. Faça a conta antes de aderir.`
   } else if (isDemissao) {
-    titulo = 'FGTS na Demissão: Quando e Quanto Posso Sacar em 2026'
-    intro = `Na demissão sem justa causa, você tem direito ao saldo total do FGTS <strong>mais a multa de 40%</strong>. Na rescisão por acordo, o saque é de 80% do saldo (multa de 20%). Na justa causa, o saldo fica bloqueado.`
+    titulo = 'FGTS na Demissão 2026: Quando Você Pode Sacar e Quanto Recebe em Cada Caso'
+    intro = `O que acontece com o seu FGTS quando o contrato de trabalho termina depende do motivo da rescisão. Na demissão sem justa causa, você saca tudo <strong>mais 40% de multa</strong> paga pela empresa. Na justa causa, o saldo fica bloqueado — você não perde, mas não pode sacar imediatamente. Entenda cada cenário antes de tomar qualquer decisão.`
   } else if (isSaque) {
-    titulo = 'Quando Posso Sacar o FGTS em 2026? Todos os Casos'
-    intro = `O FGTS pode ser sacado em diversas situações além da demissão: aposentadoria, doenças graves, compra da casa própria, conta inativa, desastres naturais e modalidade aniversário. Veja todos os casos permitidos.`
+    titulo = 'Quando Posso Sacar o FGTS em 2026? Todos os 9 Casos Previstos em Lei'
+    intro = `Muita gente acha que só pode sacar o FGTS quando é demitido — mas a lei prevê pelo menos 9 situações em que o saque é permitido. Aposentadoria, doenças graves, compra de imóvel, conta inativa há mais de 3 anos, modalidade aniversário e mais. Veja cada caso com os detalhes para não perder esse direito.`
   } else if (isRendimento) {
-    titulo = 'Rendimento do FGTS 2026: Vale a Pena Manter?'
-    intro = `O FGTS rende TR + 3% ao ano. Em 2025, rendeu aproximadamente 6,17% ao ano — abaixo do CDI (cerca de 10,5% a.a.), mas com a vantagem da multa de 40% em demissão sem justa causa.`
+    titulo = 'Rendimento do FGTS 2026: Quanto Rende e Vale Mais que a Poupança?'
+    intro = `O FGTS rende TR + 3% ao ano, mais distribuição dos lucros do Fundo — que varia a cada ano. Em 2025, o rendimento total foi de aproximadamente 6,17% ao ano. Está acima da poupança, mas abaixo do CDI (cerca de 10,5% a.a.) e do Tesouro Selic. Mas compare com cuidado: o FGTS tem a multa de 40% como "bônus" — esse rendimento implícito supera qualquer aplicação financeira comum.`
   }
 
   const exemplos = [1518, 2000, 3000, 5000, 8000, 10000].map(s => {
@@ -842,57 +856,58 @@ function gerarFGTSGeral(slug: string): PaginaTrabalhista {
     intro,
     secoes: [
       {
-        h2: 'Tabela FGTS 2026 — Depósito por Salário',
+        h2: 'Tabela FGTS 2026 — Depósito e Saldo por Faixa Salarial',
         tabela: {
-          cabecalho: ['Salário Bruto', 'Depósito Mensal (8%)', 'Saldo em 1 Ano', 'Multa 40% (1 ano)'],
+          cabecalho: ['Salário Bruto', 'Depósito Mensal (8%)', 'Saldo em 1 Ano', 'Multa 40% se Demitido (1 ano)'],
           linhas: exemplos,
         },
-        destaque: `O FGTS é pago pelo empregador e NÃO é descontado do salário do trabalhador.`,
+        destaque: `O FGTS é pago PELO empregador, NÃO é descontado do seu salário. É um custo adicional da empresa (Art. 15 da Lei 8.036/90) — como se fosse um salário extra que fica guardado para você.`,
       },
       {
-        h2: 'Situações em que Posso Sacar o FGTS',
+        h2: 'Quando Você Pode Sacar o FGTS — Todos os Casos em 2026',
         lista: [
-          'Demissão sem justa causa — saca 100% + multa de 40%',
-          'Rescisão por acordo mútuo — saca 100% do saldo + multa de 20%',
-          'Aposentadoria — saca 100% do saldo',
-          'Compra, construção ou amortização de imóvel próprio',
-          'Doenças graves (câncer, HIV, hepatite C terminal, etc.)',
-          'Conta inativa há mais de 3 anos sem vínculo empregatício',
-          'Desastre natural em área de estado de emergência ou calamidade',
-          'Modalidade aniversário — saque parcial anual no mês de aniversário',
-          'Trabalhador com mais de 70 anos de idade',
+          'Demissão sem justa causa: saca 100% do saldo + 40% de multa paga pela empresa (Lei 8.036/90, Art. 18)',
+          'Rescisão por acordo mútuo (Art. 484-A CLT): saca 100% do saldo + 20% de multa — boa opção para quem quer sair sem pedir demissão',
+          'Aposentadoria (qualquer modalidade): saca 100% do saldo acumulado em todas as contas',
+          'Compra, construção ou amortização de imóvel próprio: deve ser pelo SFH, regras específicas da Caixa',
+          'Doenças graves: câncer, HIV/AIDS, hepatite C em estágio terminal, neoplasia maligna',
+          'Conta inativa há mais de 3 anos sem nenhum vínculo empregatício ativo',
+          'Trabalhador com mais de 70 anos de idade: saca a conta mais antiga',
+          'Desastre natural em município em estado de emergência ou calamidade pública decretada',
+          'Modalidade Aniversário: saque parcial anual, mas você abre mão da multa de 40% — pense duas vezes',
         ],
       },
       {
-        h2: 'Como Consultar o Saldo do FGTS',
+        h2: 'Como Verificar Se o Empregador Está Depositando o FGTS',
         lista: [
-          'App FGTS (disponível para Android e iOS) — forma mais prática',
-          'Site da Caixa Econômica Federal (caixa.gov.br)',
-          'Agências e lotéricas da Caixa com CPF e senha',
-          'Extrato do FGTS disponível no e-Social',
-          'Verificar no holerite se os depósitos estão sendo feitos regularmente',
+          'App FGTS (Android e iOS) — consulte mensalmente, é gratuito e instantâneo',
+          'Site da Caixa Econômica Federal (caixa.gov.br) — com login do Gov.br',
+          'Extrato nas agências ou lotéricas da Caixa com CPF e senha do FGTS',
+          'Pelo e-Social: verifique se os recolhimentos mensais aparecem no extrato',
+          'Atenção: empresa com mais de 6 meses sem depositar pode responder criminalmente — denuncie ao MTE',
+          'Se identificar falta de depósito: notifique por escrito a empresa e, se não resolver, acesse a Justiça do Trabalho com extrato como prova',
         ],
       },
     ],
     faq: [
       {
         pergunta: 'O FGTS é obrigatório para todos os trabalhadores?',
-        resposta: 'É obrigatório para trabalhadores com carteira assinada (CLT), domésticos, trabalhadores avulsos e temporários. Não se aplica a autônomos, MEI e PJ — esses podem fazer FGTS voluntário.',
+        resposta: 'É obrigatório para: empregados CLT, domésticos (Lei Complementar 150/2015), trabalhadores avulsos e temporários. Não se aplica a autônomos, MEI e PJ — esses não têm direito ao FGTS, o que é uma das principais desvantagens de trabalhar fora da CLT.',
       },
       {
-        pergunta: 'O FGTS pode ser penhorado em caso de dívidas?',
-        resposta: 'Não. O saldo do FGTS é impenhorável — não pode ser usado para pagar dívidas do trabalhador, mesmo em caso de processo judicial.',
+        pergunta: 'O FGTS pode ser penhorado por dívidas?',
+        resposta: 'Não — e isso é um direito importante. O saldo do FGTS é impenhorável (Art. 2º, §2º da Lei 8.036/90): nenhum credor, nem mesmo via processo judicial, pode tomar seu saldo do FGTS para pagar dívidas. É uma proteção legal ao trabalhador.',
       },
       {
-        pergunta: 'O que acontece com o FGTS se eu ficar muito tempo empregado?',
-        resposta: 'O saldo continua crescendo com os depósitos mensais do empregador (8%) e os rendimentos de TR + 3% ao ano. Não há prazo limite — quanto mais tempo empregado, maior o saldo.',
+        pergunta: 'O FGTS rende? Vale mais que a poupança?',
+        resposta: 'O FGTS rende TR + 3% ao ano, mais distribuição dos lucros do Fundo. Em 2025, o rendimento total foi de aproximadamente 6,17% ao ano — mais que a poupança (cerca de 5,8%), mas bem abaixo do CDI (10,5% a.a.) e do Tesouro Direto. O grande diferencial não é o rendimento, mas a multa de 40% em demissão sem justa causa — esse "bônus" supera qualquer rendimento de investimento.',
       },
       {
-        pergunta: 'Preciso pagar imposto sobre o saque do FGTS?',
-        resposta: 'Não. O saque do FGTS é isento de Imposto de Renda, independentemente do valor. Apenas a multa de 40% sobre o FGTS paga pelo empregador pode ter incidência em situações específicas.',
+        pergunta: 'Pago imposto sobre o saque do FGTS?',
+        resposta: 'Não. O saque do FGTS — seja do saldo acumulado ou da multa de 40% — é totalmente isento de Imposto de Renda (Art. 28 da Lei 8.036/90). Não precisa declarar o saque como rendimento tributável — declare como "rendimento isento" na sua declaração de IR.',
       },
     ],
-    conclusao: `O FGTS é um dos mais importantes direitos do trabalhador CLT: 8% do salário depositado mensalmente, com multa de 40% em demissão sem justa causa. Acompanhe seu saldo regularmente pelo app FGTS e conheça todas as situações que permitem o saque.`,
+    conclusao: `O FGTS é um dos direitos mais valiosos do trabalhador CLT: 8% do salário depositado mensalmente pela empresa, com multa de 40% paga pela empresa em caso de demissão sem justa causa. Monitore seu extrato mensalmente pelo app FGTS — muitos trabalhadores descobrem anos depois que a empresa não estava depositando. Você pode cobrar retroativamente os depósitos em atraso na Justiça do Trabalho, com correção e multa.`,
   }
 }
 
@@ -943,81 +958,82 @@ function gerarCLTGeral(slug: string): PaginaTrabalhista {
     intro,
     secoes: [
       {
-        h2: 'Principais Direitos CLT em 2026',
+        h2: 'Principais Direitos CLT em 2026 — Com Valores Atualizados',
         tabela: {
-          cabecalho: ['Direito', 'Valor / Regra 2026'],
+          cabecalho: ['Direito', 'Valor / Regra 2026', 'Base Legal'],
           linhas: [
-            ['Salário Mínimo', fmtR$(SALARIO_MINIMO_2026) + '/mês'],
-            ['FGTS', '8% do salário bruto (pago pelo empregador)'],
-            ['13º Salário', '1 salário extra por ano (pago em dez. ou em duas parcelas)'],
-            ['Férias', '30 dias + 1/3 do salário'],
-            ['Hora Extra', '50% sobre a hora normal (mínimo)'],
-            ['Adicional Noturno', '20% sobre a hora normal (trabalho entre 22h e 5h)'],
-            ['Vale-Transporte', 'Obrigatório, desconto máximo de 6% do salário'],
-            ['Licença Maternidade', '120 dias (empresas com CIPA: 180 dias)'],
-            ['Licença Paternidade', '5 dias (20 dias em empresas pró-equidade)'],
-            ['Aviso Prévio', '30 dias + 3 dias por ano (máx 90 dias)'],
+            ['Salário Mínimo', `${fmtR$(SALARIO_MINIMO_2026)}/mês (reajuste de 5,5% vs 2025)`, 'Art. 76 CLT'],
+            ['FGTS', '8% do salário bruto — pago pelo empregador, não desconta do salário', 'Lei 8.036/90'],
+            ['13º Salário', '1 salário extra/ano — 1ª parcela até 30/nov, 2ª até 20/dez', 'Lei 4.090/62'],
+            ['Férias', '30 dias + 1/3 constitucional — período aquisitivo de 12 meses', 'Art. 129 CLT'],
+            ['Hora Extra', 'Mínimo 50% sobre a hora normal; 100% aos domingos/feriados', 'Art. 59 CLT'],
+            ['Adicional Noturno', '20% sobre a hora diurna (trabalho entre 22h e 5h)', 'Art. 73 CLT'],
+            ['Vale-Transporte', 'Obrigatório — desconto máximo de 6% do salário bruto', 'Lei 7.418/85'],
+            ['Licença Maternidade', '120 dias (180 dias em empresas com CIPA/Empresa Cidadã)', 'Art. 392 CLT'],
+            ['Licença Paternidade', '5 dias (20 dias em empresas aderentes ao programa de pró-equidade)', 'Art. 10 ADCT'],
+            ['Aviso Prévio', '30 dias + 3 dias por ano trabalhado — máximo 90 dias', 'Lei 12.506/11'],
           ],
         },
       },
       {
-        h2: 'Salário Mínimo 2026 — Equivalências',
+        h2: 'Salário Mínimo 2026 — Quanto Vale por Hora, Dia e Ano',
         tabela: {
-          cabecalho: ['Período', 'Valor'],
+          cabecalho: ['Período', 'Valor', 'Observação'],
           linhas: [
-            ['Por mês (220h)', fmtR$(SALARIO_MINIMO_2026)],
-            ['Por hora (÷ 220)', fmtR$(SALARIO_MINIMO_2026 / 220)],
-            ['Por dia (÷ 30)', fmtR$(SALARIO_MINIMO_2026 / 30)],
-            ['Por ano (× 12 + 13º)', fmtR$(SALARIO_MINIMO_2026 * 13)],
+            ['Por mês (jornada de 220h)', fmtR$(SALARIO_MINIMO_2026), 'Piso mínimo — pode ser maior por CCT'],
+            ['Por hora (÷ 220)', fmtR$(SALARIO_MINIMO_2026 / 220), 'Base para cálculo de hora extra'],
+            ['Hora extra (× 1,5)', fmtR$(SALARIO_MINIMO_2026 / 220 * 1.5), 'Adicional mínimo de 50%'],
+            ['Por dia (÷ 30)', fmtR$(SALARIO_MINIMO_2026 / 30), 'Base para saldo de salário na rescisão'],
+            ['Por ano (mês × 13 + 1/3 férias)', fmtR$(SALARIO_MINIMO_2026 * 13 + SALARIO_MINIMO_2026 / 3), 'Com 13º e adicional de férias'],
           ],
         },
-        destaque: `O salário mínimo de 2026 (${fmtR$(SALARIO_MINIMO_2026)}) representa reajuste de 5,5% sobre 2025 (R$ 1.412,00).`,
+        destaque: `O salário mínimo de 2026 é ${fmtR$(SALARIO_MINIMO_2026)} — reajuste de 5,5% sobre o de 2025 (R$&nbsp;1.412,00). Empregadores que pagam abaixo disso cometem infração administrativa com multa de R$&nbsp;170,47 por empregado (Art. 16 da Lei 7.855/89).`,
       },
       {
-        h2: 'CLT vs PJ: Comparativo Prático',
+        h2: 'CLT vs PJ: O Que Vale Mais na Prática?',
         subsecoes: [
           {
-            h3: 'Regime CLT',
-            conteudo: `Vantagens: FGTS (8%), 13º salário, férias pagas com 1/3, seguro-desemprego, INSS, estabilidade em algumas situações, plano de saúde corporativo. Desvantagens: desconto de INSS e IRRF, menor flexibilidade.`,
+            h3: 'Regime CLT — O que Você Ganha Além do Salário',
+            conteudo: `Além do salário mensal, o trabalhador CLT recebe: FGTS de 8% (custo da empresa), 13º salário (1/12 ao mês), férias de 30 dias com 1/3, seguro-desemprego em caso de demissão, cobertura pelo INSS (auxílio-doença, aposentadoria) e estabilidades provisórias (gestante, acidente de trabalho, membro de CIPA). Em média, os benefícios adicionam 35% a 40% ao custo real da empresa — o que significa que um salário CLT de R$&nbsp;3.000 custa cerca de R$&nbsp;4.000 a R$&nbsp;4.200 para o empregador.`,
           },
           {
-            h3: 'Regime PJ (Pessoa Jurídica)',
-            conteudo: `Vantagens: salário bruto maior (sem INSS do empregador), mais flexibilidade, possibilidade de dedução de despesas. Desvantagens: sem FGTS, sem seguro-desemprego, sem 13º nem férias pagas, responsabilidade tributária própria, contador necessário.`,
+            h3: 'Regime PJ — Cuidado com a Comparação Errada',
+            conteudo: `Um PJ ganhando R$&nbsp;3.000 não é equivalente a um CLT ganhando R$&nbsp;3.000. Para ser equivalente ao CLT considerando todos os benefícios, o PJ precisaria receber cerca de R$&nbsp;4.000 a R$&nbsp;4.500. Os custos do PJ: contador (R$&nbsp;150 a R$&nbsp;400/mês), plano de saúde próprio (R$&nbsp;300 a R$&nbsp;800/mês), sem FGTS, sem seguro-desemprego, sem 13º, sem férias. A vantagem tributária do PJ só compensa para faturamentos altos com estrutura de despesas real.`,
           },
         ],
       },
       {
-        h2: 'Adicionais e Benefícios Calculados',
+        h2: 'Adicionais Obrigatórios Calculados sobre o Salário Mínimo 2026',
         lista: [
-          `Hora Extra (50%): hora normal de ${fmtR$(SALARIO_MINIMO_2026 / 220)} → hora extra ${fmtR$(SALARIO_MINIMO_2026 / 220 * 1.5)}`,
-          `Hora Extra (100% — domingos/feriados): ${fmtR$(SALARIO_MINIMO_2026 / 220 * 2)}`,
-          `Adicional Noturno (20%): hora noturna ${fmtR$(SALARIO_MINIMO_2026 / 220 * 1.2)}`,
-          `Adicional Insalubridade grau mínimo (10%): ${fmtR$(SALARIO_MINIMO_2026 * 0.10)}/mês`,
-          `Adicional Insalubridade grau médio (20%): ${fmtR$(SALARIO_MINIMO_2026 * 0.20)}/mês`,
-          `Adicional Insalubridade grau máximo (40%): ${fmtR$(SALARIO_MINIMO_2026 * 0.40)}/mês`,
-          `Adicional Periculosidade (30% do salário): ${fmtR$(SALARIO_MINIMO_2026 * 0.30)}/mês (sobre o salário mínimo)`,
+          `Hora Extra 50%: hora normal ${fmtR$(SALARIO_MINIMO_2026 / 220)} → hora extra ${fmtR$(SALARIO_MINIMO_2026 / 220 * 1.5)} (Art. 59 CLT)`,
+          `Hora Extra 100% (domingo/feriado): ${fmtR$(SALARIO_MINIMO_2026 / 220 * 2)} por hora trabalhada`,
+          `Adicional Noturno 20% (22h às 5h): hora noturna = ${fmtR$(SALARIO_MINIMO_2026 / 220 * 1.2)} (+ a hora tem 52min30s, não 60 minutos)`,
+          `Adicional Insalubridade grau mínimo (10%): ${fmtR$(SALARIO_MINIMO_2026 * 0.10)}/mês sobre o salário mínimo`,
+          `Adicional Insalubridade grau médio (20%): ${fmtR$(SALARIO_MINIMO_2026 * 0.20)}/mês — requer laudo técnico PPRA/LTCAT`,
+          `Adicional Insalubridade grau máximo (40%): ${fmtR$(SALARIO_MINIMO_2026 * 0.40)}/mês — exposição severa a agentes nocivos`,
+          `Adicional Periculosidade (30% sobre o salário): ${fmtR$(SALARIO_MINIMO_2026 * 0.30)}/mês — explosivos, inflamáveis, eletricidade, segurança pessoal`,
         ],
       },
     ],
     faq: [
       {
         pergunta: 'O salário mínimo de 2026 vale para todo o Brasil?',
-        resposta: `Sim. O salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)} é o piso nacional. Alguns estados têm piso salarial estadual maior, como São Paulo, Rio de Janeiro e Paraná. O nacional é o mínimo que toda empresa deve pagar.`,
+        resposta: `Sim — ${fmtR$(SALARIO_MINIMO_2026)} é o piso nacional obrigatório (Art. 76 da CLT). Mas alguns estados têm piso salarial estadual maior: SP (pisos por categoria), PR (R$&nbsp;1.726,22), RS e SC têm pisos específicos. A empresa deve pagar o maior valor entre o nacional e o estadual/categoria.`,
       },
       {
         pergunta: 'É possível ganhar menos que o salário mínimo?',
-        resposta: 'Não. Nenhum trabalhador CLT pode receber menos que o salário mínimo nacional ou o piso estadual/categoria, o que for maior. Isso inclui empregados domésticos e trabalhadores parciais.',
+        resposta: `Não — e qualquer acordo nesse sentido é nulo de pleno direito (Art. 9º CLT). Mesmo que o trabalhador assine aceitando, a empresa responde pelo pagamento da diferença mais os encargos. Isso inclui domésticos, aprendizes (que recebem o salário mínimo proporcional à jornada) e trabalhadores em contrato parcial.`,
       },
       {
         pergunta: 'Quais atividades têm adicional de insalubridade?',
-        resposta: 'Atividades com exposição a: ruído excessivo, calor intenso, produtos químicos, poeiras, vibrações, radiações. A classificação é feita por laudo técnico de um engenheiro ou médico do trabalho (PPRA/LTCAT).',
+        resposta: 'Atividades com exposição a: ruído acima de 85 dB, calor excessivo, frio abaixo de 12°C, produtos químicos tóxicos, agentes biológicos (hospitais, esgoto), poeira mineral, radiações ionizantes. A caracterização exige laudo técnico assinado por engenheiro de segurança ou médico do trabalho — sem laudo, não há obrigação de pagar o adicional.',
       },
       {
-        pergunta: 'O vale-refeição é obrigatório?',
-        resposta: 'Não é obrigatório por lei federal, mas muitas categorias têm o benefício garantido por convenção coletiva. Quando oferecido, não pode ser descontado acima de 20% do valor do benefício.',
+        pergunta: 'O vale-refeição é obrigatório por lei?',
+        resposta: 'Não é obrigatório pela legislação federal, mas é garantido para muitas categorias por convenção coletiva (CCT ou ACT). Quando oferecido, o desconto máximo é de 20% do valor do benefício — não pode ser descontado pelo valor total. Verifique a convenção da sua categoria no site do MTE (sit.trabalho.gov.br).',
       },
     ],
-    conclusao: `A CLT 2026 garante ao trabalhador formal uma série de direitos: salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)}, FGTS de 8%, 13º, férias com 1/3, hora extra com 50% de adicional e muito mais. Conheça seus direitos para negociar melhor e garantir o cumprimento da legislação.`,
+    conclusao: `A CLT 2026 garante ao trabalhador formal: salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)}, FGTS de 8%, 13º salário, férias de 30 dias com 1/3, hora extra com 50% de adicional, aviso prévio proporcional e seguro-desemprego. Conheça cada direito pelo número do artigo — isso faz diferença na hora de exigir cumprimento ou entrar com reclamação trabalhista.`,
   }
 }
 
@@ -1123,20 +1139,20 @@ function gerarRescisaoGeral(slug: string): PaginaTrabalhista {
   const isPrazo = slug.includes('prazo')
 
   let titulo = `${nome}: Guia Completo 2026`
-  let intro = `Saiba como calcular e entender suas verbas rescisórias em 2026. A rescisão inclui: aviso prévio, saldo de salário, 13º proporcional, férias + 1/3 e FGTS com multa (quando aplicável).`
+  let intro = `Saber o que você tem direito a receber na rescisão é fundamental para não sair prejudicado. A rescisão inclui: saldo de salário, aviso prévio, 13º proporcional, férias + 1/3 constitucional e FGTS com multa de 40% (na demissão sem justa causa). O prazo legal para pagamento é de 10 dias corridos após o encerramento do contrato — Art. 477, §6º da CLT.`
 
   if (is13) {
-    titulo = 'Como Calcular o 13º Salário 2026: Guia Completo'
-    intro = `O 13º salário 2026 é calculado como: <strong>salário_bruto × meses_trabalhados / 12</strong>. Deve ser pago até 30 de novembro (1ª parcela) e 20 de dezembro (2ª parcela), ou na rescisão do contrato.`
+    titulo = 'Como Calcular o 13º Salário 2026: Fórmula, Prazo e Erros Comuns'
+    intro = `O 13º salário 2026 é calculado como: <strong>salário bruto × meses trabalhados no ano ÷ 12</strong>. Cada mês com 15 dias ou mais de trabalho conta como mês inteiro. O pagamento tem prazo legal: 1ª parcela até 30 de novembro (ou na rescisão) e 2ª parcela até 20 de dezembro. Atraso gera multa e pode ser cobrado na Justiça do Trabalho.`
   } else if (isFerias) {
-    titulo = 'Cálculo de Férias 2026: Como Calcular Proporcionais e Vencidas'
-    intro = `As férias em 2026 equivalem a 30 dias de salário + 1/3 constitucional. Proporcionais: cada mês trabalhado dá direito a 2,5 dias de férias. Férias vencidas (período completo não gozado) são pagas em dobro na rescisão.`
+    titulo = 'Como Calcular Férias 2026: Proporcionais, Vencidas e o Terço Constitucional'
+    intro = `As férias em 2026 garantem 30 dias de descanso remunerado com 1/3 constitucional adicional (Art. 7º, XVII da CF/88). Férias proporcionais: cada mês do período aquisitivo atual dá direito a 2,5 dias. Férias vencidas (período aquisitivo completo de 12 meses que não foram gozadas): a empresa deve pagar em dobro na rescisão — é uma penalidade automática, não uma opção.`
   } else if (isAvisoPrevio) {
-    titulo = 'Aviso Prévio 2026: Cálculo, Direitos e Obrigações'
-    intro = `O aviso prévio em 2026 é de <strong>30 dias + 3 dias por ano de serviço</strong>, limitado a 90 dias. Pode ser trabalhado ou indenizado — a escolha geralmente é do empregador.`
+    titulo = 'Aviso Prévio 2026: Cálculo, Direitos, Armadilhas e Como Negociar'
+    intro = `O aviso prévio em 2026 é de <strong>30 dias + 3 dias por ano completo de serviço</strong>, limitado a 90 dias (Lei 12.506/2011). Pode ser trabalhado ou indenizado — na demissão sem justa causa, a empresa escolhe. No pedido de demissão, o trabalhador é que deve cumprir o aviso — ou terá o valor descontado das verbas. Muita gente não sabe que avisos prévios acima de 30 dias foram uma conquista da lei de 2011 e ainda são sistematicamente calculados errado pelas empresas.`
   } else if (isPrazo) {
-    titulo = 'Prazo para Pagamento da Rescisão 2026'
-    intro = `O empregador tem <strong>10 dias corridos</strong> após o encerramento do contrato para pagar todas as verbas rescisórias. O descumprimento gera multa de um salário mensal por dia de atraso.`
+    titulo = 'Prazo para Pagamento da Rescisão 2026 — e o que Fazer se a Empresa Atrasar'
+    intro = `O Art. 477, §6º da CLT determina que o empregador tem <strong>10 dias corridos</strong> após o encerramento do contrato (ou do aviso prévio trabalhado) para pagar todas as verbas rescisórias. O descumprimento gera multa de 1 salário mensal por dia de atraso. Mas muita gente não cobra essa multa — e a empresa sai impune.`
   }
 
   const ex1 = calcularRescisao(3000, 12, 'sem-justa-causa')
@@ -1154,71 +1170,75 @@ function gerarRescisaoGeral(slug: string): PaginaTrabalhista {
     intro,
     secoes: [
       {
-        h2: 'Comparativo de Tipos de Rescisão (Salário R$ 3.000, 1 Ano)',
+        h2: 'Comparativo Real: Demissão Sem Justa Causa vs Pedido de Demissão (Salário R$&nbsp;3.000, 1 Ano)',
         tabela: {
-          cabecalho: ['Tipo', 'Aviso Prévio', 'Total Bruto', 'FGTS + Multa', 'Total Líquido'],
+          cabecalho: ['Tipo de Rescisão', 'Aviso Prévio', 'Total Líquido (verbas)', 'FGTS + Multa', 'Seguro-Desemprego?'],
           linhas: [
-            ['Demissão sem justa causa', `${ex1.avisoPrevio} dias`, fmtR$(ex1.totalBruto), `${fmtR$(ex1.fgtsSaldo)} + ${fmtR$(ex1.multaFGTS)}`, fmtR$(ex1.totalLiquido)],
-            ['Pedido de demissão', `${ex2.avisoPrevio} dias`, fmtR$(ex2.totalBruto), `${fmtR$(ex2.fgtsSaldo)} (bloqueado)`, fmtR$(ex2.totalLiquido)],
-            ['Acordo mútuo', `${ex3.avisoPrevio} dias`, fmtR$(ex3.totalBruto), `${fmtR$(ex3.fgtsSaldo)} + ${fmtR$(ex3.multaFGTS)} (20%)`, fmtR$(ex3.totalLiquido)],
+            ['Demissão sem justa causa', `${ex1.avisoPrevio} dias`, fmtR$(ex1.totalLiquido), `${fmtR$(ex1.fgtsSaldo)} + ${fmtR$(ex1.multaFGTS)} (40%)`, 'Sim'],
+            ['Pedido de demissão', `${ex2.avisoPrevio} dias`, fmtR$(ex2.totalLiquido), `${fmtR$(ex2.fgtsSaldo)} (bloqueado — não saca)`, 'Não'],
+            ['Acordo mútuo (Art. 484-A CLT)', `${ex3.avisoPrevio} dias`, fmtR$(ex3.totalLiquido), `${fmtR$(ex3.fgtsSaldo)} + ${fmtR$(ex3.multaFGTS)} (20%)`, 'Não'],
+            ['Justa causa (Art. 482 CLT)', '0 dias', 'Só saldo de salário + férias vencidas', 'Bloqueado', 'Não'],
           ],
         },
+        destaque: `Diferença entre demissão sem justa causa e pedido de demissão (R$&nbsp;3.000, 1 ano): você abre mão de ${fmtR$(ex1.multaFGTS)} de multa FGTS + ${fmtR$(ex1.avisoPrevioValor)} de aviso prévio indenizado = ${fmtR$(ex1.multaFGTS + ex1.avisoPrevioValor)} a menos. Vale muito negociar uma rescisão por acordo antes de simplesmente pedir demissão.`,
       },
       {
-        h2: 'Verbas Rescisórias: O que é Cada Uma?',
+        h2: 'Verbas Rescisórias Explicadas: O que é Cada Uma e Como Conferir',
         subsecoes: [
           {
-            h3: 'Saldo de Salário',
-            conteudo: 'Os dias trabalhados no mês da rescisão, calculados proporcionalmente. Fórmula: salário ÷ 30 × dias trabalhados.',
+            h3: 'Saldo de Salário (Art. 477 CLT)',
+            conteudo: 'Os dias trabalhados no mês da demissão, calculados proporcionalmente. Fórmula: salário ÷ 30 × dias trabalhados. Se foi demitido no dia 20, recebe 20/30 do salário mensal. É uma das verbas mais simples, mas verifique a data exata no TRCT.',
           },
           {
-            h3: 'Aviso Prévio',
-            conteudo: 'Direito a 30 dias + 3 dias por ano de serviço (máx 90). Pode ser trabalhado ou indenizado (pago em dinheiro sem trabalhar). Na demissão sem justa causa, o aviso prévio indenizado vale se o empregador dispensar o cumprimento.',
+            h3: 'Aviso Prévio (Lei 12.506/2011)',
+            conteudo: '30 dias base + 3 dias por ano completo de serviço, limitado a 90 dias. Pode ser trabalhado (você trabalha os dias) ou indenizado (empresa paga o equivalente sem você trabalhar). Atenção: no pedido de demissão, se você não cumprir o aviso, a empresa desconta o valor das suas verbas. Na justa causa, não há aviso prévio.',
           },
           {
-            h3: '13º Salário Proporcional',
-            conteudo: 'Calculado como: salário × meses_trabalhados_no_ano / 12. Não é pago em caso de justa causa.',
+            h3: '13º Salário Proporcional (Lei 4.090/62)',
+            conteudo: 'Calculado como: salário × meses trabalhados no ano ÷ 12. Fração de 15 dias ou mais conta como mês completo. Não é pago em demissão por justa causa. Na rescisão, incide INSS e IRRF separados do salário.',
           },
           {
-            h3: 'Férias Proporcionais + 1/3',
-            conteudo: 'Calculadas pelos meses do período aquisitivo atual, mais o terço constitucional. Férias vencidas (período aquisitivo completo) são pagas em dobro.',
+            h3: 'Férias Proporcionais + 1/3 Constitucional (Arts. 129, 146 e 148 CLT)',
+            conteudo: 'Férias proporcionais: cada mês do período aquisitivo atual dá direito a 2,5 dias de férias. Mais o 1/3 constitucional (Art. 7º, XVII da CF). Férias vencidas (período aquisitivo completo de 12 meses que passou sem gozo): pagas em dobro — é uma penalidade para a empresa, não uma opção.',
           },
           {
-            h3: 'FGTS e Multa',
-            conteudo: 'O saldo do FGTS é liberado para saque. Na demissão sem justa causa, há multa adicional de 40% paga pela empresa. No acordo mútuo, a multa é de 20%.',
+            h3: 'FGTS e Multa Rescisória (Art. 18 §1º da Lei 8.036/90)',
+            conteudo: 'O saldo do FGTS é liberado para saque na Caixa. Na demissão sem justa causa, a empresa paga adicionalmente 40% sobre o saldo total acumulado como multa. Essa multa não sai do seu saldo — é um pagamento extra da empresa. No acordo mútuo, a multa é de 20%.',
           },
         ],
       },
       {
-        h2: 'Prazos e Documentos da Rescisão',
+        h2: 'Prazos, Documentos e Armadilhas da Rescisão',
         lista: [
-          'Prazo de pagamento: 10 dias corridos após encerramento do contrato',
-          'Documentos: TRCT (Termo de Rescisão) assinado, guia do FGTS, certidão de CPF, Carteira de Trabalho',
-          'O sindicato deve estar presente na homologação apenas para contratos acima de 1 ano (algumas categorias)',
-          'Multa por atraso: 1 salário por dia de atraso no pagamento',
-          'Prazo para reclamação trabalhista: 2 anos após a demissão (5 anos retroativos)',
+          'Prazo de pagamento: 10 dias corridos após o encerramento do contrato — Art. 477, §6º CLT. Atraso gera multa de 1 salário mensal por dia',
+          'Documentos obrigatórios: TRCT assinado, Chave FGTS (GRF ou GRFC), e-Social, baixa na CTPS',
+          'Você NÃO é obrigado a assinar o TRCT com valores errados. Anote a divergência, assine com ressalva e procure a Justiça do Trabalho',
+          'Prazo para reclamar: 2 anos após a demissão para entrar com ação (Art. 7º, XXIX CF). Cobranças retroativas: até 5 anos',
+          'Gestante demitida: se estiver grávida na data da demissão (mesmo sem saber), tem direito à estabilidade e pode anular a demissão ou receber indenização',
+          'Acidente de trabalho: 12 meses de estabilidade após o retorno. Demissão nesse período é nula (Súmula 378 do TST)',
+          'Cuidado com "acordo" informal: rescisão por acordo tem rito legal específico — sem seguir o Art. 484-A da CLT, pode ser questionada',
         ],
       },
     ],
     faq: [
       {
-        pergunta: 'O que é verbas indenizatórias e tributáveis?',
-        resposta: 'Verbas indenizatórias (FGTS, férias indenizadas) são isentas de INSS e IRRF. Verbas tributáveis (aviso prévio indenizado, 13º salário, saldo de salário) têm desconto de INSS e IRRF.',
+        pergunta: 'Qual a diferença entre verbas indenizatórias e tributáveis?',
+        resposta: 'Verbas indenizatórias (férias indenizadas, multa FGTS, indenizações) são isentas de INSS e IRRF. Verbas tributáveis (aviso prévio indenizado, 13º salário, saldo de salário) têm desconto de INSS e, se ultrapassar a faixa de isenção, de IRRF. Verifique no TRCT se essa separação foi feita corretamente — um erro nessa conta pode gerar desconto indevido de imposto.',
       },
       {
         pergunta: 'Posso ser demitido durante afastamento por doença?',
-        resposta: 'Não. O trabalhador em afastamento por doença (auxílio-doença) tem estabilidade provisória de 12 meses após o retorno ao trabalho. A demissão durante o afastamento é nula.',
+        resposta: 'Não — a demissão durante o afastamento por doença é nula. O trabalhador com auxílio-doença tem estabilidade provisória de 12 meses após a alta médica e o retorno ao trabalho (Súmula 378 do TST). Se isso acontecer, procure a Justiça do Trabalho imediatamente — o prazo para reintegração ou indenização pode ser curto.',
       },
       {
         pergunta: 'Qual a diferença entre rescisão sem justa causa e rescisão indireta?',
-        resposta: 'Na sem justa causa, a empresa demite o trabalhador. Na rescisão indireta, é o trabalhador que encerra o contrato por descumprimento grave do empregador (como falta de pagamento, assédio ou violação de obrigações legais). Ambos têm os mesmos direitos.',
+        resposta: 'Na demissão sem justa causa, a empresa decide encerrar o contrato. Na rescisão indireta (Art. 483 CLT), é o trabalhador que encerra o contrato, mas por culpa grave da empresa: falta de pagamento, assédio moral, rebaixamento de cargo, exigência de serviços contrários à lei ou moral. Ambas têm os mesmos direitos — inclusive seguro-desemprego.',
       },
       {
         pergunta: 'Férias vencidas são pagas em dobro sempre?',
-        resposta: 'Sim. Férias vencidas (quando o período aquisitivo completo de 12 meses passou e as férias não foram concedidas) são pagas em dobro na rescisão — é uma penalidade para o empregador.',
+        resposta: 'Sim, sem exceção. Férias vencidas são aquelas em que o período aquisitivo de 12 meses se completou e o empregador não concedeu as férias. Na rescisão, são pagas em dobro (Art. 146, parágrafo único da CLT). Não é negociável — é uma penalidade automática ao empregador. E lembre: sobre o dobro ainda incide o 1/3 constitucional.',
       },
     ],
-    conclusao: `A rescisão em 2026 envolve várias verbas: aviso prévio, saldo de salário, 13º proporcional, férias + 1/3 e FGTS com multa. O prazo de pagamento é de 10 dias corridos. Leia com atenção o TRCT antes de assinar e verifique se todos os valores estão corretos. Em caso de dúvida, consulte o sindicato da categoria ou um advogado trabalhista.`,
+    conclusao: `A rescisão em 2026 envolve várias verbas com prazos e cálculos específicos: saldo de salário, aviso prévio, 13º proporcional, férias + 1/3 e FGTS com multa. O prazo legal de pagamento é de 10 dias corridos (Art. 477 CLT). Antes de assinar o TRCT, confira cada valor. Você tem até 2 anos após a demissão para reclamar direitos na Justiça do Trabalho — não deixe prescrever.`,
   }
 }
 
@@ -1235,76 +1255,78 @@ function gerarGuiaGeral(slug: string, nome: string): PaginaTrabalhista {
     publishedAt: PUBLISHED_AT,
     tags: ['trabalhista 2026', 'CLT 2026', 'INSS 2026', 'FGTS 2026', 'direitos trabalhistas'],
     tempoLeitura: 5,
-    intro: `Tudo o que você precisa saber sobre <strong>${nome.toLowerCase()}</strong> em 2026. Com salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)}, teto INSS de ${fmtR$(TETO_INSS_2026)} e FGTS de 8%, o mercado de trabalho formal brasileiro tem regras claras para proteger trabalhadores e empregadores.`,
+    intro: `Tudo o que você precisa saber sobre <strong>${nome.toLowerCase()}</strong> em 2026, com exemplos numéricos reais. O mercado de trabalho formal brasileiro garante direitos robustos pela CLT — mas só quem os conhece pode exigir que sejam cumpridos. Com salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)}, teto INSS de ${fmtR$(TETO_INSS_2026)} e FGTS de 8%, veja o que você tem direito hoje.`,
     secoes: [
       {
-        h2: 'Principais Indicadores Trabalhistas 2026',
+        h2: 'Indicadores Trabalhistas 2026 — Valores Atualizados',
         tabela: {
-          cabecalho: ['Indicador', 'Valor 2026'],
+          cabecalho: ['Indicador', 'Valor 2026', 'Base Legal'],
           linhas: [
-            ['Salário Mínimo', fmtR$(SALARIO_MINIMO_2026)],
-            ['Teto INSS', fmtR$(TETO_INSS_2026)],
-            ['FGTS', '8% do salário bruto'],
-            ['Multa FGTS (demissão s/ justa causa)', '40% do saldo'],
-            ['Aviso Prévio Mínimo', '30 dias'],
-            ['Aviso Prévio Máximo', '90 dias'],
-            ['13º Salário', '1/12 do salário por mês trabalhado'],
-            ['Férias', '30 dias + 1/3 do salário'],
+            ['Salário Mínimo', `${fmtR$(SALARIO_MINIMO_2026)}/mês`, 'Art. 76 CLT'],
+            ['Teto INSS', fmtR$(TETO_INSS_2026), 'Portaria MTP 1.320/22'],
+            ['Desconto INSS Máximo', fmtR$(calcularINSS(TETO_INSS_2026).descontoTotal), 'Tabela progressiva'],
+            ['FGTS', '8% do salário bruto (pago pela empresa)', 'Lei 8.036/90'],
+            ['Multa FGTS Demissão Sem Justa Causa', '40% do saldo total', 'Art. 18 §1º Lei 8.036/90'],
+            ['Multa FGTS Acordo Mútuo', '20% do saldo total', 'Art. 484-A CLT'],
+            ['Aviso Prévio Mínimo', '30 dias', 'Art. 487 CLT'],
+            ['Aviso Prévio Máximo', '90 dias (30 + 3 por ano)', 'Lei 12.506/11'],
+            ['13º Salário', '1/12 do salário por mês trabalhado', 'Lei 4.090/62'],
+            ['Férias', '30 dias + 1/3 constitucional', 'Art. 129 e 7º XVII CF'],
           ],
         },
       },
       {
-        h2: 'Exemplo Prático — Salário de R$ 3.000',
+        h2: 'Exemplo Real — Trabalhador com Salário de R$&nbsp;3.000 em 2026',
         subsecoes: [
           {
             h3: 'Desconto INSS Mensal',
-            conteudo: `INSS: <strong>${fmtR$(inssRef.descontoTotal)}</strong> (alíquota efetiva: ${fmt(inssRef.aliquotaEfetiva)}%)`,
+            conteudo: `INSS: <strong>${fmtR$(inssRef.descontoTotal)}</strong> (alíquota efetiva: ${fmt(inssRef.aliquotaEfetiva)}% — não os 12% da faixa nominal). O cálculo é progressivo: 7,5% sobre os primeiros R$&nbsp;1.518, depois 9% sobre a diferença até R$&nbsp;2.793,88, depois 12% sobre o restante.`,
           },
           {
-            h3: 'FGTS Mensal (pago pelo empregador)',
-            conteudo: `FGTS: <strong>${fmtR$(fgtsRef.depositoMensal)}/mês</strong>. Em 2 anos: ${fmtR$(fgtsRef.saldoApos24Meses)}`,
+            h3: 'FGTS Mensal (custo da empresa, não desconto do salário)',
+            conteudo: `FGTS: <strong>${fmtR$(fgtsRef.depositoMensal)}/mês</strong> depositado pela empresa na Caixa. Em 2 anos, esse saldo chega a ${fmtR$(fgtsRef.saldoApos24Meses)} — mais ${fmtR$(fgtsRef.saldoApos24Meses * 0.4)} de multa em caso de demissão.`,
           },
           {
-            h3: 'Rescisão após 2 anos (sem justa causa)',
-            conteudo: `Total líquido: <strong>${fmtR$(rescisaoRef.totalLiquido)}</strong> + saldo FGTS de ${fmtR$(rescisaoRef.fgtsSaldo)}`,
+            h3: 'Rescisão após 2 anos sem justa causa',
+            conteudo: `Verbas rescisórias líquidas: <strong>${fmtR$(rescisaoRef.totalLiquido)}</strong> + saldo FGTS de ${fmtR$(rescisaoRef.fgtsSaldo)} + multa de ${fmtR$(rescisaoRef.multaFGTS)}. Total recebido: ${fmtR$(rescisaoRef.totalLiquido + rescisaoRef.fgtsSaldo)}. Tudo dentro do prazo de 10 dias corridos (Art. 477 CLT).`,
           },
         ],
       },
       {
-        h2: 'Direitos Fundamentais CLT 2026',
+        h2: 'Direitos Fundamentais CLT 2026 — Com Artigos da Lei',
         lista: [
-          'Registro em Carteira de Trabalho (CTPS) — obrigatório',
-          'Salário mínimo ou piso da categoria',
-          'FGTS depositado mensalmente',
-          '13º salário pago até 20 de dezembro',
-          'Férias de 30 dias com adicional de 1/3',
-          'Hora extra com adicional mínimo de 50%',
-          'Seguro-desemprego em caso de demissão sem justa causa',
-          'Licença maternidade de 120 dias e paternidade de 5 dias',
-          'Aviso prévio proporcional ao tempo de serviço',
-          'Vale-transporte para quem usa transporte coletivo',
+          'Registro em Carteira de Trabalho (CTPS) desde o primeiro dia — Art. 29 CLT. Trabalho sem carteira é vínculo informal e pode ser cobrado na Justiça',
+          `Salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)} ou piso da categoria (o maior) — Art. 76 CLT`,
+          'FGTS de 8% depositado mensalmente pela empresa — Lei 8.036/90. Verifique mensalmente pelo app FGTS',
+          '13º salário pago até 30/nov (1ª parcela) e 20/dez (2ª parcela) — Lei 4.090/62',
+          'Férias de 30 dias com adicional de 1/3 — após cada 12 meses de período aquisitivo (Art. 129 CLT)',
+          'Hora extra com adicional mínimo de 50% (100% aos domingos e feriados) — Art. 59 CLT',
+          'Seguro-desemprego em caso de demissão sem justa causa — Lei 7.998/90',
+          'Licença maternidade de 120 dias (Art. 392 CLT) e paternidade de 5 dias (ADCT Art. 10)',
+          'Aviso prévio proporcional: 30 + 3 dias por ano, máx 90 dias — Lei 12.506/11',
+          'Vale-transporte para uso de transporte público — desconto máximo de 6% (Lei 7.418/85)',
         ],
       },
     ],
     faq: [
       {
         pergunta: 'Quais são os principais direitos do trabalhador CLT em 2026?',
-        resposta: `Salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)}, FGTS de 8%, 13º salário, férias de 30 dias com 1/3, hora extra com 50% adicional, aviso prévio proporcional e seguro-desemprego.`,
+        resposta: `Os direitos fundamentais são: salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)}, FGTS de 8% (pago pela empresa), 13º salário, férias de 30 dias com 1/3, hora extra com 50%, aviso prévio proporcional ao tempo de serviço e seguro-desemprego na demissão sem justa causa. Todos previstos na CLT e na Constituição Federal.`,
       },
       {
         pergunta: 'O empregador pode deixar de depositar o FGTS?',
-        resposta: 'Não. O não recolhimento do FGTS é infração administrativa e crime contra o trabalhador. O empregador que não recolhe pode ser autuado pela Fiscalização do Trabalho e pelo Ministério Público.',
+        resposta: 'Não — e as consequências são sérias. O não recolhimento do FGTS é infração administrativa (multa de 10% do saldo devedor) e pode ser enquadrado como crime de apropriação indébita. O trabalhador pode denunciar ao MTE (www.gov.br/trabalho), e o empregador pode ser obrigado a pagar os depósitos em atraso com correção de TR + 3% + multa de 20%.',
       },
       {
         pergunta: 'Há diferença entre CLT e regime estatutário (servidor público)?',
-        resposta: 'Sim. Servidores públicos concursados são regidos pelo Estatuto dos Servidores Públicos (Lei 8.112/90 no âmbito federal), com regras diferentes de aposentadoria, benefícios e estabilidade. A CLT rege o setor privado.',
+        resposta: 'Sim — são sistemas completamente diferentes. Servidores públicos concursados são regidos pelo Estatuto dos Servidores (Lei 8.112/90 federal), com regras próprias de aposentadoria (RPPS), estabilidade após 3 anos e benefícios específicos. A CLT rege o setor privado e os empregados públicos de estatais. A aposentadoria do CLTista é pelo INSS; a do estatutário, pelo RPPS.',
       },
       {
-        pergunta: 'Como reclamar direitos trabalhistas?',
-        resposta: 'Você pode: 1) buscar o sindicato da categoria; 2) registrar denúncia no Ministério do Trabalho (Fiscalização do Trabalho); 3) entrar com reclamação trabalhista na Justiça do Trabalho (pode ser feita sem advogado para causas simples).',
+        pergunta: 'Como reclamar direitos trabalhistas não pagos?',
+        resposta: 'Três caminhos: 1) Sindicato da categoria — muitos têm departamento jurídico gratuito para filiados; 2) MTE (Ministério do Trabalho) — denúncia online em www.gov.br/trabalho, inspeciona a empresa; 3) Justiça do Trabalho — ação trabalhista com ou sem advogado (para causas até 2 salários mínimos). Prazo: 2 anos após a demissão para entrar com ação, cobrando até 5 anos retroativos.',
       },
     ],
-    conclusao: `Conhecer seus direitos trabalhistas em 2026 é fundamental para garantir o cumprimento da legislação e negociar melhor. INSS, FGTS, rescisão, 13º e férias são apenas alguns dos benefícios garantidos pela CLT. Consulte sempre seu sindicato ou um especialista trabalhista em caso de dúvidas específicas.`,
+    conclusao: `Conhecer seus direitos trabalhistas pelo número do artigo faz diferença: quando você cita o Art. 477 da CLT para exigir pagamento em 10 dias, a empresa sabe que você está informado. Em 2026, com salário mínimo de ${fmtR$(SALARIO_MINIMO_2026)}, teto INSS de ${fmtR$(TETO_INSS_2026)} e FGTS de 8%, o trabalhador CLT tem uma das proteções trabalhistas mais completas da América Latina. Use esses direitos — eles foram conquistados ao longo de décadas.`,
   }
 }
 
