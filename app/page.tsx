@@ -49,6 +49,29 @@ export default function Home() {
 
       <div className="container" style={{ paddingTop: 36 }}>
 
+        {/* ── Seções de conteúdo ── */}
+        <section style={{ marginBottom: 40 }}>
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: 16, color: 'var(--text)' }}>
+            Guias e Conteúdos
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
+            {[
+              { href: '/trabalhista', icon: '👔', nome: 'CLT / INSS / FGTS', desc: 'Rescisão, direitos, salário 2026' },
+              { href: '/ir', icon: '🏛️', nome: 'IR 2025 / 2026', desc: 'Declaração, deduções, malha fina' },
+              { href: '/emprestimos', icon: '💳', nome: 'Empréstimos', desc: 'Taxas, consignado, financiamento' },
+              { href: '/concursos', icon: '🎯', nome: 'Concursos Públicos', desc: 'Salários, vagas, como passar' },
+              { href: '/caneta-emagrecedora', icon: '💉', nome: 'Ozempic / GLP-1', desc: 'Semanas, efeitos, comparativos' },
+              { href: '/salarios', icon: '💰', nome: 'Tabela Salarial', desc: '470 profissões com salário médio' },
+            ].map(item => (
+              <Link key={item.href} href={item.href} style={{ textDecoration: 'none', background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius-lg)', padding: '16px', display: 'block', transition: 'box-shadow 0.15s' }}>
+                <div style={{ fontSize: '1.8rem', marginBottom: 8 }}>{item.icon}</div>
+                <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: '0.9rem', marginBottom: 4 }}>{item.nome}</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--muted)', lineHeight: 1.4 }}>{item.desc}</div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* ── Categorias ── */}
         <section style={{ marginBottom: 40 }}>
           <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: 16, color: 'var(--text)' }}>

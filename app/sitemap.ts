@@ -5,8 +5,11 @@ import { ELEMENTOS } from '@/lib/periodica/elementos'
 import { MEDICAMENTOS } from '@/lib/medicamentos/remedios'
 import { SLUGS_TRABALHISTA } from '@/lib/trabalhista/slugs'
 import { SLUGS_EMPRESTIMOS } from '@/lib/emprestimos/slugs'
+import { SLUGS_CANETA } from '@/lib/caneta/slugs'
+import { SLUGS_IR } from '@/lib/ir/slugs'
+import { SLUGS_CONCURSOS } from '@/lib/concursos/slugs'
 
-const BASE_URL = 'https://calculadoravirtual.com'
+const BASE_URL = 'https://calculadoravirtual.com.br'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const hoje = new Date()
@@ -161,5 +164,53 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ]
 
-  return [...paginas, ...categorias, ...calculadoras, ...blog, ...duvidas, ...salarios, ...periodica, ...medicamentos, ...trabalhista, ...emprestimos]
+  // Caneta emagrecedora — hub + ~552 páginas
+  const caneta: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/caneta-emagrecedora`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_CANETA.map(slug => ({
+      url: `${BASE_URL}/caneta-emagrecedora/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
+  ]
+
+  // IR 2025/2026 — hub + ~1.000 páginas
+  const ir: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/ir`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_IR.map(slug => ({
+      url: `${BASE_URL}/ir/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+    })),
+  ]
+
+  // Concursos públicos — hub + ~1.200 páginas
+  const concursos: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/concursos`,
+      lastModified: hoje,
+      changeFrequency: 'weekly' as const,
+      priority: 0.95,
+    },
+    ...SLUGS_CONCURSOS.filter(s => typeof s === 'string' && s.length > 0).map(slug => ({
+      url: `${BASE_URL}/concursos/${slug}`,
+      lastModified: hoje,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+  ]
+
+  return [...paginas, ...categorias, ...calculadoras, ...blog, ...duvidas, ...salarios, ...periodica, ...medicamentos, ...caneta, ...ir, ...concursos, ...trabalhista, ...emprestimos]
 }

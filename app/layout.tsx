@@ -44,9 +44,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Link>
             <HeaderSearch />
             <nav className="header-nav" style={{ flexShrink: 0 }}>
-              <Link href="/ferramentas">Todas</Link>
-              <Link href="/categoria/trabalhista">Trabalhista</Link>
-              <Link href="/categoria/saude">Saúde</Link>
+              <Link href="/ferramentas">Calculadoras</Link>
+              <Link href="/trabalhista">CLT/INSS</Link>
+              <Link href="/ir">IR 2026</Link>
+              <Link href="/emprestimos">Empréstimos</Link>
+              <Link href="/concursos">Concursos</Link>
+              <Link href="/caneta-emagrecedora">Ozempic</Link>
             </nav>
           </div>
         </header>
@@ -64,11 +67,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text)', marginBottom: 4 }}>Calculadora Virtual</div>
                 <div style={{ fontSize: '0.82rem', color: 'var(--muted)' }}>Calculadoras online gratuitas e atualizadas 2026.</div>
               </div>
-              <div style={{ display: 'flex', gap: 20, fontSize: '0.82rem' }}>
-                <Link href="/ferramentas" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Ferramentas</Link>
-                <Link href="/duvidas" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Dúvidas</Link>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: '0.82rem' }}>
+                <Link href="/ferramentas" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Calculadoras</Link>
+                <Link href="/trabalhista" style={{ color: 'var(--muted)', textDecoration: 'none' }}>CLT/INSS/FGTS</Link>
+                <Link href="/ir" style={{ color: 'var(--muted)', textDecoration: 'none' }}>IR 2026</Link>
+                <Link href="/emprestimos" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Empréstimos</Link>
+                <Link href="/concursos" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Concursos</Link>
+                <Link href="/caneta-emagrecedora" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Ozempic/GLP-1</Link>
                 <Link href="/blog" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Blog</Link>
-                <Link href="/privacidade" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Privacidade</Link>
+                <Link href="/duvidas" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Dúvidas</Link>
               </div>
             </div>
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--line)', fontSize: '0.78rem', color: 'var(--dim)' }}>
