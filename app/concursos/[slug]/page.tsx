@@ -4,9 +4,12 @@ import { notFound } from 'next/navigation'
 import { SLUGS_CONCURSOS } from '@/lib/concursos/slugs'
 import { gerarPaginaConcurso, fmt, fmtNum, dificuldadeLabel, escolaridadeLabel, calcularSalarioLiquido } from '@/lib/concursos/generator'
 
+export const dynamicParams = true
+
 export function generateStaticParams() {
   return SLUGS_CONCURSOS
     .filter(slug => typeof slug === 'string' && slug.length > 0)
+    .slice(0, 80)
     .map(slug => ({ slug }))
 }
 

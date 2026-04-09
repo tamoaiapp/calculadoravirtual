@@ -5,9 +5,12 @@ import { SLUGS_EMPRESTIMOS } from '@/lib/emprestimos/slugs'
 import { gerarPaginaEmprestimo, fmt, fmtNum, fmtPct } from '@/lib/emprestimos/generator'
 import { BANCOS, TAXAS_2026, mensal2Anual } from '@/lib/emprestimos/dados'
 
+export const dynamicParams = true
+
 export function generateStaticParams() {
   return SLUGS_EMPRESTIMOS
     .filter(slug => typeof slug === 'string' && slug.length > 0)
+    .slice(0, 80)
     .map(slug => ({ slug }))
 }
 

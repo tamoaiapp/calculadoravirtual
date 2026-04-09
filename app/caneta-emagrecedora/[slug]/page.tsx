@@ -14,8 +14,10 @@ import {
   type PaginaCaneta,
 } from '@/lib/caneta/generator'
 
+export const dynamicParams = true
+
 export async function generateStaticParams() {
-  return SLUGS_CANETA.map(slug => ({ slug }))
+  return SLUGS_CANETA.slice(0, 80).map(slug => ({ slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

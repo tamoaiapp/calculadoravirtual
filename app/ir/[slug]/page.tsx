@@ -5,8 +5,10 @@ import { SLUGS_IR } from '@/lib/ir/slugs'
 import { gerarPaginaIR } from '@/lib/ir/generator'
 import { TABELA_IRPF_2025, TABELA_IRPF_2026 } from '@/lib/ir/dados'
 
+export const dynamicParams = true
+
 export function generateStaticParams() {
-  return SLUGS_IR.map(slug => ({ slug }))
+  return SLUGS_IR.slice(0, 80).map(slug => ({ slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

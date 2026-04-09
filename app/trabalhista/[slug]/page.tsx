@@ -5,8 +5,10 @@ import { SLUGS_TRABALHISTA } from '@/lib/trabalhista/slugs'
 import { gerarPaginaTrabalhista } from '@/lib/trabalhista/generator'
 import { TABELA_INSS_2026, SALARIO_MINIMO_2026, TETO_INSS_2026 } from '@/lib/trabalhista/dados'
 
+export const dynamicParams = true
+
 export function generateStaticParams() {
-  return SLUGS_TRABALHISTA.map(slug => ({ slug }))
+  return SLUGS_TRABALHISTA.slice(0, 80).map(slug => ({ slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
