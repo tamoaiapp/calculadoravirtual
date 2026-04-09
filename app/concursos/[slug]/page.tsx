@@ -1,3 +1,4 @@
+import { AutorBox, schemaAutor } from '@/components/ui/AutorBox'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'

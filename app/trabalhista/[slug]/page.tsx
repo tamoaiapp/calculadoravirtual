@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { SLUGS_TRABALHISTA } from '@/lib/trabalhista/slugs'
 import { gerarPaginaTrabalhista } from '@/lib/trabalhista/generator'
 import { TABELA_INSS_2026, SALARIO_MINIMO_2026, TETO_INSS_2026 } from '@/lib/trabalhista/dados'
+import { AutorBox, schemaAutor } from '@/components/ui/AutorBox'
 
 export const dynamicParams = true
 
@@ -105,6 +106,7 @@ export default async function PaginaTrabalhista({ params }: { params: Promise<{ 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaArticle) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaAutor) }} />
       {schemaFAQ && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaFAQ) }} />
       )}
@@ -480,11 +482,14 @@ export default async function PaginaTrabalhista({ params }: { params: Promise<{ 
                 </div>
               </section>
 
+              <AutorBox />
             </article>
           </div>
 
           {/* ── Sidebar ── */}
           <div className="sidebar-col" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+            <AutorBox compact />
 
             <div className="card" style={{ padding: 16 }}>
               <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 12 }}>
