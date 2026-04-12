@@ -375,5 +375,293 @@ export const CALCS_INVESTIMENTOS: CalcConfig[] = [
         ],
       }
     },
+  },,
+  {
+    slug: 'calculadora-tesouro-selic-rendimento',
+    titulo: 'Rendimento do Tesouro Selic',
+    desc: 'Calcule quanto rende seu investimento no Tesouro Selic com desconto de IR',
+    cat: 'Investimentos',
+    icon: '🏦',
+    campos: [
+      { k: 'valor', l: 'Valor aplicado (R$)', t: 'num', p: '10000', min: 0 },
+      { k: 'selic', l: 'Taxa Selic anual (%)', t: 'num', p: '10.50', min: 0 },
+      { k: 'meses', l: 'Prazo (meses)', t: 'num', p: '12', min: 1 },
+    ],
+    fn: (v) => {
+      const taxaMensal = Math.pow(1 + v.selic / 100, 1 / 12) - 1
+      const bruto = v.valor * Math.pow(1 + taxaMensal, v.meses) - v.valor
+      let aliqIR = 0.225
+      if (v.meses > 24) aliqIR = 0.15
+      else if (v.meses > 12) aliqIR = 0.175
+      else if (v.meses > 6) aliqIR = 0.20
+      const ir = bruto * aliqIR
+      const liquido = bruto - ir
+      return {
+        principal: { valor: parseFloat(liquido.toFixed(2)), label: 'Rendimento líquido (R$)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Rendimento bruto', v: parseFloat(bruto.toFixed(2)), fmt: 'brl' },
+          { l: 'IR descontado', v: parseFloat(ir.toFixed(2)), fmt: 'brl' },
+          { l: 'Alíquota IR', v: aliqIR * 100, fmt: 'pct' },
+          { l: 'Total final', v: parseFloat((v.valor + liquido).toFixed(2)), fmt: 'brl' },
+        ],
+      }
+    },
   },
+  {
+    slug: 'calculadora-retorno-imovel-aluguel',
+    titulo: 'Retorno de Imóvel para Aluguel',
+    desc: 'Calcule o retorno anual e o cap rate de um imóvel para locação',
+    cat: 'Investimentos',
+    icon: '🏠',
+    campos: [
+      { k: 'valorImovel', l: 'Valor do imóvel (R$)', t: 'num', p: '400000', min: 0 },
+      { k: 'aluguelMensal', l: 'Aluguel mensal (R$)', t: 'num', p: '2000', min: 0 },
+      { k: 'vacancia', l: 'Vacância estimada (%)', t: 'num', p: '8', min: 0, max: 100 },
+      { k: 'custosMes', l: 'Custos mensais (condomínio, IPTU, etc.) (R$)', t: 'num', p: '300', min: 0 },
+    ],
+    fn: (v) => {
+      const receitaAnual = v.aluguelMensal * 12 * (1 - v.vacancia / 100)
+      const custosAnuais = v.custosMes * 12
+      const noi = receitaAnual - custosAnuais
+      const capRate = v.valorImovel > 0 ? (noi / v.valorImovel) * 100 : 0
+      const payback = capRate > 0 ? 100 / capRate : 0
+      return {
+        principal: { valor: parseFloat(capRate.toFixed(2)), label: 'Cap Rate anual (%)', fmt: 'pct' },
+        detalhes: [
+          { l: 'Receita líquida anual', v: parseFloat(noi.toFixed(2)), fmt: 'brl' },
+          { l: 'Payback estimado', v: parseFloat(payback.toFixed(1)), fmt: 'num' },
+          { l: 'Rendimento mensal', v: parseFloat((noi / 12).toFixed(2)), fmt: 'brl' },
+        ],
+      }
+    },
+  },
+  {
+    slug: 'calculadora-cdi-bruto-liquido',
+    titulo: 'Rendimento CDB/LCI/LCA (CDI)',
+    desc: 'Compare o rendimento bruto e líquido de CDB e LCI/LCA pelo CDI',
+    cat: 'Investimentos',
+    icon: '📊',
+    campos: [
+      { k: 'valor', l: 'Valor investido (R$)', t: 'num', p: '50000', min: 0 },
+      { k: 'cdi', l: 'CDI anual (%)', t: 'num', p: '10.40', min: 0 },
+      { k: 'percentualCDI', l: 'Percentual do CDI (%)', t: 'num', p: '110', min: 0 },
+      { k: 'meses', l: 'Prazo (meses)', t: 'num', p: '12', min: 1 },
+    ],
+    fn: (v) => {
+      const taxaAnual = (v.cdi * v.percentualCDI) / 100
+      const taxaMensal = Math.pow(1 + taxaAnual / 100, 1 / 12) - 1
+      const bruto = v.valor * Math.pow(1 + taxaMensal, v.meses) - v.valor
+      let aliqIR = 0.225
+      if (v.meses > 24) aliqIR = 0.15
+      else if (v.meses > 12) aliqIR = 0.175
+      else if (v.meses > 6) aliqIR = 0.20
+      const liquido = bruto * (1 - aliqIR)
+      return {
+        principal: { valor: parseFloat(liquido.toFixed(2)), label: 'Rendimento líquido CDB (R$)', fmt: 'brl' },
+        detalhes: [
+          { l: 'LCI/LCA isenta (bruto = líquido)', v: parseFloat(bruto.toFixed(2)), fmt: 'brl' },
+          { l: 'IR CDB', v: parseFloat((bruto - liquido).toFixed(2)), fmt: 'brl' },
+          { l: 'Taxa efetiva CDI', v: parseFloat(taxaAnual.toFixed(2)), fmt: 'pct' },
+        ],
+        aviso: 'LCI e LCA são isentos de IR para pessoa física. CDB tem alíquota regressiva (22,5% a 15%).',
+      }
+    },
+  },
+  {
+    slug: 'calculadora-fundo-imobiliario-dy',
+    titulo: 'Dividend Yield de Fundo Imobiliário (FII)',
+    desc: 'Calcule o dividend yield mensal e anual de um FII com base no preço e rendimento',
+    cat: 'Investimentos',
+    icon: '🏢',
+    campos: [
+      { k: 'precoFII', l: 'Preço da cota (R$)', t: 'num', p: '100', min: 0.01 },
+      { k: 'rendimentoMes', l: 'Rendimento por cota (R$/mês)', t: 'num', p: '0.85', min: 0 },
+      { k: 'cotas', l: 'Número de cotas', t: 'num', p: '100', min: 1 },
+    ],
+    fn: (v) => {
+      const dyMensal = (v.rendimentoMes / v.precoFII) * 100
+      const dyAnual = dyMensal * 12
+      const rendimentoAnual = v.rendimentoMes * v.cotas * 12
+      const patrimonioTotal = v.precoFII * v.cotas
+      return {
+        principal: { valor: parseFloat(dyAnual.toFixed(2)), label: 'Dividend Yield anual (%)', fmt: 'pct' },
+        detalhes: [
+          { l: 'DY mensal', v: parseFloat(dyMensal.toFixed(3)), fmt: 'pct' },
+          { l: 'Renda mensal total', v: parseFloat((v.rendimentoMes * v.cotas).toFixed(2)), fmt: 'brl' },
+          { l: 'Renda anual total', v: parseFloat(rendimentoAnual.toFixed(2)), fmt: 'brl' },
+          { l: 'Patrimônio total', v: parseFloat(patrimonioTotal.toFixed(2)), fmt: 'brl' },
+        ],
+      }
+    },
+  },
+  {
+    slug: 'calculadora-previdencia-privada-pgbl',
+    titulo: 'Benefício Fiscal do PGBL no IRPF',
+    desc: 'Calcule quanto o PGBL reduz seu imposto de renda anual',
+    cat: 'Investimentos',
+    icon: '🛡️',
+    campos: [
+      { k: 'rendaBruta', l: 'Renda bruta anual (R$)', t: 'num', p: '100000', min: 0 },
+      { k: 'aportePGBL', l: 'Aporte anual no PGBL (R$)', t: 'num', p: '12000', min: 0 },
+    ],
+    fn: (v) => {
+      const limiteDeducao = v.rendaBruta * 0.12
+      const deducaoEfetiva = Math.min(v.aportePGBL, limiteDeducao)
+      const baseReduzida = v.rendaBruta - deducaoEfetiva
+      const calcIR = (base: number): number => {
+        if (base <= 28559.70) return 0
+        if (base <= 33919.80) return (base - 28559.70) * 0.075 - 142.80
+        if (base <= 45012.60) return (base - 33919.80) * 0.15 - 354.80 + 402.47
+        if (base <= 55976.16) return (base - 45012.60) * 0.225 - 636.13 + 1069.09
+        return (base - 55976.16) * 0.275 - 869.36 + 1596.23
+      }
+      const irOriginal = Math.max(0, calcIR(v.rendaBruta))
+      const irComPGBL = Math.max(0, calcIR(baseReduzida))
+      const economia = irOriginal - irComPGBL
+      return {
+        principal: { valor: parseFloat(economia.toFixed(2)), label: 'Economia de IR com PGBL (R$)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Dedução máxima (12% renda)', v: parseFloat(limiteDeducao.toFixed(2)), fmt: 'brl' },
+          { l: 'Dedução efetiva', v: parseFloat(deducaoEfetiva.toFixed(2)), fmt: 'brl' },
+          { l: 'IR sem PGBL', v: parseFloat(irOriginal.toFixed(2)), fmt: 'brl' },
+          { l: 'IR com PGBL', v: parseFloat(irComPGBL.toFixed(2)), fmt: 'brl' },
+        ],
+        aviso: 'PGBL só é vantajoso para quem faz declaração completa do IRPF. Verifique com seu contador.',
+      }
+    },
+  },
+  {
+    slug: 'calculadora-custo-fundo-taxa-administracao',
+    titulo: 'Impacto da Taxa de Administração em Fundos',
+    desc: 'Veja quanto a taxa de administração consome do seu patrimônio ao longo dos anos',
+    cat: 'Investimentos',
+    icon: '📉',
+    campos: [
+      { k: 'valorInicial', l: 'Valor investido (R$)', t: 'num', p: '100000', min: 0 },
+      { k: 'rentabilidadeBruta', l: 'Rentabilidade bruta anual (%)', t: 'num', p: '12', min: 0 },
+      { k: 'taxaAdmin', l: 'Taxa de administração anual (%)', t: 'num', p: '2', min: 0, max: 10 },
+      { k: 'anos', l: 'Prazo (anos)', t: 'num', p: '10', min: 1, max: 40 },
+    ],
+    fn: (v) => {
+      const taxaLiquida = v.rentabilidadeBruta - v.taxaAdmin
+      const semTaxa = v.valorInicial * Math.pow(1 + v.rentabilidadeBruta / 100, v.anos)
+      const comTaxa = v.valorInicial * Math.pow(1 + taxaLiquida / 100, v.anos)
+      const custo = semTaxa - comTaxa
+      return {
+        principal: { valor: parseFloat(custo.toFixed(2)), label: 'Custo total da taxa (R$)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Patrimônio sem taxa', v: parseFloat(semTaxa.toFixed(2)), fmt: 'brl' },
+          { l: 'Patrimônio com taxa', v: parseFloat(comTaxa.toFixed(2)), fmt: 'brl' },
+          { l: 'Rentabilidade líquida', v: parseFloat(taxaLiquida.toFixed(2)), fmt: 'pct' },
+        ],
+        aviso: 'ETFs e fundos indexados cobram taxa de 0,1–0,5% vs 1,5–2,5% de fundos ativos — diferença enorme no longo prazo.',
+      }
+    },
+  },
+  {
+    slug: 'calculadora-retorno-real-inflacao',
+    titulo: 'Retorno Real Descontado da Inflação',
+    desc: 'Calcule o retorno real do seu investimento após descontar a inflação',
+    cat: 'Investimentos',
+    icon: '📈',
+    campos: [
+      { k: 'retornoNominal', l: 'Retorno nominal anual (%)', t: 'num', p: '12', min: 0 },
+      { k: 'inflacao', l: 'Inflação anual esperada (%)', t: 'num', p: '4.5', min: 0 },
+      { k: 'valorInicial', l: 'Valor investido (R$)', t: 'num', p: '50000', min: 0 },
+      { k: 'anos', l: 'Prazo (anos)', t: 'num', p: '5', min: 1 },
+    ],
+    fn: (v) => {
+      const retornoReal = ((1 + v.retornoNominal / 100) / (1 + v.inflacao / 100) - 1) * 100
+      const finalNominal = v.valorInicial * Math.pow(1 + v.retornoNominal / 100, v.anos)
+      const finalReal = v.valorInicial * Math.pow(1 + retornoReal / 100, v.anos)
+      return {
+        principal: { valor: parseFloat(retornoReal.toFixed(2)), label: 'Retorno real anual (%)', fmt: 'pct' },
+        detalhes: [
+          { l: 'Patrimônio nominal final', v: parseFloat(finalNominal.toFixed(2)), fmt: 'brl' },
+          { l: 'Poder de compra real', v: parseFloat(finalReal.toFixed(2)), fmt: 'brl' },
+          { l: 'Perda de poder de compra', v: parseFloat((finalNominal - finalReal).toFixed(2)), fmt: 'brl' },
+        ],
+      }
+    },
+  },
+  {
+    slug: 'calculadora-numero-fire',
+    titulo: 'Número FIRE (Independência Financeira)',
+    desc: 'Calcule o patrimônio necessário para viver de renda e se aposentar cedo (FIRE)',
+    cat: 'Investimentos',
+    icon: '🔥',
+    campos: [
+      { k: 'despesaMensal', l: 'Despesa mensal desejada (R$)', t: 'num', p: '8000', min: 0 },
+      { k: 'rendimentoAnual', l: 'Rendimento anual esperado (%)', t: 'num', p: '10', min: 0.1 },
+    ],
+    fn: (v) => {
+      const despesaAnual = v.despesaMensal * 12
+      const taxaSaqueSegura = Math.min(v.rendimentoAnual * 0.7, 4)
+      const patrimonioFIRE = despesaAnual / (taxaSaqueSegura / 100)
+      return {
+        principal: { valor: parseFloat(patrimonioFIRE.toFixed(2)), label: 'Patrimônio FIRE necessário (R$)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Despesa anual', v: despesaAnual, fmt: 'brl' },
+          { l: 'Taxa de saque segura usada', v: parseFloat(taxaSaqueSegura.toFixed(1)), fmt: 'pct' },
+          { l: 'Renda mensal gerada', v: parseFloat((patrimonioFIRE * (taxaSaqueSegura / 100) / 12).toFixed(2)), fmt: 'brl' },
+        ],
+        aviso: 'A regra dos 4% (Estudo Trinity) é referência, mas envolve riscos. Consulte um planejador financeiro.',
+      }
+    },
+  },
+  {
+    slug: 'calculadora-dividendos-acoes',
+    titulo: 'Renda Passiva com Dividendos de Ações',
+    desc: 'Calcule a renda mensal gerada por dividendos com base no DY e no patrimônio',
+    cat: 'Investimentos',
+    icon: '💰',
+    campos: [
+      { k: 'patrimonio', l: 'Patrimônio em ações (R$)', t: 'num', p: '200000', min: 0 },
+      { k: 'dyAnual', l: 'Dividend Yield médio anual (%)', t: 'num', p: '6', min: 0 },
+    ],
+    fn: (v) => {
+      const rendaAnual = v.patrimonio * (v.dyAnual / 100)
+      const rendaMensal = rendaAnual / 12
+      const patrimonioMeta5k = 5000 / (v.dyAnual / 100 / 12)
+      return {
+        principal: { valor: parseFloat(rendaMensal.toFixed(2)), label: 'Renda mensal com dividendos (R$)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Renda anual', v: parseFloat(rendaAnual.toFixed(2)), fmt: 'brl' },
+          { l: 'Patrimônio para R$5.000/mês', v: parseFloat(patrimonioMeta5k.toFixed(2)), fmt: 'brl' },
+        ],
+      }
+    },
+  },
+  {
+    slug: 'calculadora-carteira-diversificada',
+    titulo: 'Simulador de Carteira Diversificada',
+    desc: 'Simule o retorno de uma carteira com renda fixa, ações e FIIs',
+    cat: 'Investimentos',
+    icon: '🗂️',
+    campos: [
+      { k: 'totalInvestido', l: 'Total investido (R$)', t: 'num', p: '100000', min: 0 },
+      { k: 'pctRendaFixa', l: 'Renda Fixa (%)', t: 'num', p: '50', min: 0, max: 100 },
+      { k: 'pctAcoes', l: 'Ações (%)', t: 'num', p: '30', min: 0, max: 100 },
+      { k: 'pctFII', l: 'FIIs (%)', t: 'num', p: '20', min: 0, max: 100 },
+    ],
+    fn: (v) => {
+      const RETORNO_RF = 0.105
+      const RETORNO_ACOES = 0.14
+      const RETORNO_FII = 0.11
+      const rf = v.totalInvestido * (v.pctRendaFixa / 100)
+      const ac = v.totalInvestido * (v.pctAcoes / 100)
+      const fii = v.totalInvestido * (v.pctFII / 100)
+      const rendaAnual = rf * RETORNO_RF + ac * RETORNO_ACOES + fii * RETORNO_FII
+      const retornoMedio = v.totalInvestido > 0 ? (rendaAnual / v.totalInvestido) * 100 : 0
+      return {
+        principal: { valor: parseFloat(retornoMedio.toFixed(2)), label: 'Retorno médio anual estimado (%)', fmt: 'pct' },
+        detalhes: [
+          { l: 'Renda anual estimada', v: parseFloat(rendaAnual.toFixed(2)), fmt: 'brl' },
+          { l: 'Renda mensal estimada', v: parseFloat((rendaAnual / 12).toFixed(2)), fmt: 'brl' },
+        ],
+        aviso: 'Retornos são estimativas baseadas em médias históricas. Rentabilidade passada não garante futura.',
+      }
+    },
+  },
+
 ]

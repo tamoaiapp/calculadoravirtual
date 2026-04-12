@@ -422,5 +422,264 @@ export const CALCS_AGRONEGOCIO: CalcConfig[] = [
       }
     },
     dis: DIS_AGRO,
+  },,
+  {
+    slug: 'calculadora-custo-insumos-plantio',
+    titulo: 'Custo de Insumos por Hectare',
+    desc: 'Calcule o custo total de insumos (semente, fertilizante, defensivo) por hectare plantado',
+    cat: 'Agronegócio',
+    icon: '🌱',
+    campos: [
+      { k: 'semente', l: 'Custo de sementes (R$/ha)', t: 'num', p: '350', min: 0 },
+      { k: 'fertilizante', l: 'Custo de fertilizantes (R$/ha)', t: 'num', p: '900', min: 0 },
+      { k: 'defensivo', l: 'Custo de defensivos (R$/ha)', t: 'num', p: '600', min: 0 },
+      { k: 'area', l: 'Área total (hectares)', t: 'num', p: '100', min: 0.1 },
+    ],
+    fn: (v) => {
+      const custoPorHa = v.semente + v.fertilizante + v.defensivo
+      const custoTotal = custoPorHa * v.area
+      return {
+        principal: { valor: custoTotal, label: 'Custo total de insumos', fmt: 'brl' },
+        detalhes: [
+          { l: 'Custo por hectare', v: custoPorHa, fmt: 'brl' },
+          { l: 'Sementes (total)', v: v.semente * v.area, fmt: 'brl' },
+          { l: 'Fertilizantes (total)', v: v.fertilizante * v.area, fmt: 'brl' },
+          { l: 'Defensivos (total)', v: v.defensivo * v.area, fmt: 'brl' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
   },
+  {
+    slug: 'calculadora-produtividade-milho',
+    titulo: 'Produtividade e Margem do Milho',
+    desc: 'Calcule a receita bruta e margem da cultura do milho por hectare',
+    cat: 'Agronegócio',
+    icon: '🌽',
+    campos: [
+      { k: 'produtividade', l: 'Produtividade (sacas/ha)', t: 'num', p: '150', min: 0 },
+      { k: 'precoSaca', l: 'Preço da saca (R$)', t: 'num', p: '65', min: 0 },
+      { k: 'custoHa', l: 'Custo total por hectare (R$)', t: 'num', p: '3200', min: 0 },
+      { k: 'area', l: 'Área (hectares)', t: 'num', p: '50', min: 0.1 },
+    ],
+    fn: (v) => {
+      const receitaPorHa = v.produtividade * v.precoSaca
+      const margemHa = receitaPorHa - v.custoHa
+      const margemPct = v.custoHa > 0 ? (margemHa / v.custoHa) * 100 : 0
+      return {
+        principal: { valor: margemHa * v.area, label: 'Margem bruta total', fmt: 'brl' },
+        detalhes: [
+          { l: 'Receita por hectare', v: receitaPorHa, fmt: 'brl' },
+          { l: 'Margem por hectare', v: margemHa, fmt: 'brl' },
+          { l: 'Margem percentual', v: margemPct, fmt: 'pct' },
+          { l: 'Receita total', v: receitaPorHa * v.area, fmt: 'brl' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
+  },
+  {
+    slug: 'calculadora-custo-irrigacao-pivo',
+    titulo: 'Custo de Irrigação por Pivô Central',
+    desc: 'Estime o custo mensal de energia de um pivô central',
+    cat: 'Agronegócio',
+    icon: '💧',
+    campos: [
+      { k: 'potenciaKW', l: 'Potência do motor (kW)', t: 'num', p: '75', min: 0 },
+      { k: 'horasDia', l: 'Horas de operação por dia', t: 'num', p: '20', min: 0, max: 24 },
+      { k: 'diasMes', l: 'Dias de irrigação por mês', t: 'num', p: '15', min: 0, max: 31 },
+      { k: 'tarifaKWh', l: 'Tarifa de energia (R$/kWh)', t: 'num', p: '0.72', min: 0 },
+    ],
+    fn: (v) => {
+      const consumoMes = v.potenciaKW * v.horasDia * v.diasMes
+      const custoEnergia = consumoMes * v.tarifaKWh
+      const custoTotal = custoEnergia * 1.15
+      return {
+        principal: { valor: custoTotal, label: 'Custo mensal estimado', fmt: 'brl' },
+        detalhes: [
+          { l: 'Consumo mensal (kWh)', v: consumoMes, fmt: 'num' },
+          { l: 'Custo de energia', v: custoEnergia, fmt: 'brl' },
+          { l: 'Custo anual estimado', v: custoTotal * 12, fmt: 'brl' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
+  },
+  {
+    slug: 'calculadora-ponto-equilibrio-lavoura',
+    titulo: 'Ponto de Equilíbrio da Lavoura',
+    desc: 'Calcule quantas sacas por hectare precisa produzir para cobrir os custos',
+    cat: 'Agronegócio',
+    icon: '⚖️',
+    campos: [
+      { k: 'custoHa', l: 'Custo total por hectare (R$)', t: 'num', p: '4000', min: 0 },
+      { k: 'precoSaca', l: 'Preço de venda da saca (R$)', t: 'num', p: '120', min: 0.01 },
+    ],
+    fn: (v) => {
+      const pe = v.custoHa / v.precoSaca
+      return {
+        principal: { valor: parseFloat(pe.toFixed(1)), label: 'Ponto de equilíbrio (sacas/ha)', fmt: 'num' },
+        detalhes: [
+          { l: 'Custo por hectare', v: v.custoHa, fmt: 'brl' },
+          { l: 'Preço por saca', v: v.precoSaca, fmt: 'brl' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
+  },
+  {
+    slug: 'calculadora-armazenagem-graos',
+    titulo: 'Custo de Armazenagem de Grãos',
+    desc: 'Calcule o custo de armazenar grãos aguardando melhor preço',
+    cat: 'Agronegócio',
+    icon: '🏚️',
+    campos: [
+      { k: 'sacas', l: 'Quantidade de sacas', t: 'num', p: '5000', min: 0 },
+      { k: 'custoPorSacaMes', l: 'Custo armazenagem (R$/saca/mês)', t: 'num', p: '1.20', min: 0 },
+      { k: 'meses', l: 'Meses de armazenagem', t: 'num', p: '3', min: 1 },
+    ],
+    fn: (v) => {
+      const custoTotal = v.sacas * v.custoPorSacaMes * v.meses
+      const custoPorSaca = v.custoPorSacaMes * v.meses
+      return {
+        principal: { valor: custoTotal, label: 'Custo total de armazenagem', fmt: 'brl' },
+        detalhes: [
+          { l: 'Custo por saca', v: custoPorSaca, fmt: 'brl' },
+          { l: 'Custo mensal', v: v.sacas * v.custoPorSacaMes, fmt: 'brl' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
+  },
+  {
+    slug: 'calculadora-lucro-pecuaria-corte',
+    titulo: 'Lucratividade na Pecuária de Corte',
+    desc: 'Calcule o lucro por animal abatido na pecuária de corte',
+    cat: 'Agronegócio',
+    icon: '🐄',
+    campos: [
+      { k: 'pesoArrobas', l: 'Peso em arrobas (@)', t: 'num', p: '16', min: 0 },
+      { k: 'precoArroba', l: 'Preço da arroba (R$)', t: 'num', p: '280', min: 0 },
+      { k: 'custoAnimal', l: 'Custo total do animal (R$)', t: 'num', p: '3000', min: 0 },
+      { k: 'qtd', l: 'Número de animais', t: 'num', p: '100', min: 1 },
+    ],
+    fn: (v) => {
+      const receitaAnimal = v.pesoArrobas * v.precoArroba
+      const lucroAnimal = receitaAnimal - v.custoAnimal
+      const margemPct = v.custoAnimal > 0 ? (lucroAnimal / v.custoAnimal) * 100 : 0
+      return {
+        principal: { valor: lucroAnimal * v.qtd, label: 'Lucro total', fmt: 'brl' },
+        detalhes: [
+          { l: 'Receita por animal', v: receitaAnimal, fmt: 'brl' },
+          { l: 'Lucro por animal', v: lucroAnimal, fmt: 'brl' },
+          { l: 'Margem por animal', v: margemPct, fmt: 'pct' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
+  },
+  {
+    slug: 'calculadora-custo-silagem',
+    titulo: 'Custo de Produção de Silagem',
+    desc: 'Calcule o custo por tonelada de silagem produzida na propriedade',
+    cat: 'Agronegócio',
+    icon: '🌿',
+    campos: [
+      { k: 'custoPlantio', l: 'Custo de plantio (R$/ha)', t: 'num', p: '1800', min: 0 },
+      { k: 'custoColheita', l: 'Custo de colheita/silo (R$/ha)', t: 'num', p: '800', min: 0 },
+      { k: 'produtividade', l: 'Produtividade (ton/ha)', t: 'num', p: '45', min: 0.1 },
+      { k: 'area', l: 'Área plantada (ha)', t: 'num', p: '20', min: 0.1 },
+    ],
+    fn: (v) => {
+      const custoPorHa = v.custoPlantio + v.custoColheita
+      const custoPorTon = custoPorHa / v.produtividade
+      const producaoTotal = v.produtividade * v.area
+      return {
+        principal: { valor: custoPorTon, label: 'Custo por tonelada (R$)', fmt: 'brl' },
+        detalhes: [
+          { l: 'Produção total (ton)', v: producaoTotal, fmt: 'num' },
+          { l: 'Custo total', v: custoPorHa * v.area, fmt: 'brl' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
+  },
+  {
+    slug: 'calculadora-receita-cana-de-acucar',
+    titulo: 'Receita e Margem da Cana-de-Açúcar',
+    desc: 'Calcule a receita e margem bruta da produção de cana-de-açúcar',
+    cat: 'Agronegócio',
+    icon: '🌾',
+    campos: [
+      { k: 'produtividade', l: 'Produtividade (ton/ha)', t: 'num', p: '80', min: 0 },
+      { k: 'precoTon', l: 'Preço da tonelada (R$)', t: 'num', p: '110', min: 0 },
+      { k: 'custoHa', l: 'Custo por hectare (R$)', t: 'num', p: '5500', min: 0 },
+      { k: 'area', l: 'Área (hectares)', t: 'num', p: '50', min: 0.1 },
+    ],
+    fn: (v) => {
+      const receitaHa = v.produtividade * v.precoTon
+      const margemHa = receitaHa - v.custoHa
+      return {
+        principal: { valor: margemHa * v.area, label: 'Margem bruta total', fmt: 'brl' },
+        detalhes: [
+          { l: 'Receita por ha', v: receitaHa, fmt: 'brl' },
+          { l: 'Margem por ha', v: margemHa, fmt: 'brl' },
+          { l: 'Margem %', v: v.custoHa > 0 ? (margemHa / v.custoHa) * 100 : 0, fmt: 'pct' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
+  },
+  {
+    slug: 'calculadora-custo-colheita-mecanizada',
+    titulo: 'Custo de Colheita Mecanizada',
+    desc: 'Calcule o custo por hectare da colheita com máquinas',
+    cat: 'Agronegócio',
+    icon: '🚜',
+    campos: [
+      { k: 'custoHoraMaquina', l: 'Custo da máquina (R$/hora)', t: 'num', p: '350', min: 0 },
+      { k: 'haHora', l: 'Capacidade operacional (ha/hora)', t: 'num', p: '8', min: 0.1 },
+      { k: 'area', l: 'Área a colher (hectares)', t: 'num', p: '200', min: 0.1 },
+    ],
+    fn: (v) => {
+      const custoPorHa = v.custoHoraMaquina / v.haHora
+      const custoTotal = custoPorHa * v.area
+      const horas = v.area / v.haHora
+      return {
+        principal: { valor: custoTotal, label: 'Custo total de colheita', fmt: 'brl' },
+        detalhes: [
+          { l: 'Custo por hectare', v: custoPorHa, fmt: 'brl' },
+          { l: 'Horas necessárias', v: parseFloat(horas.toFixed(1)), fmt: 'num' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
+  },
+  {
+    slug: 'calculadora-rotacao-pastagem',
+    titulo: 'Taxa de Lotação de Pastagem',
+    desc: 'Calcule a taxa de lotação e a área de pastagem necessária por cabeça',
+    cat: 'Agronegócio',
+    icon: '🐂',
+    campos: [
+      { k: 'areaTotal', l: 'Área de pastagem (hectares)', t: 'num', p: '100', min: 0.1 },
+      { k: 'animais', l: 'Número de animais', t: 'num', p: '80', min: 1 },
+      { k: 'pesoMedio', l: 'Peso médio dos animais (kg)', t: 'num', p: '400', min: 0 },
+    ],
+    fn: (v) => {
+      const uaAnimal = v.pesoMedio / 450
+      const uaTotal = v.animais * uaAnimal
+      const lotacao = uaTotal / v.areaTotal
+      const haAnimal = v.areaTotal / v.animais
+      return {
+        principal: { valor: parseFloat(lotacao.toFixed(2)), label: 'Taxa de lotação (UA/ha)', fmt: 'num' },
+        detalhes: [
+          { l: 'Área por animal (ha)', v: parseFloat(haAnimal.toFixed(2)), fmt: 'num' },
+          { l: 'UAs totais', v: parseFloat(uaTotal.toFixed(1)), fmt: 'num' },
+        ],
+      }
+    },
+    dis: DIS_AGRO,
+  },
+
 ]
