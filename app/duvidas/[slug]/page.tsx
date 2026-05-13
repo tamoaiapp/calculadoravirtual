@@ -8,8 +8,10 @@ import { CalculadoraGenerica } from '@/components/calculadoras/CalculadoraGeneri
 import { CalculadoraIMC } from '@/components/calculadoras/saude/CalculadoraIMC'
 import { CalculadoraSalarioLiquido } from '@/components/calculadoras/trabalhista/CalculadoraSalarioLiquido'
 
+export const dynamicParams = true
+
 export function generateStaticParams() {
-  return FERRAMENTAS.map(f => ({ slug: f.slug }))
+  return FERRAMENTAS.slice(0, 80).map(f => ({ slug: f.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

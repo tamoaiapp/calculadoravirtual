@@ -58,7 +58,7 @@ function gerarDescricao(p: Profissao): string {
     out: `${nome} é uma profissão com salário médio de ${med} mensais. O mercado para esta área apresenta oportunidades tanto no Brasil quanto internacionalmente. A remuneração depende muito da experiência, especialização e do tipo de empresa ou cliente atendido, podendo chegar a ${fmt(p.sr)} para os mais experientes.`,
   }
 
-  return map[cat] ?? `${nome} tem salário médio de ${med} mensais no Brasil em 2025.`
+  return map[cat] ?? `${nome} tem salário médio de ${med} mensais no Brasil em 2026.`
 }
 
 function gerarAtividades(p: Profissao): string[] {
@@ -143,8 +143,8 @@ Profissionais de alta performance e renome no mercado podem superar esses valore
 function gerarFAQ(p: Profissao): { pergunta: string; resposta: string }[] {
   return [
     {
-      pergunta: `Quanto ganha um ${p.nome} no Brasil em 2025?`,
-      resposta: `O salário médio de ${p.nome} no Brasil em 2025 é de ${fmt(p.med)}/mês (CLT). Os valores variam conforme a experiência: júnior ganha em torno de ${fmt(p.jr)}, pleno entre ${fmt(p.pl)} e sênior pode alcançar ${fmt(p.sr)} ou mais. Em São Paulo e no DF os salários costumam ser 10–20% maiores.`,
+      pergunta: `Quanto ganha um ${p.nome} no Brasil em 2026?`,
+      resposta: `O salário médio de ${p.nome} no Brasil em 2026 é de ${fmt(p.med)}/mês (CLT). Os valores variam conforme a experiência: júnior ganha em torno de ${fmt(p.jr)}, pleno entre ${fmt(p.pl)} e sênior pode alcançar ${fmt(p.sr)} ou mais. Em São Paulo e no DF os salários costumam ser 10–20% maiores.`,
     },
     {
       pergunta: `Qual é a formação necessária para ser ${p.nome}?`,
@@ -169,10 +169,10 @@ export function gerarPaginaSalario(p: Profissao): SalarioPagina {
   const catNome = getCatNome(p.cat)
 
   return {
-    titulo: `Salário de ${p.nome} em 2025`,
-    metaTitle: `Salário ${p.nome} 2025 — Média, Faixa e Como Ganhar Mais`,
-    metaDesc: `Salário de ${p.nome} em 2025: média de ${fmt(p.med)}/mês. Veja a faixa júnior/pleno/sênior, por estado, e como aumentar sua remuneração.`,
-    h1: `Quanto ganha um ${p.nome} em 2025?`,
+    titulo: `Salário de ${p.nome} em 2026`,
+    metaTitle: `Quanto Ganha ${p.nome} em 2026? ${fmt(p.med)}/mês (Faixa Real)`,
+    metaDesc: `Salário de ${p.nome} em 2026: média de ${fmt(p.med)}/mês. Veja a faixa júnior (${fmt(p.jr)}), pleno (${fmt(p.pl)}) e sênior (${fmt(p.sr)}), por estado, e como aumentar sua remuneração.`,
+    h1: `Quanto ganha um ${p.nome} em 2026?`,
     intro: gerarDescricao(p),
     tabelaNiveis: [
       { nivel: 'Júnior (0–2 anos)', salario: fmt(p.jr), descricao: 'Início de carreira, em aprendizado, trabalha com supervisão' },

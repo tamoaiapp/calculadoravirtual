@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Script from 'next/script'
 import { HeaderSearch } from '@/components/ui/HeaderSearch'
+import { AdsterraResponsiveLeaderboard, AdsterraNative, AdsterraRectangle300, AdsterraSkyscraper160 } from '@/components/ads/Adsterra'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -90,10 +91,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
 
+        {/* ── Adsterra leaderboard (728x90 desktop / 320x50 mobile) ── */}
+        <AdsterraResponsiveLeaderboard />
+
         {/* ── Conteúdo ── */}
         <main style={{ minHeight: 'calc(100vh - 300px)', paddingBottom: 48 }}>
           {children}
         </main>
+
+        {/* ── Adsterra rectangle (300x250) ── */}
+        <div className="ad-rectangle-wrapper">
+          <AdsterraRectangle300 />
+        </div>
+
+        {/* ── Adsterra native banner ── */}
+        <AdsterraNative />
+
+        {/* ── Adsterra skyscraper (160x600) — fixed desktop only ── */}
+        <aside className="ad-skyscraper-fixed">
+          <AdsterraSkyscraper160 />
+        </aside>
 
         {/* ── Footer ── */}
         <footer style={{ background: '#fff', borderTop: '1px solid var(--line)', paddingTop: 24, paddingBottom: 24 }}>

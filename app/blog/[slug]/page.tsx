@@ -11,8 +11,10 @@ import { CalculadoraSalarioLiquido } from '@/components/calculadoras/trabalhista
 import type { BlogArtigo } from '@/lib/blog-articles'
 import { AutorBox, schemaAutor } from '@/components/ui/AutorBox'
 
+export const dynamicParams = true
+
 export function generateStaticParams() {
-  return FERRAMENTAS.map(f => ({ slug: f.slug }))
+  return FERRAMENTAS.slice(0, 80).map(f => ({ slug: f.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

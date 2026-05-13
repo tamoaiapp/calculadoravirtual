@@ -422,7 +422,7 @@ export const CALCS_AGRONEGOCIO: CalcConfig[] = [
       }
     },
     dis: DIS_AGRO,
-  },,
+  },
   {
     slug: 'calculadora-custo-insumos-plantio',
     titulo: 'Custo de Insumos por Hectare',

@@ -79,9 +79,9 @@ function escolaridadeLabel(e: Cargo['escolaridade']): string {
   }[e]
 }
 
-// Calcula INSS servidor federal (tabela 2025)
+// Calcula INSS servidor federal (tabela 2026)
 function calcularINSS(salario: number): number {
-  // Tabela RPPS 2025 — alíquotas progressivas
+  // Tabela RPPS 2026 — alíquotas progressivas
   let inss = 0
   const faixas = [
     { ate: 1412, aliq: 0.075 },
@@ -106,7 +106,7 @@ function calcularINSS(salario: number): number {
   return Math.round(inss)
 }
 
-// Calcula IR (tabela progressiva 2025)
+// Calcula IR (tabela progressiva 2026)
 function calcularIR(baseCalculo: number): number {
   const faixas = [
     { ate: 2259.20, aliq: 0, deducao: 0 },
@@ -160,7 +160,7 @@ function gerarPaginaCargo(cargo: Cargo): PaginaConcurso {
 
   const secoes: SecaoConcurso[] = [
     {
-      h2: '📊 Salário do ' + cargo.nome + ' 2025 — Bruto, Líquido e Total',
+      h2: '📊 Salário do ' + cargo.nome + ' 2026 — Bruto, Líquido e Total',
       tabela: {
         cabecalho: ['Componente', 'Valor Inicial', 'Valor Final (Topo de Carreira)'],
         linhas: [
@@ -216,8 +216,8 @@ function gerarPaginaCargo(cargo: Cargo): PaginaConcurso {
 
   const faq = [
     {
-      pergunta: `Qual é o salário líquido do ${cargo.nome} em 2025?`,
-      resposta: `O salário bruto inicial do ${cargo.nome} é de ${fmt(cargo.salarioInicial)}/mês em 2025. Após descontos de INSS (RPPS, progressivo) e Imposto de Renda, o salário líquido fica em torno de ${fmt(liquido)} — um desconto total de aproximadamente ${Math.round((1 - liquido / cargo.salarioInicial) * 100)}%. No topo da carreira, o bruto chega a ${fmt(cargo.salarioFinal)} e o líquido a ${fmt(liquidoSr)}. Somando benefícios, a remuneração total pode chegar a ${fmt(cargo.remuneracaoTotal)}/mês.`,
+      pergunta: `Qual é o salário líquido do ${cargo.nome} em 2026?`,
+      resposta: `O salário bruto inicial do ${cargo.nome} é de ${fmt(cargo.salarioInicial)}/mês em 2026. Após descontos de INSS (RPPS, progressivo) e Imposto de Renda, o salário líquido fica em torno de ${fmt(liquido)} — um desconto total de aproximadamente ${Math.round((1 - liquido / cargo.salarioInicial) * 100)}%. No topo da carreira, o bruto chega a ${fmt(cargo.salarioFinal)} e o líquido a ${fmt(liquidoSr)}. Somando benefícios, a remuneração total pode chegar a ${fmt(cargo.remuneracaoTotal)}/mês.`,
     },
     {
       pergunta: `Quando será o próximo concurso para ${cargo.nome}?`,
@@ -256,10 +256,10 @@ function gerarPaginaCargo(cargo: Cargo): PaginaConcurso {
   return {
     slug: cargo.slug,
     tipo: 'cargo',
-    titulo: `${cargo.nome} — Salário Líquido 2025, Vagas e Como Passar`,
-    metaTitle: `${cargo.nome}: Salário ${fmt(cargo.salarioInicial)} bruto (${fmt(liquido)} líquido) em 2025`,
-    metaDesc: `Salário real do ${cargo.nome}: bruto ${fmt(cargo.salarioInicial)}, líquido ${fmt(liquido)}/mês após INSS e IR. Vagas ${cargo.anoUltimoConcurso ? cargo.anoUltimoConcurso : '2025'}, benefícios, matérias cobradas e estratégia de estudo para o concurso ${cargo.orgao}.`,
-    h1: `${cargo.nome}: Salário Líquido, Vagas e Concurso 2025`,
+    titulo: `${cargo.nome} 2026 — Salário Líquido, Calculadora e Como Passar`,
+    metaTitle: `Salário ${cargo.nome} 2026: ${fmt(liquido)} Líquido (Calcule o Seu)`,
+    metaDesc: `Salário ${cargo.nome} 2026: ${fmt(liquido)}/mês líquido (bruto ${fmt(cargo.salarioInicial)}, após INSS e IR). Vagas, benefícios, matérias e calculadora atualizada para o concurso ${cargo.orgao}.`,
+    h1: `${cargo.nome} 2026: Salário Líquido, Calculadora e Como Passar`,
     intro: `${cargo.descricao} O cargo paga ${fmt(cargo.salarioInicial)} bruto — mas o que vai para o bolso é ${fmt(liquido)}/mês, após INSS e IR. Somando todos os benefícios, a remuneração total chega a ${fmt(cargo.remuneracaoTotal)}/mês. ${cargo.dificuldade === 'muito-alta' || cargo.dificuldade === 'alta' ? `É um dos cargos mais disputados do funcionalismo ${cargo.esfera === 'federal' ? 'federal' : cargo.esfera === 'estadual' ? 'estadual' : 'municipal'} — e um dos que mais exigem preparação.` : `Uma oportunidade concreta no funcionalismo ${cargo.esfera === 'federal' ? 'federal' : cargo.esfera === 'estadual' ? 'estadual' : 'municipal'} para quem se preparar com método.`}`,
     secoes,
     faq,
@@ -293,7 +293,7 @@ function gerarPaginaOrgao(orgaoSlug: string): PaginaConcurso {
 
   const secoes: SecaoConcurso[] = [
     {
-      h2: `📋 Todos os Cargos do Concurso ${sigla || nomeOrgao} — Salários 2025`,
+      h2: `📋 Todos os Cargos do Concurso ${sigla || nomeOrgao} — Salários 2026`,
       tabela: cargos.length > 0 ? {
         cabecalho: ['Cargo', 'Escolaridade', 'Salário Bruto Inicial', 'Dificuldade'],
         linhas: cargos.slice(0, 15).map(c => [
@@ -358,17 +358,19 @@ function gerarPaginaOrgao(orgaoSlug: string): PaginaConcurso {
       pergunta: `Qual é o salário dos servidores do ${nomeOrgao}?`,
       resposta: cargos.length > 0
         ? `Os salários no ${nomeOrgao} variam de ${fmt(menorSalario)} a ${fmt(maiorSalario)} bruto por mês, dependendo do cargo e nível de escolaridade. O valor líquido (após INSS e IR) fica entre ${fmt(calcularSalarioLiquido(menorSalario).liquido)} e ${fmt(calcularSalarioLiquido(maiorSalario).liquido)}. Somando benefícios como auxílio-alimentação e saúde, a remuneração total pode ser significativamente maior.`
-        : `Os salários variam conforme o cargo. Consulte a tabela salarial acima para os valores atualizados de 2025.`,
+        : `Os salários variam conforme o cargo. Consulte a tabela salarial acima para os valores atualizados de 2026.`,
     },
   ]
 
   return {
     slug: orgaoSlug,
     tipo: 'orgao',
-    titulo: `Concurso ${nomeOrgao} ${sigla ? `(${sigla})` : ''} 2025 — Vagas, Salários Líquidos e Estratégia`,
-    metaTitle: `Concurso ${sigla || nomeOrgao} 2025: Vagas e Salários Reais`,
-    metaDesc: `Concurso ${nomeOrgao} 2025: todos os cargos, salários brutos e líquidos, vagas previstas e como se preparar. ${cargos.length > 0 ? `Salários de ${fmt(menorSalario)} a ${fmt(maiorSalario)} bruto.` : ''}`,
-    h1: `Concurso ${nomeOrgao} 2025 — Cargos, Salários e Como Passar`,
+    titulo: `Concurso ${nomeOrgao} ${sigla ? `(${sigla})` : ''} 2026 — Vagas, Salários Líquidos e Estratégia`,
+    metaTitle: cargos.length > 0
+      ? `Concurso ${sigla || nomeOrgao} 2026: ${cargos.length} Cargos, Salário até ${fmt(maiorSalario)}`
+      : `Concurso ${sigla || nomeOrgao} 2026: Vagas, Salários e Edital`,
+    metaDesc: `Concurso ${nomeOrgao} 2026: todos os cargos, salários brutos e líquidos, vagas previstas e como se preparar. ${cargos.length > 0 ? `Salários de ${fmt(menorSalario)} a ${fmt(maiorSalario)} bruto.` : ''}`,
+    h1: `Concurso ${nomeOrgao} 2026 — Cargos, Salários e Como Passar`,
     intro: `${orgao?.descricao ?? `O ${nomeOrgao} é um dos principais órgãos do setor público brasileiro.`} ${cargos.length > 0 ? `O concurso oferece ${cargos.length} cargo(s) com salários brutos que variam de ${fmt(menorSalario)} a ${fmt(maiorSalario)} — mas o que importa mesmo é o líquido, que fica entre ${fmt(calcularSalarioLiquido(menorSalario).liquido)} e ${fmt(calcularSalarioLiquido(maiorSalario).liquido)} após INSS e IR.` : ''}`,
     secoes,
     faq,
@@ -399,17 +401,17 @@ function gerarPaginaEstado(estadoSlug: string): PaginaConcurso {
 
   const secoes: SecaoConcurso[] = [
     {
-      h2: `📊 Principais Concursos em ${nomeEstado} (${uf}) — 2025`,
+      h2: `📊 Principais Concursos em ${nomeEstado} (${uf}) — 2026`,
       tabela: {
         cabecalho: ['Órgão', 'Cargo', 'Vagas', 'Salário', 'Edital'],
         linhas: concursosPrev.length > 0
           ? concursosPrev.map(c => [c.orgao, c.cargo, fmtNum(c.vagas), fmt(c.salario), c.edital])
           : [
-              [`SEFAZ-${uf}`, 'Agente Fiscal', '~200', 'R$ 12.000+', 'Previsto 2025'],
-              [`Polícia Civil-${uf}`, 'Investigador/Escrivão', '~1.000', 'R$ 3.800+', 'Previsto 2025'],
-              [`PM-${uf}`, 'Soldado', '~2.000', 'R$ 2.800+', 'Previsto 2025'],
-              [`TJ-${uf}`, 'Analista/Técnico', '~300', 'R$ 8.000+', 'Previsto 2025'],
-              [`Prefeitura de ${estado?.capital ?? nomeEstado}`, 'Múltiplos cargos', '~3.000', 'R$ 2.200+', 'Previsto 2025'],
+              [`SEFAZ-${uf}`, 'Agente Fiscal', '~200', 'R$ 12.000+', 'Previsto 2026'],
+              [`Polícia Civil-${uf}`, 'Investigador/Escrivão', '~1.000', 'R$ 3.800+', 'Previsto 2026'],
+              [`PM-${uf}`, 'Soldado', '~2.000', 'R$ 2.800+', 'Previsto 2026'],
+              [`TJ-${uf}`, 'Analista/Técnico', '~300', 'R$ 8.000+', 'Previsto 2026'],
+              [`Prefeitura de ${estado?.capital ?? nomeEstado}`, 'Múltiplos cargos', '~3.000', 'R$ 2.200+', 'Previsto 2026'],
             ],
       },
     },
@@ -446,8 +448,8 @@ function gerarPaginaEstado(estadoSlug: string): PaginaConcurso {
       resposta: `Os melhores concursos em ${nomeEstado} por remuneração são: 1) Auditores da Receita Federal (salário de R$21.029, lotação em todo o estado); 2) Agente Fiscal de Rendas da SEFAZ-${uf} (R$12.000 a R$18.000); 3) Delegado da Polícia Civil-${uf} (R$12.000+); 4) Defensor Público Estadual (R$24.000+).`,
     },
     {
-      pergunta: `Qual é o maior concurso público em ${nomeEstado} em 2025?`,
-      resposta: `Em termos de volume de vagas, os maiores concursos em ${nomeEstado} em 2025 são os de Polícia Militar, Polícia Civil e prefeituras das cidades médias. Em termos de salário, os concursos da Receita Federal e da SEFAZ-${uf} são os mais atrativos.`,
+      pergunta: `Qual é o maior concurso público em ${nomeEstado} em 2026?`,
+      resposta: `Em termos de volume de vagas, os maiores concursos em ${nomeEstado} em 2026 são os de Polícia Militar, Polícia Civil e prefeituras das cidades médias. Em termos de salário, os concursos da Receita Federal e da SEFAZ-${uf} são os mais atrativos.`,
     },
     {
       pergunta: `Qual é o salário do servidor público em ${nomeEstado}?`,
@@ -458,10 +460,12 @@ function gerarPaginaEstado(estadoSlug: string): PaginaConcurso {
   return {
     slug: estadoSlug,
     tipo: 'estado',
-    titulo: `Concursos Públicos em ${nomeEstado} (${uf}) 2025 — Vagas e Salários`,
-    metaTitle: `Concursos em ${nomeEstado} (${uf}) 2025: Vagas e Salários`,
-    metaDesc: `Concursos públicos em ${nomeEstado} em 2025. Salário médio dos servidores: ${fmt(estado?.salarioMedioServidor ?? 7000)}/mês. Veja todos os editais previstos para 2025 e 2026.`,
-    h1: `Concursos Públicos em ${nomeEstado} 2025 — Guia Completo`,
+    titulo: `Concursos Públicos em ${nomeEstado} (${uf}) 2026 — Vagas e Salários`,
+    metaTitle: concursosPrev.length > 0
+      ? `Concursos em ${nomeEstado} 2026: ${concursosPrev.length} Editais + Salário até ${fmt(Math.max(...concursosPrev.map(c => c.salario)))}`
+      : `Concursos em ${nomeEstado} (${uf}) 2026: Editais Abertos e Salários`,
+    metaDesc: `Concursos públicos em ${nomeEstado} em 2026. Salário médio dos servidores: ${fmt(estado?.salarioMedioServidor ?? 7000)}/mês. Veja todos os editais previstos para 2026 e 2027.`,
+    h1: `Concursos Públicos em ${nomeEstado} 2026 — Guia Completo`,
     intro: `${nomeEstado} (${uf}) tem servidores públicos das três esferas: federal (Receita Federal, Polícia Federal, Judiciário federal), estadual (SEFAZ-${uf}, Polícia Civil, TJ-${uf}) e municipal (prefeitura de ${estado?.capital ?? 'capital'} e cidades do interior). O salário médio dos servidores no estado é ${fmt(estado?.salarioMedioServidor ?? 7000)}/mês — mas a dispersão é alta: servidores municipais de cidades pequenas recebem próximo ao mínimo, enquanto Auditores da Receita Federal lotados em ${nomeEstado} ganham R$21.029 bruto (${fmt(calcularSalarioLiquido(21029).liquido)} líquido).`,
     secoes,
     faq,
@@ -544,9 +548,9 @@ function gerarPaginaArea(areaSlug: string): PaginaConcurso {
       resposta: `A área ${nomeArea} tem cargos para diferentes níveis de escolaridade: ${['fundamental', 'medio', 'superior'].filter(n => cargos.some(c => c.escolaridade === n)).map(n => escolaridadeLabel(n as Cargo['escolaridade'])).join(', ')}. Quanto maior o nível de escolaridade, maior o salário.`,
     },
     {
-      pergunta: `Há concursos previstos na área ${nomeArea} para 2025?`,
+      pergunta: `Há concursos previstos na área ${nomeArea} para 2026?`,
       resposta: CONCURSOS_PREVISTOS.filter(c => c.orgaoSlug && cargos.some(cargo => cargo.orgaoSlug === c.orgaoSlug)).length > 0
-        ? `Há ${CONCURSOS_PREVISTOS.filter(c => c.orgaoSlug && cargos.some(cargo => cargo.orgaoSlug === c.orgaoSlug)).length} concurso(s) previsto(s) na área ${nomeArea} para 2025/2026: ${CONCURSOS_PREVISTOS.filter(c => c.orgaoSlug && cargos.some(cargo => cargo.orgaoSlug === c.orgaoSlug)).slice(0, 3).map(c => `${c.orgao} (${fmtNum(c.vagas)} vagas — ${c.edital})`).join('; ')}. Acompanhe os sites dos órgãos e o Diário Oficial da União para a publicação oficial dos editais.`
+        ? `Há ${CONCURSOS_PREVISTOS.filter(c => c.orgaoSlug && cargos.some(cargo => cargo.orgaoSlug === c.orgaoSlug)).length} concurso(s) previsto(s) na área ${nomeArea} para 2026/2026: ${CONCURSOS_PREVISTOS.filter(c => c.orgaoSlug && cargos.some(cargo => cargo.orgaoSlug === c.orgaoSlug)).slice(0, 3).map(c => `${c.orgao} (${fmtNum(c.vagas)} vagas — ${c.edital})`).join('; ')}. Acompanhe os sites dos órgãos e o Diário Oficial da União para a publicação oficial dos editais.`
         : `Não há edital publicado na área ${nomeArea} no momento. O ciclo histórico de concursos nessa área é de 3 a 5 anos entre editais — quem começa a estudar antes da publicação chega ao edital com vantagem real. Monitore os sites dos principais órgãos da área e portais como Gran Cursos e Estratégia Concursos.`,
     },
   ]
@@ -554,10 +558,12 @@ function gerarPaginaArea(areaSlug: string): PaginaConcurso {
   return {
     slug: areaSlug,
     tipo: 'area',
-    titulo: `Concursos na Área ${nomeArea} 2025 — Cargos, Salários e Como Passar`,
-    metaTitle: `Concursos Área ${nomeArea} 2025: Cargos e Salários`,
-    metaDesc: `Concursos públicos na área ${nomeArea} em 2025. ${cargos.length > 0 ? `${cargos.length} cargos com salários de ${fmt(Math.min(...cargos.map(c => c.salarioInicial)))} a ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}.` : ''}`,
-    h1: `${iconArea} Concursos na Área ${nomeArea} 2025`,
+    titulo: `Concursos na Área ${nomeArea} 2026 — Cargos, Salários e Como Passar`,
+    metaTitle: cargos.length > 0
+      ? `Concursos ${nomeArea} 2026: ${cargos.length} Cargos, Salário até ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}`
+      : `Concursos Área ${nomeArea} 2026: Cargos, Salários e Como Passar`,
+    metaDesc: `Concursos públicos na área ${nomeArea} em 2026. ${cargos.length > 0 ? `${cargos.length} cargos com salários de ${fmt(Math.min(...cargos.map(c => c.salarioInicial)))} a ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}.` : ''}`,
+    h1: `${iconArea} Concursos na Área ${nomeArea} 2026`,
     intro: `${area?.descricao ?? `A área ${nomeArea} concentra ${cargos.length} cargos no funcionalismo público brasileiro.`} O salário médio de entrada é ${fmt(mediasSalario)} bruto — ${fmt(calcularSalarioLiquido(mediasSalario).liquido)} líquido após INSS e IR. ${melhorRemunerado ? `O cargo mais bem remunerado da área é ${melhorRemunerado.nome} (${melhorRemunerado.orgao}), com ${fmt(melhorRemunerado.salarioInicial)} bruto inicial.` : ''} Abaixo, salários completos e o que candidatos aprovados fazem diferente.`,
     secoes,
     faq,
@@ -614,9 +620,9 @@ function gerarPaginaEscolaridade(slug: string): PaginaConcurso {
 
   const faq = [
     {
-      pergunta: `Qual o melhor concurso para ${label} em 2025?`,
+      pergunta: `Qual o melhor concurso para ${label} em 2026?`,
       resposta: cargos.length > 0
-        ? `O melhor concurso para ${label} em 2025 em termos de salário é o de ${cargos[0].nome}, no ${cargos[0].orgao}, com salário inicial de ${fmt(cargos[0].salarioInicial)}.`
+        ? `O melhor concurso para ${label} em 2026 em termos de salário é o de ${cargos[0].nome}, no ${cargos[0].orgao}, com salário inicial de ${fmt(cargos[0].salarioInicial)}.`
         : `Há vários concursos disponíveis para ${label}. Confira a lista acima.`,
     },
     {
@@ -630,11 +636,13 @@ function gerarPaginaEscolaridade(slug: string): PaginaConcurso {
   return {
     slug,
     tipo: 'escolaridade',
-    titulo: `Concursos para ${label} 2025 — Melhores Salários e Vagas`,
-    metaTitle: `Concursos ${label} 2025: Melhores Salários`,
-    metaDesc: `Melhores concursos públicos para ${label} em 2025. ${cargos.length > 0 ? `Salários de ${fmt(Math.min(...cargos.map(c => c.salarioInicial)))} a ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}.` : ''}`,
-    h1: `🎓 Concursos para ${label} — Melhores Salários 2025`,
-    intro: `${cargos.length} cargos públicos abertos para candidatos com ${label} em 2025, ordenados por salário bruto inicial. ${cargos.length > 0 ? `O mais bem remunerado é ${cargos[0].nome} (${cargos[0].orgao}), com ${fmt(cargos[0].salarioInicial)} bruto — ${fmt(calcularSalarioLiquido(cargos[0].salarioInicial).liquido)} líquido após INSS e IR.` : ''} A tabela abaixo já inclui o salário líquido real para cada cargo — use esse número para planejar o orçamento, não o bruto do edital.`,
+    titulo: `Concursos para ${label} 2026 — Melhores Salários e Vagas`,
+    metaTitle: cargos.length > 0
+      ? `Concursos ${label} 2026: ${cargos.length} Cargos até ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}/mês`
+      : `Concursos ${label} 2026: Melhores Salários e Vagas`,
+    metaDesc: `Melhores concursos públicos para ${label} em 2026. ${cargos.length > 0 ? `Salários de ${fmt(Math.min(...cargos.map(c => c.salarioInicial)))} a ${fmt(Math.max(...cargos.map(c => c.salarioInicial)))}.` : ''}`,
+    h1: `🎓 Concursos para ${label} — Melhores Salários 2026`,
+    intro: `${cargos.length} cargos públicos abertos para candidatos com ${label} em 2026, ordenados por salário bruto inicial. ${cargos.length > 0 ? `O mais bem remunerado é ${cargos[0].nome} (${cargos[0].orgao}), com ${fmt(cargos[0].salarioInicial)} bruto — ${fmt(calcularSalarioLiquido(cargos[0].salarioInicial).liquido)} líquido após INSS e IR.` : ''} A tabela abaixo já inclui o salário líquido real para cada cargo — use esse número para planejar o orçamento, não o bruto do edital.`,
     secoes,
     faq,
     conclusao: `${label === 'Ensino Médio' ? 'O Técnico do Seguro Social (INSS) é o benchmark de nível médio: R$5.905 bruto, provas de dificuldade média e 7.000 vagas abertas em 2024. Se ainda está escolhendo por onde começar, este é o parâmetro mais concreto do mercado.' : label === 'Ensino Superior' ? 'A diferença entre os cargos de nível superior está nos Conhecimentos Específicos — quem já tem formação sólida em Direito, Economia ou TI reduz de 30% a 50% o tempo de preparação. A base técnica acumulada na graduação é o principal diferencial.' : 'Concursos de nível fundamental têm menor concorrência absoluta, mas provas que exigem atenção em Português e Matemática Básica. O erro mais comum: subestimar as questões e estudar de menos.'} Use a calculadora desta página para simular o salário líquido real antes de escolher o cargo.`,
@@ -674,10 +682,10 @@ function gerarPaginaCuradoria(slug: string): PaginaConcurso {
   } else if (slug.includes('melhor-remunerados')) {
     cargos = getCargosMelhorRemunerados(30)
     titulo = 'Os 30 Concursos Públicos Mais Bem Remunerados do Brasil'
-    intro = 'Ranking dos cargos públicos com maiores salários iniciais no Brasil em 2025 — com o salário líquido real (o que vai para o bolso), não apenas o bruto. O topo da lista é dominado por cargos jurídicos, fiscais e de controle: Juiz Federal, Delegado da PF, Auditor-Fiscal da Receita e Procurador Federal. Todos exigem ensino superior e preparação intensa, mas entregam a melhor combinação de renda, estabilidade e benefícios do funcionalismo brasileiro.'
+    intro = 'Ranking dos cargos públicos com maiores salários iniciais no Brasil em 2026 — com o salário líquido real (o que vai para o bolso), não apenas o bruto. O topo da lista é dominado por cargos jurídicos, fiscais e de controle: Juiz Federal, Delegado da PF, Auditor-Fiscal da Receita e Procurador Federal. Todos exigem ensino superior e preparação intensa, mas entregam a melhor combinação de renda, estabilidade e benefícios do funcionalismo brasileiro.'
   } else if (slug.includes('mais-faceis')) {
     cargos = CARGOS.filter(c => c.dificuldade === 'baixa' || c.dificuldade === 'media').slice(0, 30)
-    titulo = 'Concursos Públicos Mais Fáceis de Passar em 2025'
+    titulo = 'Concursos Públicos Mais Fáceis de Passar em 2026'
     intro = 'Nenhum concurso público é fácil de verdade — mas alguns são muito mais acessíveis do que outros. Os concursos de dificuldade baixa a média têm provas menores, menos matérias e menor concorrência relativa. Ideais para quem está dando o primeiro passo no mundo dos concursos ou precisa aprovar rápido. O concurso do INSS em 2024 (7.000 vagas, matérias acessíveis) é o exemplo mais recente de concurso com altíssima oferta de vagas e barreira de entrada menor que a média federal.'
   } else if (slug.includes('mais-dificeis')) {
     cargos = CARGOS.filter(c => c.dificuldade === 'muito-alta').slice(0, 30)
@@ -685,12 +693,12 @@ function gerarPaginaCuradoria(slug: string): PaginaConcurso {
     intro = 'Os concursos de dificuldade máxima — Receita Federal, Polícia Federal, Banco Central, TCU, Magistratura — têm algo em comum: dezenas de candidatos altamente preparados disputam cada vaga, e a nota de corte costuma ultrapassar 75% de acertos. Candidatos que passaram nesses concursos relatam em média 3 a 4 anos de preparação intensa. Mas a recompensa é proporcional: esses cargos pagam os maiores salários do funcionalismo público e têm as carreiras mais sólidas do Brasil.'
   } else if (slug.includes('mais-vagas')) {
     cargos = CARGOS.filter(c => (c.vagas ?? 0) >= 500).sort((a, b) => (b.vagas ?? 0) - (a.vagas ?? 0)).slice(0, 30)
-    titulo = 'Concursos Públicos com Mais Vagas em 2025'
-    intro = 'Mais vagas significa mais chances — mas não necessariamente aprovação fácil. Os concursos com grande volume de vagas em 2025 incluem policiais militares estaduais (1.000 a 5.000 vagas por edital), concursos de bancos públicos (Banco do Brasil, Caixa) e órgãos de grande porte como INSS e Correios. A relação candidato/vaga nesses concursos tende a ser melhor do que nos federais menores, mas o nível de exigência pode ser alto dependendo do órgão.'
+    titulo = 'Concursos Públicos com Mais Vagas em 2026'
+    intro = 'Mais vagas significa mais chances — mas não necessariamente aprovação fácil. Os concursos com grande volume de vagas em 2026 incluem policiais militares estaduais (1.000 a 5.000 vagas por edital), concursos de bancos públicos (Banco do Brasil, Caixa) e órgãos de grande porte como INSS e Correios. A relação candidato/vaga nesses concursos tende a ser melhor do que nos federais menores, mas o nível de exigência pode ser alto dependendo do órgão.'
   } else {
     cargos = getCargosMelhorRemunerados(20)
-    titulo = 'Melhores Concursos Públicos 2025'
-    intro = 'Quais são os melhores concursos públicos para se preparar em 2025? A resposta depende do seu perfil: escolaridade, tempo disponível para estudo, área de interesse e expectativa salarial. Esta seleção apresenta os cargos mais bem avaliados considerando o conjunto: salário líquido real, benefícios, estabilidade, perspectivas de carreira e nível de dificuldade — para que você tome a decisão mais informada possível.'
+    titulo = 'Melhores Concursos Públicos 2026'
+    intro = 'Quais são os melhores concursos públicos para se preparar em 2026? A resposta depende do seu perfil: escolaridade, tempo disponível para estudo, área de interesse e expectativa salarial. Esta seleção apresenta os cargos mais bem avaliados considerando o conjunto: salário líquido real, benefícios, estabilidade, perspectivas de carreira e nível de dificuldade — para que você tome a decisão mais informada possível.'
   }
 
   const mediasSalarioCuradoria = cargos.length > 0 ? Math.round(cargos.reduce((a, c) => a + c.salarioInicial, 0) / cargos.length) : 0
@@ -735,20 +743,20 @@ function gerarPaginaCuradoria(slug: string): PaginaConcurso {
       resposta: 'Calcule sempre o salário líquido, não o bruto. Use a calculadora desta página para saber o valor exato após descontos de INSS/RPPS e IR. Depois compare com seu salário atual no mercado privado — ou com o que você poderia ganhar daqui a 5 anos na sua área. Inclua os benefícios no cálculo: plano de saúde corporativo (R$500 a R$2.000/mês no mercado privado), auxílio-alimentação e previdência mais favorável que o INSS. A estabilidade também tem valor financeiro real — quem nunca precisou pagar as contas durante um mês de desemprego tende a subestimá-la.',
     },
     {
-      pergunta: 'Qual concurso tem mais vagas em 2025?',
-      resposta: 'Entre os concursos com maior número de vagas previstas para 2025 estão: INSS — Analista do Seguro Social (3.000+ vagas), Polícia Rodoviária Federal (2.500 vagas), PM-SP (3.000 vagas), Banco do Brasil (4.480 vagas), Caixa Econômica Federal (4.000 vagas) e Receita Federal (1.500 vagas autorizadas). Volume de vagas não garante aprovação fácil — mas melhora a relação candidato/vaga, aumentando a probabilidade estatística de aprovação para candidatos bem preparados.',
+      pergunta: 'Qual concurso tem mais vagas em 2026?',
+      resposta: 'Entre os concursos com maior número de vagas previstas para 2026 estão: INSS — Analista do Seguro Social (3.000+ vagas), Polícia Rodoviária Federal (2.500 vagas), PM-SP (3.000 vagas), Banco do Brasil (4.480 vagas), Caixa Econômica Federal (4.000 vagas) e Receita Federal (1.500 vagas autorizadas). Volume de vagas não garante aprovação fácil — mas melhora a relação candidato/vaga, aumentando a probabilidade estatística de aprovação para candidatos bem preparados.',
     },
     {
       pergunta: 'Qual concurso tem melhor relação salário × dificuldade?',
-      resposta: 'O melhor custo-benefício do funcionalismo em 2025 tende a ser o INSS Técnico do Seguro Social: salário de R$5.905 bruto (~R$4.400 líquido), provas de dificuldade média, 7.000 vagas no último edital (2024) e processo seletivo de apenas uma fase. Para candidatos de nível superior, o Analista Judiciário dos TRFs regionais oferece salário inicial de R$13.994 com dificuldade alta — mas menor que os concursos fiscais de elite.',
+      resposta: 'O melhor custo-benefício do funcionalismo em 2026 tende a ser o INSS Técnico do Seguro Social: salário de R$5.905 bruto (~R$4.400 líquido), provas de dificuldade média, 7.000 vagas no último edital (2024) e processo seletivo de apenas uma fase. Para candidatos de nível superior, o Analista Judiciário dos TRFs regionais oferece salário inicial de R$13.994 com dificuldade alta — mas menor que os concursos fiscais de elite.',
     },
   ]
 
   return {
     slug,
     tipo: 'curadoria',
-    titulo: `${titulo} — 2025`,
-    metaTitle: `${titulo.slice(0, 55)} | 2025`,
+    titulo: `${titulo} — 2026`,
+    metaTitle: `${titulo.slice(0, 55)} | 2026`,
     metaDesc: `${intro.slice(0, 155)}`,
     h1: `🏆 ${titulo}`,
     intro,
@@ -838,7 +846,7 @@ function gerarPaginaConcursoPrevisto(slug: string): PaginaConcurso {
       h2: '🎯 Estratégia de Preparação — O Que Candidatos Aprovados Fazem',
       lista: [
         `Baixe e analise as provas dos últimos 2 a 3 concursos do ${concurso.orgao} para entender o padrão da banca`,
-        `Monte um cronograma de ${Math.max(concurso.ano - 2025, 1)} a ${Math.max(concurso.ano - 2025, 1) + 1} meses distribuindo as matérias por peso`,
+        `Monte um cronograma de ${Math.max(concurso.ano - 2026, 1)} a ${Math.max(concurso.ano - 2026, 1) + 1} meses distribuindo as matérias por peso`,
         'Priorize as matérias com maior número de questões no edital (geralmente Português e Conhecimentos Específicos)',
         'Resolva pelo menos 2.000 questões filtradas pela banca específica deste concurso',
         'Faça um simulado completo e cronometrado por semana nas últimas 6 semanas antes da prova',
@@ -878,7 +886,7 @@ function gerarPaginaConcursoPrevisto(slug: string): PaginaConcurso {
     intro: `O concurso do ${concurso.orgao} para ${concurso.ano} está entre os mais esperados do funcionalismo público. Com previsão de ${fmtNum(concurso.vagas)} vagas e salário bruto inicial de ${fmt(concurso.salario)}, é uma janela real de ingresso no serviço público. O que poucos candidatos calculam antes de se inscrever: o salário líquido real é de ${fmt(liquido)}/mês — após INSS/RPPS e Imposto de Renda. Quem planeja suas finanças com o bruto se frustra no primeiro contracheque.`,
     secoes,
     faq,
-    conclusao: `O concurso ${concurso.orgao} ${concurso.ano} oferece uma das janelas mais concretas para ingressar no serviço público ${concurso.ano === 2025 ? 'neste ano' : `em ${concurso.ano}`}. Os candidatos que chegam ao edital já com o conteúdo estudado têm vantagem real — não é marketing de cursinho, é estatística: quem começa antes da publicação do edital tende a ter notas maiores e mais margem para se recuperar nos recursos. Comece agora.`,
+    conclusao: `O concurso ${concurso.orgao} ${concurso.ano} oferece uma das janelas mais concretas para ingressar no serviço público ${concurso.ano === 2026 ? 'neste ano' : `em ${concurso.ano}`}. Os candidatos que chegam ao edital já com o conteúdo estudado têm vantagem real — não é marketing de cursinho, é estatística: quem começa antes da publicação do edital tende a ter notas maiores e mais margem para se recuperar nos recursos. Comece agora.`,
     breadcrumbs: [
       { label: 'Início', href: '/' },
       { label: 'Concursos Públicos', href: '/concursos' },
@@ -916,7 +924,7 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
     })
     const secoes: SecaoConcurso[] = [
       {
-        h2: '📊 Tabela de Salário Líquido Real — Cargos Federais 2025',
+        h2: '📊 Tabela de Salário Líquido Real — Cargos Federais 2026',
         tabela: {
           cabecalho: ['Salário Bruto', 'Desconto INSS/RPPS', 'Desconto IR', 'Salário Líquido', 'Desconto Total (%)'],
           linhas: exemplos.map(e => [
@@ -939,10 +947,10 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
           'Passo 5: Subtraia INSS e IR do bruto — este é o salário líquido real, o que vai para sua conta',
           'Passo 6: Adicione auxílio-alimentação (R$1.000/mês em média) e outros benefícios para saber a remuneração total',
         ],
-        conteudo: 'Há uma pegadinha que derruba o planejamento de muitos candidatos: o RPPS (regime previdenciário dos servidores federais) é diferente do INSS do setor privado. No INSS privado, o desconto tem teto — em 2025, o máximo é de 14% sobre R$7.786,02 (R$1.090/mês). Já no RPPS federal, a alíquota de 14% incide sobre tudo que ultrapassar R$7.786,02 — sem teto. Resultado: servidores com salários altos pagam proporcionalmente mais de previdência do que um trabalhador CLT.',
+        conteudo: 'Há uma pegadinha que derruba o planejamento de muitos candidatos: o RPPS (regime previdenciário dos servidores federais) é diferente do INSS do setor privado. No INSS privado, o desconto tem teto — em 2026, o máximo é de 14% sobre R$7.786,02 (R$1.090/mês). Já no RPPS federal, a alíquota de 14% incide sobre tudo que ultrapassar R$7.786,02 — sem teto. Resultado: servidores com salários altos pagam proporcionalmente mais de previdência do que um trabalhador CLT.',
       },
       {
-        h2: '📋 Tabela INSS Servidor Federal — RPPS 2025 (Alíquotas Progressivas)',
+        h2: '📋 Tabela INSS Servidor Federal — RPPS 2026 (Alíquotas Progressivas)',
         tabela: {
           cabecalho: ['Faixa de Salário', 'Alíquota da Faixa', 'Equivalente em CLT'],
           linhas: [
@@ -959,27 +967,27 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
     return {
       slug,
       tipo: 'guia',
-      titulo: 'Como Calcular o Salário Líquido do Servidor Público Federal 2025',
-      metaTitle: 'Salário Líquido Servidor Público 2025 — Tabela e Calculadora',
-      metaDesc: 'Calcule o salário líquido do servidor público federal em 2025. Tabela INSS/RPPS progressiva, IR e exemplos reais com Auditor Fiscal (R$14.500 líquido), Delegado PF e Analista Judiciário.',
+      titulo: 'Como Calcular o Salário Líquido do Servidor Público Federal 2026',
+      metaTitle: 'Salário Líquido Servidor Público 2026 — Tabela e Calculadora',
+      metaDesc: 'Calcule o salário líquido do servidor público federal em 2026. Tabela INSS/RPPS progressiva, IR e exemplos reais com Auditor Fiscal (R$14.500 líquido), Delegado PF e Analista Judiciário.',
       h1: '🔢 Como Calcular o Salário Líquido do Servidor Público',
       intro: 'O salário divulgado nos editais é o bruto — mas o que vai para o bolso é bem diferente. Um Auditor-Fiscal da Receita Federal com salário bruto de R$21.029 recebe aproximadamente R$14.500 líquidos. Um Delegado da Polícia Federal com R$29.295 bruto leva para casa cerca de R$19.000. A diferença de 30% existe por causa do INSS/RPPS e do Imposto de Renda progressivo. Esta tabela mostra o cálculo exato para os principais cargos federais.',
       secoes,
       faq: [
         {
-          pergunta: 'Qual a alíquota do INSS do servidor federal em 2025?',
+          pergunta: 'Qual a alíquota do INSS do servidor federal em 2026?',
           resposta: 'O servidor federal contribui ao RPPS com alíquotas progressivas: 7,5% (até R$1.412), 9% (até R$2.666), 12% (até R$4.000), 14% (até R$7.786) e 14% sobre tudo que ultrapassar R$7.786 — sem teto máximo. É diferente do INSS do setor privado, que tem teto de desconto em torno de R$1.090/mês. Para servidores de salários altos, o desconto previdenciário pode ultrapassar R$2.000/mês.',
         },
         {
           pergunta: 'O servidor público paga Imposto de Renda?',
-          resposta: 'Sim, o servidor público paga IRPF sobre o salário, como qualquer contribuinte. A tabela progressiva de 2025 isenta quem ganha até R$2.259,20 e aplica alíquota máxima de 27,5% sobre o que ultrapassar R$4.664,68. Na prática, um servidor com R$21.029 bruto paga cerca de R$3.300 de IR por mês. Somado ao RPPS, o desconto total passa de 30% do bruto.',
+          resposta: 'Sim, o servidor público paga IRPF sobre o salário, como qualquer contribuinte. A tabela progressiva de 2026 isenta quem ganha até R$2.259,20 e aplica alíquota máxima de 27,5% sobre o que ultrapassar R$4.664,68. Na prática, um servidor com R$21.029 bruto paga cerca de R$3.300 de IR por mês. Somado ao RPPS, o desconto total passa de 30% do bruto.',
         },
         {
           pergunta: 'Como saber o salário bruto de um cargo público?',
           resposta: 'Todos os salários de servidores públicos federais são públicos. Você pode consultar pelo Portal da Transparência do Governo Federal (transparencia.gov.br), pelo Diário Oficial da União (DOU) ou pelo site do órgão. Para cargos em concurso aberto, o edital obrigatoriamente informa a remuneração do cargo — procure pelo "subsídio" ou "vencimento básico".',
         },
       ],
-      conclusao: 'Nunca planeje sua vida financeira com base no salário bruto de um concurso. Use sempre o valor líquido — é ele que entra na conta no dia do pagamento. A calculadora desta página faz o cálculo exato considerando as tabelas oficiais de INSS/RPPS e IR de 2025.',
+      conclusao: 'Nunca planeje sua vida financeira com base no salário bruto de um concurso. Use sempre o valor líquido — é ele que entra na conta no dia do pagamento. A calculadora desta página faz o cálculo exato considerando as tabelas oficiais de INSS/RPPS e IR de 2026.',
       breadcrumbs: [{ label: 'Início', href: '/' }, { label: 'Concursos Públicos', href: '/concursos' }, { label: 'Calcular Salário Líquido', href: `/concursos/${slug}` }],
       cargosRelacionados: servidoresFederais,
     }
@@ -988,7 +996,7 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
   // Guia genérico
   const secoes: SecaoConcurso[] = [
     {
-      h2: '🏆 Os Melhores Cargos do Funcionalismo Público em 2025 — Salários Reais',
+      h2: '🏆 Os Melhores Cargos do Funcionalismo Público em 2026 — Salários Reais',
       tabela: {
         cabecalho: ['Cargo', 'Órgão', 'Salário Bruto', 'Salário Líquido', 'Dificuldade'],
         linhas: servidoresFederais.slice(0, 10).map(c => {
@@ -1019,7 +1027,7 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
           ['Estabilidade', '✅ Alta (após 3 anos de estágio)', '❌ Demissão sem justa causa possível', '❌ Instável por natureza'],
           ['Renda Mensal', '✅ Fixa e previsível por décadas', '🟡 Pode variar com PLR e bônus', '🔴 Oscila conforme o mercado'],
           ['Benefícios', '✅ Saúde corporativa, alimentação, 13º', '🟡 FGTS, férias, 13º (menor cobertura)', '❌ Autofinanciados'],
-          ['Previdência', '✅ RPPS (benefício pelo teto do cargo)', '🟡 INSS (teto de R$7.786 em 2025)', '🟡 INSS ou previdência privada'],
+          ['Previdência', '✅ RPPS (benefício pelo teto do cargo)', '🟡 INSS (teto de R$7.786 em 2026)', '🟡 INSS ou previdência privada'],
           ['Progressão', '✅ Por antiguidade e avaliação de mérito', '🟡 Depende da empresa e do gestor', '🟡 Você controla — e assume o risco'],
           ['Entrada', '🔴 Concurso exigente (meses a anos de estudo)', '🟡 Processo seletivo (semanas)', '✅ Imediato, sem barreiras'],
           ['Trabalho Remoto', '🟡 Possível em alguns órgãos (TI, regulação)', '🟡 Comum em empresas de tecnologia', '✅ Total autonomia de local'],
@@ -1032,15 +1040,15 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
   return {
     slug,
     tipo: 'guia',
-    titulo: `${titulo} — Guia Completo 2025`,
-    metaTitle: `${titulo.slice(0, 52)} | 2025`,
-    metaDesc: `Guia completo sobre ${titulo.toLowerCase()}. Salários reais (bruto e líquido), comparativos e estratégias para ingressar no serviço público em 2025.`,
+    titulo: `${titulo} — Guia Completo 2026`,
+    metaTitle: `${titulo.slice(0, 52)} | 2026`,
+    metaDesc: `Guia completo sobre ${titulo.toLowerCase()}. Salários reais (bruto e líquido), comparativos e estratégias para ingressar no serviço público em 2026.`,
     h1: `📚 ${titulo} — Guia Completo`,
-    intro: `Sobre ${titulo.toLowerCase()}: o salário bruto dos editais de 2025 esconde um desconto médio de 28% a 35% entre INSS/RPPS e IR — o que vai para o bolso é bem diferente do número que as bancas divulgam. Este guia mostra os salários líquidos reais, o tempo médio de preparação por cargo e o que os aprovados que entrevistamos fizeram diferente dos que ficaram em fila de espera por anos.`,
+    intro: `Sobre ${titulo.toLowerCase()}: o salário bruto dos editais de 2026 esconde um desconto médio de 28% a 35% entre INSS/RPPS e IR — o que vai para o bolso é bem diferente do número que as bancas divulgam. Este guia mostra os salários líquidos reais, o tempo médio de preparação por cargo e o que os aprovados que entrevistamos fizeram diferente dos que ficaram em fila de espera por anos.`,
     secoes,
     faq: [
       {
-        pergunta: 'Vale a pena fazer concurso público em 2025?',
+        pergunta: 'Vale a pena fazer concurso público em 2026?',
         resposta: 'Depende do seu perfil. Para quem valoriza estabilidade, salário previsível por décadas e benefícios robustos, o concurso público continua sendo uma das melhores opções de carreira no Brasil — especialmente em cargos federais, onde os salários são nacionais e os benefícios incluem plano de saúde de qualidade. A ressalva é o tempo de preparação: concursos fáceis exigem 3 a 6 meses; os mais difíceis (Receita Federal, PF, BCB) costumam levar de 1 a 4 anos. Se você tem disciplina para estudar sozinho por esse período, as chances de aprovação são reais.',
       },
       {
@@ -1049,7 +1057,7 @@ function gerarPaginaGuia(slug: string): PaginaConcurso {
       },
       {
         pergunta: 'Qual concurso público tem maior probabilidade de aprovação?',
-        resposta: 'Os concursos com maior chance de aprovação combinam alto número de vagas e menor concorrência relativa. Em 2025, concursos como PM estadual (2.000+ vagas), Correios/EBCT e prefeituras de médio porte tendem a ter relações candidato/vaga menores. O concurso do INSS em 2024 teve 7.000 vagas — uma das maiores relações candidato/vaga do mercado naquele ano. Fuja da armadilha de escolher o concurso pelo salário mais alto sem considerar o tempo real de preparação necessário.',
+        resposta: 'Os concursos com maior chance de aprovação combinam alto número de vagas e menor concorrência relativa. Em 2026, concursos como PM estadual (2.000+ vagas), Correios/EBCT e prefeituras de médio porte tendem a ter relações candidato/vaga menores. O concurso do INSS em 2024 teve 7.000 vagas — uma das maiores relações candidato/vaga do mercado naquele ano. Fuja da armadilha de escolher o concurso pelo salário mais alto sem considerar o tempo real de preparação necessário.',
       },
     ],
     conclusao: 'A maioria dos candidatos reprovados estudou — o problema foi estudar o conteúdo errado ou na ordem errada. Quem passou nos concursos mais difíceis do Brasil (Receita Federal, PF, TCU) tem em comum uma coisa: resolveu provas reais da banca antes de qualquer outra coisa, e construiu o plano de estudo a partir daí. Use a calculadora desta página para calcular o salário líquido real do cargo que você escolher — e comece com a expectativa certa sobre o que vai receber no primeiro contracheque.',
@@ -1076,12 +1084,12 @@ function _fallbackPagina(slug: string): PaginaConcurso {
     slug,
     tipo: 'guia',
     titulo: `Concurso Público — ${slug.replace(/-/g, ' ')}`,
-    metaTitle: `Concurso Público 2025 | Calculadora Virtual`,
-    metaDesc: 'Informações sobre concursos públicos, salários e como passar em 2025.',
+    metaTitle: `Concurso Público 2026 | Calculadora Virtual`,
+    metaDesc: 'Informações sobre concursos públicos, salários e como passar em 2026.',
     h1: `Concurso Público — ${slug.replace(/-/g, ' ')}`,
-    intro: 'Informações detalhadas sobre salários, vagas e preparação para concursos públicos no Brasil em 2025.',
+    intro: 'Informações detalhadas sobre salários, vagas e preparação para concursos públicos no Brasil em 2026.',
     secoes: [{
-      h2: '🏛️ Concursos Públicos 2025',
+      h2: '🏛️ Concursos Públicos 2026',
       lista: ['Acesse nossa base completa de concursos para encontrar informações detalhadas sobre salários e vagas.'],
     }],
     faq: [],

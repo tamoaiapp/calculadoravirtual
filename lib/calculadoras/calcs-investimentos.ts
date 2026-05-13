@@ -375,7 +375,7 @@ export const CALCS_INVESTIMENTOS: CalcConfig[] = [
         ],
       }
     },
-  },,
+  },
   {
     slug: 'calculadora-tesouro-selic-rendimento',
     titulo: 'Rendimento do Tesouro Selic',

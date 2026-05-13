@@ -320,6 +320,41 @@ select.field-input { cursor: pointer; }
 .ad-rect { height: 280px; border-radius: 12px; }
 .ad-rect-sm { height: 250px; border-radius: 12px; }
 
+/* Adsterra wrappers */
+.ad-leaderboard-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 12px 8px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.ad-desktop-only { display: flex; justify-content: center; }
+.ad-mobile-only { display: none; justify-content: center; }
+@media (max-width: 768px) {
+  .ad-desktop-only { display: none; }
+  .ad-mobile-only { display: flex; }
+  .ad-leaderboard-wrapper { padding: 8px 4px; }
+}
+.ad-native-wrapper { padding: 0 16px; }
+
+.ad-rectangle-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 16px 8px;
+}
+
+.ad-skyscraper-fixed { display: none; }
+@media (min-width: 1520px) {
+  .ad-skyscraper-fixed {
+    display: block;
+    position: fixed;
+    right: 16px;
+    top: 96px;
+    z-index: 50;
+  }
+}
+
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .layout-two-col {

@@ -15,12 +15,12 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   if (params.slug === 'maiores-salarios') return {
-    title: 'As 20 Profissões que Mais Pagam no Brasil em 2025 | Calculadora Virtual',
-    description: 'Descubra as 20 profissões com maiores salários no Brasil em 2025. Veja a faixa sênior, formação exigida e perspectivas de carreira.',
+    title: 'As 20 Profissões que Mais Pagam no Brasil em 2026 | Calculadora Virtual',
+    description: 'Descubra as 20 profissões com maiores salários no Brasil em 2026. Veja a faixa sênior, formação exigida e perspectivas de carreira.',
     alternates: { canonical: '/salarios/maiores-salarios' },
   }
   if (params.slug === 'profissoes-do-futuro') return {
-    title: 'Profissões do Futuro 2025–2030 — Carreiras em Alta no Brasil | Calculadora Virtual',
+    title: 'Profissões do Futuro 2026–2030 — Carreiras em Alta no Brasil | Calculadora Virtual',
     description: 'As profissões do futuro com maior demanda e salários no Brasil. Tecnologia, saúde, dados, IA e muito mais para planejar sua carreira.',
     alternates: { canonical: '/salarios/profissoes-do-futuro' },
   }
@@ -49,10 +49,10 @@ function PaginaMaioresSalarios() {
         <span>Maiores Salários</span>
       </nav>
       <h1 style={{ fontSize: '1.9rem', fontWeight: 800, color: 'var(--text)', marginBottom: 12 }}>
-        💰 As 20 Profissões que Mais Pagam no Brasil em 2025
+        💰 As 20 Profissões que Mais Pagam no Brasil em 2026
       </h1>
       <p style={{ color: 'var(--muted)', fontSize: '1rem', lineHeight: 1.7, marginBottom: 36, maxWidth: 680 }}>
-        Veja quais são as profissões com maiores salários no Brasil, baseado em dados de mercado 2025. A lista considera o salário sênior (teto da carreira) e inclui tanto regime CLT quanto PJ.
+        Veja quais são as profissões com maiores salários no Brasil, baseado em dados de mercado 2026. A lista considera o salário sênior (teto da carreira) e inclui tanto regime CLT quanto PJ.
       </p>
       <div style={{ border: '1px solid var(--line)', borderRadius: 14, overflow: 'hidden' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '0.4fr 2.5fr 0.8fr 1fr 1fr 1fr', background: 'var(--bg2)', padding: '12px 16px', fontWeight: 700, fontSize: '0.78rem', color: 'var(--muted)', textTransform: 'uppercase', gap: 8 }}>
@@ -75,7 +75,7 @@ function PaginaMaioresSalarios() {
         ))}
       </div>
       <div style={{ marginTop: 32, padding: '20px 24px', background: 'var(--card)', borderRadius: 14, border: '1px solid var(--line)', fontSize: '0.88rem', color: 'var(--muted)', lineHeight: 1.7 }}>
-        <strong style={{ color: 'var(--text)' }}>Metodologia:</strong> Os valores representam medianas de mercado em 2025, combinando dados do LinkedIn Salary, Glassdoor, Catho, InfoJobs e pesquisas do Great Place to Work. Profissões com alta variabilidade (médicos autônomos, traders, advogados sócios) têm faixa muito ampla — os valores mostram a mediana do mercado formal (CLT) ou de contratos PJ.
+        <strong style={{ color: 'var(--text)' }}>Metodologia:</strong> Os valores representam medianas de mercado em 2026, combinando dados do LinkedIn Salary, Glassdoor, Catho, InfoJobs e pesquisas do Great Place to Work. Profissões com alta variabilidade (médicos autônomos, traders, advogados sócios) têm faixa muito ampla — os valores mostram a mediana do mercado formal (CLT) ou de contratos PJ.
       </div>
     </div>
   )
@@ -92,14 +92,14 @@ function PaginaFuturo() {
         <span>Profissões do Futuro</span>
       </nav>
       <h1 style={{ fontSize: '1.9rem', fontWeight: 800, color: 'var(--text)', marginBottom: 12 }}>
-        🚀 Profissões do Futuro no Brasil — 2025 a 2030
+        🚀 Profissões do Futuro no Brasil — 2026 a 2030
       </h1>
       <p style={{ color: 'var(--muted)', fontSize: '1rem', lineHeight: 1.7, marginBottom: 36, maxWidth: 680 }}>
         Estas são as carreiras com maior crescimento de demanda e remuneração para os próximos anos, segundo o Fórum Econômico Mundial, o FMI e o mercado de trabalho brasileiro. Invista na formação certa antes que a concorrência aumente.
       </p>
       <div style={{ border: '1px solid var(--line)', borderRadius: 14, overflow: 'hidden' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '2.5fr 0.9fr 1fr 1fr 0.8fr', background: 'var(--bg2)', padding: '12px 16px', fontWeight: 700, fontSize: '0.78rem', color: 'var(--muted)', textTransform: 'uppercase', gap: 8 }}>
-          <span>Profissão</span><span>Área</span><span style={{ textAlign: 'right' }}>Médio 2025</span><span style={{ textAlign: 'right' }}>Sênior</span><span style={{ textAlign: 'center' }}>Mercado</span>
+          <span>Profissão</span><span>Área</span><span style={{ textAlign: 'right' }}>Médio 2026</span><span style={{ textAlign: 'right' }}>Sênior</span><span style={{ textAlign: 'center' }}>Mercado</span>
         </div>
         {futuro.map((p, i) => (
           <Link key={p.slug} href={`/salarios/${p.slug}`} style={{ textDecoration: 'none' }}>
