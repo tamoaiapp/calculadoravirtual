@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { FERRAMENTAS, CATEGORIAS } from '@/lib/ferramentas'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Dúvidas Frequentes sobre Calculadoras | Calculadora Virtual',
   description: 'Respostas completas para mais de 3.000 dúvidas sobre cálculos trabalhistas, financeiros, saúde e do dia a dia. Atualizado 2026.',

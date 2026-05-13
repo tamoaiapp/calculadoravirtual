@@ -91,7 +91,7 @@ export default function ConcursosPage() {
       {/* Concursos previstos */}
       <div style={{ marginBottom: 40 }}>
         <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>
-          📅 Concursos Previstos 2025–2026
+          📅 Concursos Previstos 2026
         </h2>
         <div style={{ border: '1px solid var(--line)', borderRadius: 14, overflow: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>

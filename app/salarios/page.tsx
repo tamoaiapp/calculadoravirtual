@@ -4,8 +4,8 @@ import { PROFISSOES, CATEGORIAS_SALARIO, getTopPagantes, getProfissoesFuturo } f
 import { BuscaSalarios } from '@/components/salarios/BuscaSalarios'
 
 export const metadata: Metadata = {
-  title: 'Tabela de Salários por Profissão 2025 — Média, Faixa e Por Estado | Calculadora Virtual',
-  description: 'Consulte o salário médio de mais de 500 profissões no Brasil em 2025. Veja a faixa júnior, pleno e sênior, comparativo por estado e perspectivas de carreira.',
+  title: 'Tabela de Salários por Profissão 2026 — Média, Faixa e Por Estado | Calculadora Virtual',
+  description: 'Consulte o salário médio de mais de 500 profissões no Brasil em 2026. Veja a faixa júnior, pleno e sênior, comparativo por estado e perspectivas de carreira.',
   alternates: { canonical: '/salarios' },
 }
 
@@ -29,10 +29,10 @@ export default function SalariosPage() {
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text)', marginBottom: 12 }}>
-          Tabela de Salários por Profissão 2025
+          Tabela de Salários por Profissão 2026
         </h1>
         <p style={{ color: 'var(--muted)', fontSize: '1rem', lineHeight: 1.7, maxWidth: 680 }}>
-          Pesquise o salário médio de <strong>{PROFISSOES.length}+ profissões</strong> no Brasil em 2025. Veja a faixa salarial por nível (júnior, pleno, sênior), comparativo por estado e as perspectivas de cada carreira.
+          Pesquise o salário médio de <strong>{PROFISSOES.length}+ profissões</strong> no Brasil em 2026. Veja a faixa salarial por nível (júnior, pleno, sênior), comparativo por estado e as perspectivas de cada carreira.
         </p>
       </div>
 
@@ -93,7 +93,7 @@ export default function SalariosPage() {
       {/* Profissões do futuro */}
       <div style={{ marginTop: 48 }}>
         <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>
-          🚀 Profissões do futuro — carreiras em alta para 2025–2030
+          🚀 Profissões do futuro — carreiras em alta para 2026–2030
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
           {futuro.map(p => (
@@ -117,10 +117,10 @@ export default function SalariosPage() {
       {/* SEO block */}
       <div style={{ marginTop: 56, padding: '28px 32px', background: 'var(--card)', borderRadius: 16, border: '1px solid var(--line)' }}>
         <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>
-          Sobre a tabela de salários 2025
+          Sobre a tabela de salários 2026
         </h2>
         <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: 1.8, marginBottom: 10 }}>
-          Os salários apresentados são médias baseadas em dados de mercado coletados de pesquisas salariais, plataformas de emprego (LinkedIn, Glassdoor, Catho, InfoJobs) e levantamentos do IBGE e CAGED de 2024–2025. Os valores incluem tanto regime CLT quanto contratos PJ.
+          Os salários apresentados são médias baseadas em dados de mercado coletados de pesquisas salariais, plataformas de emprego (LinkedIn, Glassdoor, Catho, InfoJobs) e levantamentos do IBGE e CAGED de 2024–2026. Os valores incluem tanto regime CLT quanto contratos PJ.
         </p>
         <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: 1.8, marginBottom: 10 }}>
           A remuneração real varia conforme o porte da empresa, a cidade, o nível de experiência, as certificações e a conjuntura econômica. Em São Paulo e no Distrito Federal os salários tendem a ser 10–20% superiores à média nacional. Cidades do interior pagam entre 15–25% abaixo da média.

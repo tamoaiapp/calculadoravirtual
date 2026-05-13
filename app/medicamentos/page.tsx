@@ -4,8 +4,8 @@ import { MEDICAMENTOS, CATEGORIAS_MEDICAMENTOS, getMedicamentosByCategoria } fro
 import { BuscaMedicamentos } from '@/components/medicamentos/BuscaMedicamentos'
 
 export const metadata: Metadata = {
-  title: 'Bulas de Medicamentos 2025 — Indicações, Efeitos Colaterais e Posologia | Calculadora Virtual',
-  description: `Consulte bulas de ${MEDICAMENTOS.length}+ medicamentos: indicações, contraindicações, efeitos colaterais, posologia e interações. Informações baseadas nas bulas da ANVISA 2025.`,
+  title: 'Bulas de Medicamentos 2026 — Indicações, Efeitos Colaterais e Posologia | Calculadora Virtual',
+  description: `Consulte bulas de ${MEDICAMENTOS.length}+ medicamentos: indicações, contraindicações, efeitos colaterais, posologia e interações. Informações baseadas nas bulas da ANVISA 2026.`,
   alternates: { canonical: '/medicamentos' },
 }
 
@@ -25,7 +25,7 @@ export default function MedicamentosPage() {
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text)', marginBottom: 10 }}>
-          Bulas de Medicamentos 2025
+          Bulas de Medicamentos 2026
         </h1>
         <p style={{ color: 'var(--muted)', fontSize: '1rem', lineHeight: 1.7, maxWidth: 720 }}>
           Consulte informações completas de <strong>{MEDICAMENTOS.length}+ medicamentos</strong>: indicações, contraindicações, efeitos colaterais, posologia, mecanismo de ação e interações medicamentosas. Dados baseados nas bulas registradas na ANVISA.

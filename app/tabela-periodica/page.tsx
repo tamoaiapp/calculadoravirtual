@@ -4,7 +4,7 @@ import { ELEMENTOS, CATEGORIAS_PERIODICA, getCatCorPeriodica } from '@/lib/perio
 import { TabelaPeriodicaInterativa } from '@/components/periodica/TabelaPeriodicaInterativa'
 
 export const metadata: Metadata = {
-  title: 'Tabela Periódica Interativa 2025 — Elementos Químicos com Propriedades | Calculadora Virtual',
+  title: 'Tabela Periódica Interativa 2026 — Elementos Químicos com Propriedades | Calculadora Virtual',
   description: 'Tabela periódica completa e interativa com todos os 118 elementos. Clique em cada elemento para ver massa atômica, configuração eletrônica, ponto de fusão, usos e muito mais.',
   alternates: { canonical: '/tabela-periodica' },
 }

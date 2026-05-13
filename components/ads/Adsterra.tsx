@@ -21,7 +21,6 @@ function Banner({ adKey, width, height }: { adKey: string; width: number; height
       srcDoc={srcDoc(adKey, width, height)}
       style={{ border: 0, display: 'block', overflow: 'hidden', margin: '0 auto', maxWidth: '100%' }}
       scrolling="no"
-      sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
     />
   )
 }

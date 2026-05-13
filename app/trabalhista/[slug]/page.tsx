@@ -166,7 +166,7 @@ export default async function PaginaTrabalhista({ params }: { params: Promise<{ 
                   📅 Tabelas atualizadas para 2026
                 </span>
                 <span style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 8, padding: '3px 10px', fontSize: '0.77rem', color: '#166534', fontWeight: 600 }}>
-                  ⚖️ Conforme CLT e Portaria MPS 2025
+                  ⚖️ Conforme CLT e Portaria MPS 2026
                 </span>
               </div>
 
